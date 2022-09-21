@@ -1,0 +1,35 @@
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!DOCTYPE html>
+
+    <body>
+
+        <div class="header"  th:fragment="copy">
+            <a th:href="@{/}"><img th:src="@{/resources/static/img/logo.svg}" class="logo-img" alt=""></a>
+
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link">статьи</a></li>
+                    <li><a th:href="@{/bookmarks}" class="nav-link">закладки</a></li>
+                    <li><a href="#" class="nav-link">книги</a></li>
+                    <li><a href="#" class="nav-link">новости</a></li>
+                    <li><a href="#" class="nav-link">о нас</a></li>
+                </ul>
+            <div class="register" sec:authorize="isAnonymous()">
+                <form th:action="@{/auth/login}" method="GET">
+                    <button class="register-button">Войти</button>
+                </form>
+            </div>
+            <div class="loggedIn" sec:authorize="isAuthenticated()">
+                    <form th:method="POST" th:action="@{/logout}">
+                        <input type="image" th:src="@{/resources/static/img/user.svg}" class="loggedIn-pic">
+
+                        <input type="image" th:src="@{/resources/static/img/logout.svg}" class="loggedIn-pic">
+                    </form>
+            </div>
+        </div>
+
+
+    </body>
+
+</html>

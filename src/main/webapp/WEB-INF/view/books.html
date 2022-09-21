@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ошибка</title>
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/footer.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/header.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/books.css}">
+</head>
+
+<body>
+<header th:insert="~{base/header :: copy}"></header>
+
+    <main>
+        <div>
+            <h2>Знакомство с высшей математикой</h2>
+            <div class="flexbox">
+                <div th:each="object : ${AdvancedBooks}">
+                    <img th:src="@{/resources/static/img/books/advanced/{fileName}(fileName = ${object.getFileName()})}" alt="">
+                </div>
+                <a href=""> <button th:if="${hasMoreAdvancedBooks}">Больше книг</button> </a>
+            </div>
+        </div>
+        <div>
+            <h2>Другое</h2>
+            <div class="flexbox">
+                <div th:each="object : ${books}">
+                    <img th:src="@{/resources/static/img/books/{fileName}(fileName = ${object.getFileName()})}" alt="">
+                </div>
+                <a href=""> <button th:if="${hasMoreBooksOthers}">Больше книг</button> </a>
+            </div>
+        </div>
+    </main>
+
+<footer th:insert="~{base/footer :: copy}"></footer>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+.img {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+}
+
+.article-img-div {
+    position: relative;
+}
+
+#img-1 {
+    top: 37px;
+    right: 370px;
+}
+
+#img-2 {
+    z-index: 10;
+    top: 157px;
+    right: 263px;
+}
+
+#img-3 {
+    top: 55px;
+    right: 48px;
+    height: 462px;
+}
+.content-table {
+    border-collapse: collapse;
+    font-size: 22px;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,60%);
+    margin-top: 50px;
+}
+.content-table thead tr {
+    background-color: #28B485;
+    color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table td, .content-table th {
+    padding: 12px 110px;
+    font-size: 18px;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #28B485;
+}
+.flexbox {
+    display: flex;
+    align-items: center;
+    gap: 150px;
+}
+.Py-img  {
+    width: 500px;
+}

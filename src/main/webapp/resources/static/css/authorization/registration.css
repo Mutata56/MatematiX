@@ -1,0 +1,14 @@
+.flexbox-register-finish {
+    margin-top: 64px;
+    flex-direction: column;
+}
+input[type="submit"] {
+    width: 404px;
+}
+.noAccount {
+    padding-top: 30px;
+    text-align: center;
+}
+.frame {
+    height: 700px;
+}

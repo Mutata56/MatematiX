@@ -1,0 +1,9 @@
+.flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 33.333333%
+}
+main {
+    margin-top: 200px;
+    height: 100vh
+}

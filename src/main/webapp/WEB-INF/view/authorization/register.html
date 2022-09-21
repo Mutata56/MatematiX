@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Логин</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/authorization/base.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/authorization/registration.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div class="main">
+    <div class="frame">
+        <div class="left">
+            <a th:href="@{/}"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+            <div class="desc">
+                <h2>Регистрация</h2>
+                <h3>Создайте новый аккаунт MatematiX</h3>
+            </div>
+        </div>
+        <div class="right">
+            <h2>Добро пожаловать!</h2>
+            <form th:action="@{/auth/register}" th:method="POST" class="form" th:object="${dto}">
+
+
+                <div style="position: relative">
+                    <div class="form-info name-info">
+                        <ul>
+                            <li>
+                                <p>Имя не должно быть занято.</p>
+                            </li>
+                            <li>
+                                <p>Длина имени должна быть больше 4 и меньше 16.</p>
+                            </li>
+                            <li>
+                                <p>Имя должно состоять из латинских букв и/или цифр.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <label th:for="name">Имя пользователя</label>
+                    <input class="js-input name-input" maxlength="15" th:name="name" placeholder="Введите имя пользователя" th:type="text" th:id="name" th:value="${dto.getName()}">
+                    <img th:unless="${#fields.hasErrors('name')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
+                    <img th:if="${#fields.hasErrors('name')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                </div>
+
+
+
+                <div style="position: relative">
+                    <div class="form-info email-info">
+                        <ul>
+                            <li>
+                                <p>Почта не должна быть занята.</p>
+                            </li>
+                            <li>
+                                <p>Длина эл. почты должна быть больше 4 и меньше 46.</p>
+                            </li>
+                            <li>
+                                <p>Поле не должно быть пустым.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <label th:for="email">Email</label>
+                    <input class="js-input email-input" maxlength="45" th:name="email" placeholder="Введите E-mail" th:type="text" th:id="email" th:value="${dto.getEmail()}">
+                    <img th:unless="${#fields.hasErrors('email')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
+                    <img th:if="${#fields.hasErrors('email')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                </div>
+
+
+
+                <div style="position: relative">
+                    <div class="form-info password-info">
+                        <ul>
+                            <li>
+                                <p>Поле не должно быть пустым.</p>
+                            </li>
+                            <li>
+                                <p>Длина пароля должна быть больше 4 и меньше 61.</p>
+                            </li>
+                            <li>
+                                <p>Пароли должны совпадать.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <label th:for="password">Пароль</label>
+                    <input class="js-input password-input" maxlength="60" th:name="password"  th:value="${dto.getPassword()}"  placeholder="Введите пароль" th:id="password" th:type="password" >
+                    <img th:unless="${#fields.hasErrors('password')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
+                    <img th:if="${#fields.hasErrors('password')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                </div>
+
+
+
+                <div style="position: relative">
+                    <div class="form-info passwordAgain-info">
+                        <ul>
+                            <li>
+                                <p>Поле не должно быть пустым.</p>
+                            </li>
+                            <li>
+                                <p>Длина пароля должна быть больше 4 и меньше 61.</p>
+                            </li>
+                            <li>
+                                <p>Пароли должны совпадать.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <label th:for="passwordAgain">Подтвердите пароль</label>
+                    <input class="js-input passwordAgain-input" maxlength="60" th:name="passwordAgain"  placeholder="Введите пароль" th:id="passwordAgain" th:type="password">
+                    <img th:unless="${#fields.hasErrors('passwordAgain')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
+                    <img th:if="${#fields.hasErrors('passwordAgain')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                </div>
+
+
+                <div class="flexbox-register-finish">
+                    <input th:type="submit" class="submit" th:value="Зарегестрироваться">
+                    <h4 class="noAccount"><a th:href="@{/auth/login}">Есть Аккаунт?</a> </h4>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/static/js/ValidationRegisterPage.js}"></script>
+<script th:src="@{/resources/static/js/showInfo.js}"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Ошибка</title>
+      <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
+      <link rel="stylesheet" th:href="@{/resources/static/css/base/footer.css}">
+      <link rel="stylesheet" th:href="@{/resources/static/css/base/header.css}">
+  </head>
+
+  <body>
+      <header th:insert="~{base/header :: copy}"></header>
+          <main style="margin-top: 200px; height: 100vh">
+                <div class="anonymous" sec:authorize="isAnonymous()">
+                    <h1>Произошла ошибка при обработке запроса.</h1>
+                    <h2>Вы не аутентифицированы для выполнения этого запроса.</h2>
+                </div>
+                <div class="anonymous" sec:authorize="isAuthenticated()">
+                        <h1>Произошла ошибка при обработке запроса.</h1>
+                        <h2>Вы не авторизированы для выполнения этого запроса.</h2>
+                </div>
+          </main>
+      <footer th:insert="~{base/footer :: copy}"></footer>
+  </body>
+
+</html>

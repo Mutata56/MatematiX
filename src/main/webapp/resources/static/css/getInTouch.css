@@ -1,0 +1,125 @@
+body {
+    display: flex;
+    justify-content: space-around;
+    background-color: #313C48;
+    color: white;
+}
+input[type="text"],input[type="email"],textarea {
+    background-color: #292D32;
+}
+input[type="submit"] {
+    display: block;
+    background-color: #25CCA4;
+    width: 1201px;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+}
+input[type="submit"],input[type="text"],input[type="email"] {
+    border-radius: 5px;
+    border: none;
+    color: white;
+    height: 54px;
+    padding: 10px 10px 10px 15px;
+}
+.topic-input {
+    width: 1201px;
+}
+
+.email-input, .name-input {
+    width: 479px;
+}
+.flexbox {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+h1 {
+    margin-top: 100px;
+    margin-bottom: 60px;
+    font-weight: 600;
+    font-size: 48px;
+}
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px;
+    pointer-events: none;
+}
+
+textarea {
+    padding: 20px;
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    border: none;
+    width: 1201px;
+    position: relative;
+}
+.message-div {
+    position: relative;
+}
+.message-div::after {
+    content: attr(content) ' / 2000';
+    position: absolute;
+    right: 4px;
+    bottom: -25px;
+    color: white;
+    font-size: 14px;
+}
+textarea:focus {
+    outline: none;
+    border: 1px solid rgb(37, 204, 164);
+}
+textarea:hover {
+    border: 1px solid rgb(37, 204, 164);
+}
+input[type="submit"]:focus,input[type="text"]:focus,input[type="email"]:focus {
+    border: 1px solid rgb(37, 204, 164);
+    outline: none;
+}
+
+input[type="submit"]:hover,input[type="text"]:hover,input[type="email"]:hover {
+    border: 1px solid rgb(37, 204, 164);
+}
+textarea:focus,textarea:hover {
+    margin-bottom: -2px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition-delay: 9999s;
+    -webkit-transition: color 9999s ease-out, background-color 9999s ease-out;
+}
+.main {
+    width: 1200px;
+}
+.subject-div {
+    margin-bottom: 25px;
+}
+.message-div {
+    margin-bottom: 60px;
+}
+a:link, a:hover,a:visited,a:focus {
+    color: white;
+    transition: all 0.7s ease-out;
+}
+a:hover {
+    background-image: linear-gradient(to right, #7ed56f, #28b485);
+    color: transparent;
+    -webkit-background-clip: text;
+}
+.input-error {
+    border: solid 1px #ff0000c7 !important;
+}
+.input-error-textarea {
+     border: solid 1px #ff0000c7 !important;
+ }
+.input-error-textarea:hover,.input-error-textarea:focus {
+    margin-bottom: 0px;
+}
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 11px 12px 1px rgba(0, 0, 0, 0.32);
+}

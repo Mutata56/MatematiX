@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Логин</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
+        <link rel="stylesheet" th:href="@{/resources/static/css/authorization/base.css}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <div class="main">
+            <div class="frame">
+                <div class="left">
+                    <a th:href="@{/}"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+                    <div class="desc">
+                        <h2>Авторизация</h2>
+                        <h3>Войдите в свой аккаунт MatematiX</h3>
+                    </div>
+                </div>
+                <div class="right">
+                    <h2>Добро пожаловать!</h2>
+
+
+
+                    <form th:action="@{/auth/process_login}" th:method="POST" class="form">
+                        <label for="username">Имя пользователя или E-mail</label>
+                        <input class="email-input" maxlength="45" placeholder="Введите имя или E-mail" type="text" id="username" name="username">
+
+                        <p class="error error1" th:if="${param.userNotFound}">Пользователь не найден!</p>
+
+                        <label for="password">Пароль</label>
+                        <input class="password-input" maxlength="60"  placeholder="Введите пароль" id="password" type="password" name="password">
+
+
+
+                        <h4 class="forgotPassword-h4">
+                            <p class="errorWithoutMarginTop error2" th:if="${param.incorrectPassword}">Неверный Пароль!</p>
+                            <a th:href="@{/auth/forgotPassword}">Забыли пароль?</a>
+                        </h4>
+                        <div class="flexbox-register-finish" th:classappend="${param.incorrectPassword} or ${param.userNotFound} or ${param.error} ? fix : nothing">
+                            <input type="submit" value="Войти">
+                            <h4 class="noAccount"><a th:href="@{/auth/register}">Нет Аккаунта?</a></h4>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script th:src="@{/resources/static/js/disappearErrors.js}"></script>
+    </body>
+</html>
