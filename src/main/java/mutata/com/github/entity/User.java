@@ -24,15 +24,20 @@ public class User {
     @Column(name = "password")
     private String encryptedPassword;
 
+    @Column(name = "blocked")
+    private byte blocked;
     @Column(name = "enabled")
     private byte enabled;
 
     @OneToOne(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+
     private ResetPasswordToken resetPasswordToken;
 
     @OneToOne(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private VerificationToken verificationToken;
+    @Column(name = "role")
     private String role;
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -41,6 +46,15 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
     private List<Article> articles;
+
+    public User(String name, String email, String password, byte enabled, byte activated,String role) {
+        this.name = name;
+        this.email = email;
+        this.encryptedPassword = password;
+        this.enabled = enabled;
+        this.blocked = activated;
+        this.role = role;
+    }
 
     @Override
     public String toString() {

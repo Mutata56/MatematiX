@@ -7,8 +7,9 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -84,6 +85,7 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
         properties.put("hibernate.show_sql",environment.getRequiredProperty("hibernate.show_sql"));
         return properties;
     }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -97,25 +99,30 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
         return em;
     }
 
-        /*
+
+    /*
         @Bean
         public LocalSessionFactoryBean sessionFactory() {
             LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
             sessionFactory.setDataSource(dataSource());
-            sessionFactory.setPackagesToScan("com.github.mutata.entity"); // Package with entities
+            sessionFactory.setPackagesToScan("mutata.com.github.entity"); // Package with entities
             sessionFactory.setHibernateProperties(hibernateProperties());
             return sessionFactory;
         }
-         */
+    */
 
 
     // Manages Hibernate sessions
     @Bean
     public PlatformTransactionManager transactionManager() {
-        // HibernateTransactionManager transactionManager =  new HibernateTransactionManager();
-        // transactionManager.setSessionFactory(sessionFactory().getObject());
+        /*
+        HibernateTransactionManager transactionManager =  new HibernateTransactionManager();
+         transactionManager.setSessionFactory(sessionFactory().getObject());
+         */
+
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+
 
         return transactionManager;
     }

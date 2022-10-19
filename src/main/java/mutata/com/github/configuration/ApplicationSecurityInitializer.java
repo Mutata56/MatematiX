@@ -5,4 +5,4 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 public class ApplicationSecurityInitializer extends AbstractSecurityWebApplicationInitializer {
 
 }
-// Class that turn on Spring Security
+// Class that turns on Spring Security

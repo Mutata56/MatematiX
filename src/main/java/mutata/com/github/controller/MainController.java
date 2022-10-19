@@ -3,6 +3,7 @@ import lombok.extern.slf4j.Slf4j;
 import mutata.com.github.entity.Article;
 import mutata.com.github.entity.User;
 import mutata.com.github.entity.dto.MessageDTO;
+import mutata.com.github.repository.UserRepository;
 import mutata.com.github.service.UserService;
 import mutata.com.github.util.JavaMailSenderWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,15 +27,19 @@ public class MainController {
 
     private final UserService userService;
     private final JavaMailSenderWrapper javaMailSenderWrapper;
+
     @Autowired
-    public MainController(UserService userService,JavaMailSenderWrapper javaMailSenderWrapper) {
+    public MainController(UserService userService, JavaMailSenderWrapper javaMailSenderWrapper) {
         this.userService = userService;
         this.javaMailSenderWrapper = javaMailSenderWrapper;
     }
 
-    @GetMapping
-    public String showIndexPage() {
-        System.out.println("Current user: " + SecurityContextHolder.getContext().getAuthentication().getName());
+    @GetMapping(value = {"/","/index"})
+    public String showIndexPage(@CookieValue(value = "jax",defaultValue = "false") String seenJaxToast,Model model) {
+        if("false".equalsIgnoreCase(seenJaxToast))
+            model.addAttribute("seenJaxToast",false);
+        else
+            model.addAttribute("seenJaxToast",true);
         return "index";
     }
     @GetMapping("/bookmarks")
@@ -68,6 +74,10 @@ public class MainController {
         return String.format("articles/%s",article);
     }
 
+    @GetMapping("/jax")
+    public String showJaxPage() {
+        return "jax";
+    }
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         StringTrimmerEditor stringTrimmerEditor =  new StringTrimmerEditor(true);

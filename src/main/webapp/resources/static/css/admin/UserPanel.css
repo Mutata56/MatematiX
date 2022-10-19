@@ -1,0 +1,26 @@
+.td-name {
+    width: 200px;
+}
+.td-email {
+    width: 498px
+}
+.td-blocked {
+    width: 232px;
+}
+.td-role {
+    width: 180px;
+}
+.td-delete {
+    border-radius: 7px;
+    border-color: transparent;
+    background-color: black;
+    color: #f3f3f3;
+    width: 170px;
+    font-weight: 500;
+    font-size: 18px;
+    cursor: pointer;
+}
+tr td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

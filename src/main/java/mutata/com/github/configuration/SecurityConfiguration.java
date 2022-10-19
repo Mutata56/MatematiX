@@ -1,9 +1,11 @@
 package mutata.com.github.configuration;
 
+import mutata.com.github.service.DetailsService;
 import mutata.com.github.service.ResetPasswordTokenService;
 import mutata.com.github.service.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +21,8 @@ import java.time.LocalDateTime;
 
 
 // Password Encoder was moved to Main App Config in order to avoid circular reference
+
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // Enable @PreAuthorize Annotation
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -28,32 +32,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ResetPasswordTokenService resetPasswordTokenService;
 
+    private final DetailsService detailsService;
+
     @Autowired
-    public SecurityConfiguration(AuthenticationProvider provider,VerificationTokenService verificationTokenService,
-                                 ResetPasswordTokenService resetPasswordTokenService) {
+    public SecurityConfiguration(AuthenticationProvider provider, VerificationTokenService verificationTokenService,
+                                 ResetPasswordTokenService resetPasswordTokenService, DetailsService detailsService) {
         this.provider = provider;
         this.verificationTokenService = verificationTokenService;
         this.resetPasswordTokenService = resetPasswordTokenService;
+        this.detailsService = detailsService;
     }
 
     // Configure Authentication
     @Override
-    public void configure(AuthenticationManagerBuilder auth)  {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(provider);
     }
-
-
 
     // Configure HTTPS requests authorization
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-            http.csrf().disable().authorizeRequests()
+            http.authorizeRequests()
+                .antMatchers("/api/**").permitAll() // hasRole("ADMIN")
+                .antMatchers("/admin/**").permitAll()// hasRole("ADMIN")
                 .antMatchers("/").permitAll()
+                .antMatchers("/jax").permitAll()
                 .antMatchers("/articles/**").permitAll()
                 .antMatchers("/getInTouch").permitAll()
                 .antMatchers("/process_getInTouch").permitAll()
                 .antMatchers("/process_getInTouchResult").permitAll()
-                .antMatchers("/api/**").permitAll() // hasRole("ADMIN")
                 .antMatchers("/auth/registrationConfirm").authenticated()
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/logout").authenticated()
@@ -69,7 +76,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/",false)
                 .failureHandler(authenticationFailureHandler()).and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/").
-                and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                    and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 
     @Scheduled(fixedRate = 3600 * 24000)

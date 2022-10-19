@@ -28,7 +28,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Controller
 @Slf4j // Simple Logging Facade for Java
@@ -123,8 +122,8 @@ public class AuthController {
         Token token = resetPasswordTokenService.findByToken(tokenString);
 
         if(token == null ) {
-            model.addAttribute("notFound",true);
-            return "authorization/processTokenResult";
+            model.addAttribute("TokenNotFound",true);
+            return "authorization/forgotPassword";
         }
         User userFromDB = resetPasswordTokenService.findByToken(tokenString).getUser();
         userFromDB.setEncryptedPassword(passwordDTO.getPassword());
@@ -133,7 +132,7 @@ public class AuthController {
         model.addAttribute("success",true);
         model.addAttribute("resetPassword",true);
 
-        return "authorization/processTokenResult";
+        return "authorization/login";
     }
 
     private String processTokens(String tokenStr, TokenService tokenService, Model model, TokenType tokenType,HttpServletRequest request) {
@@ -142,8 +141,9 @@ public class AuthController {
 
         if(token == null ) {
             model.addAttribute("notFound",true);
-            return "authorization/processTokenResult";
+            return "index";
         }
+
         User user = token.getUser();
         LocalDateTime now = LocalDateTime.now();
         if ((token.getExpirationDate().isBefore(now))) {
@@ -155,14 +155,14 @@ public class AuthController {
             } else {
                 publisher.publishEvent(new OnResetPasswordEvent(user,request.getContextPath()));
             }
-            return "authorization/processTokenResult";
+            return "index";
         } else if(isTokenTypeVerification) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
             String usernameFromDataBase = token.getUser().getName();
             if(!username.equals(usernameFromDataBase)) {
                 model.addAttribute("nonValidUser",true);
-                return "authorization/processTokenResult";
+                return "index";
             }
         }
 
@@ -176,22 +176,23 @@ public class AuthController {
             return "authorization/resetPassword";
         }
 
-        model.addAttribute("success",true);
-        model.addAttribute(tokenType.getModelName(),true);
+        model.addAttribute("successEmailConfirmation",true);
 
-        return "authorization/processTokenResult";
+        return "index";
     }
 
 
 
 
     @PostMapping("/process_forgotPassword")
-    public String processForgotPassword(@RequestParam(name = "username") String username,HttpServletRequest request,Model model) {
-        User user;
-        if(username.contains("@"))
-            user = userService.findByEmailIgnoreCase(username);
-        else
-            user = userService.findByNameIgnoreCase(username);
+    public String processForgotPassword(@RequestParam(name = "username",required = false) String username,HttpServletRequest request,Model model) {
+        User user = null;
+            if(username != null) {
+                if(username.contains("@"))
+                    user = userService.findByEmailIgnoreCase(username);
+                else
+                    user = userService.findByNameIgnoreCase(username);
+            }
         if(user == null ) {
             model.addAttribute("notFound",true);
             return "authorization/forgotPassword";
@@ -199,7 +200,7 @@ public class AuthController {
 
         if(user.getResetPasswordToken() == null)
             publisher.publishEvent(new OnResetPasswordEvent(user,request.getContextPath()));
-
+        model.addAttribute("showInfo",true);
         return "redirect:/auth/login";
     }
 

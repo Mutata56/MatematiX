@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">>
+</head>
+
+<body>
+<div class="toast">
+    <script th:fragment="toast">
+        $(function(){
+            toastr.options.preventDuplicates = true;
+            toastr.options.progressBar = true;
+            toastr.options.timeOut = 50000; // How long the toast will display without user interaction
+            toastr.options.extendedTimeOut = 100000; // How long the toast will display after a user hovers over it
+            toastr.error("Заявка истекла.","Ошибка!");
+            toastr.info("На вашу почту была выслана новая ссылка.");
+        });
+    </script>
+</div>
+</body>
+
+</html>

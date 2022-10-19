@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatematiX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/footer.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/header.css}">
+    <link rel="stylesheet" th:href="@{/resources/static/css/base/jax.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <header th:insert="~{base/header :: copy}">&nbsp;</header>
+    <main>
+        <h1>Что такое MathJax, и почему это важно?</h1>
+        <div class="content">
+            <img th:src="@{/resources/static/img/Mathjax.png}" alt="">
+            <p>MathJax - кроссбраузерная библиотека, позволяющая записывать математические формулы в удобном для пользователя виде.Но Почему  мы считаем важным оповестить вас, наших пользователей, об использовании данной технологии?</p>
+            <p>MathJax добавляет к формулам контекстное меню, вызываемое правой кнопкой мыши или щелчком с нажатой Ctrl:</p>
+            <img th:src="@{/resources/static/img/Example1.png}" alt="">
+            <p><b>“Настройки Math”</b> позволяют настраивать возможности MathJax, например, размер формул и механизм их показа.</p>
+            <img th:src="@{/resources/static/img/Example2.png}" alt="">
+            <p><b>Обратите внимание: при слишком большом увеличении, формулы могут выглядеть некорректно и не соответствовать исходному виду.</b></p>
+            <p>С помощью отрисовщика формул вы можете выбрать наиболее удобный вариант отображения формул:</p>
+            <figure>
+                <img th:src="@{/resources/static/img/Example3.png}" alt="">
+                <figcaption>Вариант HTML CSS</figcaption>
+            </figure>
+            <figure>
+                <img th:src="@{/resources/static/img/Example4.png}" alt="">
+                <figcaption>Вариант SVG</figcaption>
+            </figure>
+            <figure>
+                <img th:src="@{/resources/static/img/Example5.png}" alt="">
+                <figcaption style="margin-bottom: 40px">Вариант Preview HTML</figcaption>
+            </figure>
+            <p><b>Администрация нашего сайта настоятельно рекомендует использовать HTML CSS.</b></p>
+            <p style="margin-bottom: 200px">Узнать про остальные функции можно, вызывав контекстное меню MathJAX и выбрав пункт “О MathJax”.</p>
+        </div>
+    </main>
+    <footer th:insert="~{base/footer :: copy}"></footer>
+</body>
+</html>

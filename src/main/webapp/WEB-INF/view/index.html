@@ -12,10 +12,18 @@
         <link rel="stylesheet" th:href="@{/resources/static/css/base/footer.css}">
         <link rel="stylesheet" th:href="@{/resources/static/css/base/header.css}">
         <link rel="stylesheet" th:href="@{/resources/static/css/main.css}">
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
+        <div th:if="${notFound} " th:insert="~{base/toastNotFound :: toast}"></div>
+        <div th:if="${expired} " th:insert="~{base/toastExpired :: toast}"></div>
+        <div th:if="${nonValidUser} or ${param.nonValidUser}" th:insert="~{base/toastRegisterError :: toast}"></div>
+        <div th:if="${successEmailConfirmation}" th:insert="~{base/toastEmailConfirmation :: toast}"></div>
+        <div th:if="${not seenJaxToast}" th:insert="~{base/toastAjax :: toast}"></div>
         <header th:insert="~{base/header :: copy}">&nbsp;</header>
         <div class="carousel">
             <div class="carousel--ul">
@@ -50,8 +58,8 @@
         </div>
         <div class="main">
             <main>
-                <div class="grid-column1-row1 grid-content">&nbsp;</div>
-                <div class="grid-column2-row1 grid-content">&nbsp;</div>
+                <div class="grid-column1-row1 grid-content" onclick="location.href = '/articles/Pythagorean'"></div>
+                <div class="grid-column2-row1 grid-content" onclick="location.href = `/articles/Formulas`"></div>
                 <div class="grid-column3-row1 grid-content">&nbsp;</div>
                 <div class="grid-column4-row1 grid-content">&nbsp;</div>
 

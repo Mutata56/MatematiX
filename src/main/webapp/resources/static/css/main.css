@@ -172,7 +172,7 @@ main {
 }
 .carousel--card {
     transition: all 1s ease-out;
-    width: 100vw;
+    width: 1573px;
 }
 .carousel--ul li {
     width: 100%;
@@ -204,19 +204,20 @@ main {
     margin-left: 0;
 }
 #radio2:checked ~ .carousel--card-1 {
-    margin-left: -100vw;
+    margin-left: -1573px;
 }
 #radio3:checked ~ .carousel--card-1 {
-    margin-left: -200vw;
+    margin-left: -3146px;
 }
 #radio4:checked ~ .carousel--card-1 {
-    margin-left: -300vw;
+    margin-left: -4719px;
 }
 #radio5:checked ~ .carousel--card-1 {
-    margin-left: -400vw;
+    margin-left: -6292px;
 }
 .carousel--card-1 {
     background-color: red;
+
 }
 .carousel--card-2 {
     background-color: orange;
@@ -229,4 +230,25 @@ main {
 }
 .carousel--card-5 {
     background-color: blue;
+}
+.grid-column1-row1 {
+    background-image: url("../img/card/Pythagorean.gif");
+}
+.grid-column2-row1 {
+    background-image: url("../img/card/Trigonometry.gif");
+}
+.grid-column3-row1 {
+    background-image: url("../img/card/Euclid.gif");
+}
+.grid-column4-row1 {
+    background-image: url("../img/card/Viet.gif");
+}
+.grid-column1-row2 {
+    background-image: url("../img/card/Viet.gif");
+}
+.grid-content {
+    box-shadow: -1px -1px 10px 8px rgb(0 0 0 / 4%);
+}
+body {
+    background-color: #FFFAFA;
 }

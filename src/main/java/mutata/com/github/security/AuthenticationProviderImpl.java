@@ -33,7 +33,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
               details = service.loadUserByUsername(username);
         else
              details = service.loadUserByEmail(username);
-
         if(!encoder.matches(authentication.getCredentials().toString(),details.getPassword()))
             throw new BadCredentialsException("Неверный пароль!");
         return new UsernamePasswordAuthenticationToken(details,details.getPassword(), Collections.emptyList());

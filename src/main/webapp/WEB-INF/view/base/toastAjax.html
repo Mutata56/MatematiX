@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">>
+</head>
+
+<body>
+<div class="toast">
+  <script th:fragment="toast">
+    $(function(){
+      toastr.options.preventDuplicates = true;
+      toastr.options.progressBar = false;
+      toastr.options.timeOut = 0;
+      toastr.options.extendedTimeOut = 0;
+      toastr.options.closeButton = true;
+      toastr.options.onclick = function() {
+        document.cookie = "jax=true; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT; samesite"
+        location.href = '/jax';
+      }
+      toastr.options.onCloseClick = function() {
+        document.cookie = "jax=true; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT; samesite"
+      }
+      toastr.info("Что это значит?","Мы используем MathJax!");
+    });
+  </script>
+</div>
+</body>
+
+</html>

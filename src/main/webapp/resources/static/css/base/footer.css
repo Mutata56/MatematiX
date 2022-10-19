@@ -57,6 +57,7 @@ footer {
 }
 .social-links-img {
     vertical-align: middle;
+    padding: 0 !important;
 }
 .logos-flexbox {
     display: flex;
