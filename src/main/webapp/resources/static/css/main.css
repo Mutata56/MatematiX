@@ -60,12 +60,14 @@ main {
  grid-column: 4;
  grid-row: 2;
  height: 360px;
+ background-image: url("../img/card/Modules.gif");
 }
 
 .grid-column1-row3  {
  grid-column: 1;
  grid-row: 3;
  height: 360px;
+    background-image: url("../img/card/Eq.gif");
 }
 
 .grid-column3-row3  {
@@ -73,6 +75,8 @@ main {
  grid-row: 3;
  height: 270px;
     margin-top: -212px;
+    background-image: url("../img/card/Module.gif");
+
 }
 
 .grid-column4-row3  {
@@ -153,7 +157,7 @@ main {
     height: 200px;
     background-color: white;
     box-shadow: 0px 4px 8px 5px rgb(34 60 80 / 17%);
-    border-radius: 6px;
+    border-radius: 0;
 }
 .carousel--ul {
     display: flex;
@@ -188,7 +192,7 @@ main {
     justify-content: center;
 }
 .manual-btn {
-    border: 2px solid #28B485;
+    border: 2px solid #ffffffa6;
     padding: 6px;
     border-radius: 10px;
     cursor: pointer;
@@ -198,7 +202,7 @@ main {
     margin-right: 40px;
 }
 .manual-btn:hover {
-    background: #28B485;
+    background: #fffafa;
 }
 #radio1:checked ~ .carousel--card-1 {
     margin-left: 0;
@@ -216,20 +220,23 @@ main {
     margin-left: -6292px;
 }
 .carousel--card-1 {
-    background-color: red;
-
+    background-image: url("../img/carousel/C1.gif");
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 .carousel--card-2 {
-    background-color: orange;
+    background-image: url("../img/carousel/C2.gif");
 }
 .carousel--card-3 {
-    background-color: yellow;
+    background-image: url("../img/carousel/C3.gif");
 }
 .carousel--card-4 {
-    background-color: green;
+    background-image: url("../img/carousel/C4.gif");
 }
 .carousel--card-5 {
-    background-color: blue;
+    background-image: url("../img/carousel/C5.gif");
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 .grid-column1-row1 {
     background-image: url("../img/card/Pythagorean.gif");

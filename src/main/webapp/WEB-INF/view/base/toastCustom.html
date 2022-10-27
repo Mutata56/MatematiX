@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">>
+</head>
+
+<body>
+<div class="toast">
+  <script th:inline="javascript" th:fragment="toast">
+    $(function(){
+      toastr.options.preventDuplicates = true;
+      toastr.options.timeOut = 0;
+      toastr.options.extendedTimeOut = 0
+      let message = [[${message}]];
+      if(message.charAt(message.length - 1) !== "|")
+        message+="|";
+      let index = -1;
+      let start = 0
+      while((index = message.indexOf(`|`,start)) >= 0) {
+        let substring = message.substring(start,index);
+        toastr.error(substring,"Ошибка!");
+        start = index + 1
+      }
+    });
+  </script>
+</div>
+</body>
+
+</html>

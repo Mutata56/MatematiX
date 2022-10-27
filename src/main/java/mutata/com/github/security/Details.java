@@ -16,15 +16,6 @@ public record Details(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
-        System.out.println(user.getRole());
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
     }
 

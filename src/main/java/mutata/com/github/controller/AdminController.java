@@ -4,12 +4,22 @@ package mutata.com.github.controller;
 
 import mutata.com.github.dao.MyResponse;
 import mutata.com.github.entity.User;
+import mutata.com.github.event.OnRegistrationCompleteEvent;
 import mutata.com.github.service.*;
+import mutata.com.github.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -19,13 +29,91 @@ public class AdminController {
     private final VerificationTokenService verificationTokenService;
     private final ResetPasswordTokenService resetPasswordTokenService;
 
+    private final ApplicationEventPublisher publisher;
+
+    private final UserValidator userValidator;
     @Autowired
-    public AdminController(UserService userService,VerificationTokenService verificationTokenService,ResetPasswordTokenService resetPasswordTokenService) {
+    public AdminController(ApplicationEventPublisher publisher,UserValidator userValidator, UserService userService, VerificationTokenService verificationTokenService, ResetPasswordTokenService resetPasswordTokenService) {
         this.userService = userService;
         this.resetPasswordTokenService = resetPasswordTokenService;
         this.verificationTokenService = verificationTokenService;
+        this.userValidator = userValidator;
+        this.publisher = publisher;
     }
 
+    @GetMapping(value={"/createUser","/users/create","/create/user"})
+    public String showCreateUserPage(Model model) {
+        model.addAttribute("user",new User());
+        return "/admin/createUser";
+    }
+    @GetMapping(value = "/deleteUser")
+    public String deleteUser(@RequestParam(required = false) Optional<String> name,Model model) {
+        if(name.isPresent()) {
+            String res = name.get();
+            System.out.println(res);
+            User user = res.contains("@") ? userService.findByEmailIgnoreCase(res) : userService.findByNameIgnoreCase(res);
+            if(user != null) {
+                model.addAttribute("success",true);
+                userService.delete(user);
+            } else {
+                model.addAttribute("success",false);
+                model.addAttribute("message","Такого пользователя не существует");
+            }
+        }
+        return "/admin/deleteUser";
+    }
+    @GetMapping("/editUser")
+    public String showEditUserPage(Model model) {
+         class JavaScriptUser {
+             public final String name;
+             public final String email;
+             public final String password;
+             public final byte blocked;
+             public final byte enabled;
+             public final String role;
+             JavaScriptUser(User user) {
+                 this.name = user.getName();
+                 this.blocked = user.getBlocked();
+                 this.email = user.getEmail();
+                 this.enabled = user.getEnabled();
+                 this.role = user.getRole();
+                 this.password = user.getEncryptedPassword();
+             }
+        }
+        model.addAttribute("users",userService.findAll().stream().map(JavaScriptUser::new).toList());
+        model.addAttribute("user",new User());
+        return "/admin/editUser";
+    }
+    @PostMapping(value = "/editUser")
+    public String editUser(@ModelAttribute @Valid User editedUser,BindingResult result,Model model) {
+        if(result.hasErrors()) {
+            handleErrors(model,result); // FIXME IF THE USER DOESN'T EXIST
+        } else {
+            userService.save(editedUser);
+            model.addAttribute("success",true);
+        }
+        return "/admin/editUser";
+    }
+    private void handleErrors(Model model, BindingResult result) {
+        List<ObjectError> errors = result.getAllErrors();
+        StringBuilder builder = new StringBuilder();
+        errors.forEach(err -> builder.append(err.getDefaultMessage()).append("|"));
+        model.addAttribute("message",builder.toString());
+        model.addAttribute("success",0);
+    }
+    @PostMapping(value={"/createUser","/users/create","/create/user"})
+    public String createNewUser(@ModelAttribute @Valid User user, BindingResult result, Model model, HttpServletRequest request) {
+        userValidator.validate(user,result);
+        if(result.hasErrors()) {
+            handleErrors(model,result);
+        } else {
+            model.addAttribute("success",true);
+            userService.save(user);
+            if(user.getEnabled() == 0)
+                publisher.publishEvent(new OnRegistrationCompleteEvent(user,request.getContextPath()));
+        }
+        return "/admin/createUser";
+    }
     @GetMapping(value = {"/index","/",""})
     public String showAdminPanel(Model model, @RequestParam(required = false) String sortBy,@RequestParam(required = false) String findBy,
                                  @RequestParam(required = false) Integer currentPage,@RequestParam(required = false) Integer itemsPerPage,

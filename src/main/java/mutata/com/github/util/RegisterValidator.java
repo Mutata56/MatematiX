@@ -1,5 +1,6 @@
 package mutata.com.github.util;
 
+import mutata.com.github.entity.User;
 import mutata.com.github.entity.dto.RegisterDTO;
 import mutata.com.github.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,14 @@ public class RegisterValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+
         RegisterDTO registerDTO = (RegisterDTO) target;
         String username = registerDTO.getName();
-        if(userService.findByNameIgnoreCase(username) != null) {
+        if(isNameAlreadyTaken(username)) {
             errors.rejectValue("name","","Данный логин уже занят.");
         }
         String email = registerDTO.getEmail();
-        if(userService.findByEmailIgnoreCase(email) != null) {
+        if(isEmailAlreadyTaken(email)) {
             errors.rejectValue("email","","Данная эл. почта уже занята.");
         }
         String password = registerDTO.getPassword();
@@ -39,4 +41,12 @@ public class RegisterValidator implements Validator {
             errors.rejectValue("password","","Пароли не совпадают.");
     }
 
+
+
+    boolean isEmailAlreadyTaken(String email) {
+        return userService.findByEmailIgnoreCase(email) != null;
+    }
+    boolean isNameAlreadyTaken(String name) {
+        return userService.findByNameIgnoreCase(name) != null;
+    }
 }

@@ -74,7 +74,6 @@ public class AuthController {
     @PostMapping("/register")
     public String registerUser(HttpServletRequest request, @Valid @ModelAttribute(name = "dto",binding = true) RegisterDTO registerDTO,
                                BindingResult result) {
-        System.out.println(registerDTO);
         registerValidator.validate(registerDTO,result);
         if(result.hasErrors())
             return "/authorization/register";

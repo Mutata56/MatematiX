@@ -8,6 +8,10 @@
       <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
       <link rel="stylesheet" th:href="@{/resources/static/css/base/footer.css}">
       <link rel="stylesheet" th:href="@{/resources/static/css/base/header.css}">
+      <link rel="apple-touch-icon" sizes="180x180" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
+      <link rel="icon" type="image/png" sizes="32x32" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
+      <link rel="icon" type="image/png" sizes="16x16" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
+      <link rel="manifest" th:href="@{/resources/static/img/logo/site.webmanifest}">
   </head>
 
   <body>
@@ -19,7 +23,7 @@
                 </div>
                 <div class="anonymous" sec:authorize="isAuthenticated()">
                         <h1>Произошла ошибка при обработке запроса.</h1>
-                        <h2>Вы не авторизированы для выполнения этого запроса.</h2>
+                        <h2>Вы не авторизированны для выполнения этого запроса.</h2>
                 </div>
           </main>
       <footer th:insert="~{base/footer :: copy}"></footer>
