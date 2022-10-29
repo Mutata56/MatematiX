@@ -4,8 +4,8 @@ main {
     grid-template-rows:  450px 450px 360px;
     row-gap: 30px;
     column-gap: 20px;
-    padding: 50px 50px 100px;
     justify-content: space-between;
+    padding: 50px 50px 100px 80px;
 }
 
 .grid-content {
@@ -13,6 +13,7 @@ main {
     border-radius: 20px;
     max-width: 360px;
     transition: all 0.6s ease-out;
+    transition-property: box-shadow,transform;
 }
 .grid-content:hover {
     cursor: pointer;
@@ -54,6 +55,7 @@ main {
  grid-row: 2 / span 3;
  height: 720px;
  margin-top: -180px;
+ background-image: url("../img/card/Bezu.gif");
 }
 
 .grid-column4-row2  {
@@ -88,6 +90,9 @@ main {
 
 .main {
     min-height: 100vh;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1600px;
 }
 
 @media screen and (max-width: 1210px) {
@@ -172,7 +177,9 @@ main {
     height: 200px;
     overflow: hidden;
     position: relative;
-    padding-left:50px
+    padding-left:50px;
+    margin-right: auto;
+    margin-left: auto;
 }
 .carousel--card {
     transition: all 1s ease-out;

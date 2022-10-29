@@ -8,6 +8,9 @@
     align-items: center;
     padding: 15px 80px;
     z-index: 10;
+    max-width: 1622px;
+    margin: auto;
+    right: 0;
 }
 .header .logo-img {
     width: 11em;

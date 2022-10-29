@@ -85,9 +85,11 @@ public class AdminController {
         return "/admin/editUser";
     }
     @PostMapping(value = "/editUser")
-    public String editUser(@ModelAttribute @Valid User editedUser,BindingResult result,Model model) {
-        if(result.hasErrors()) {
-            handleErrors(model,result); // FIXME IF THE USER DOESN'T EXIST
+    public String editUser(@ModelAttribute(name = "user") @Valid User editedUser,BindingResult result,Model model) {
+
+        if(result.hasErrors() || userService.findByNameIgnoreCase(editedUser.getName()) == null) {
+            handleErrors(model,result);
+            return showEditUserPage(model);
         } else {
             userService.save(editedUser);
             model.addAttribute("success",true);

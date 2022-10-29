@@ -143,7 +143,11 @@
         roleSelect.value = 1;
     }
     editButton.addEventListener("click",(event) => {
-        accessDenied()
+        let selectedUser = findByName(nameInput.value)
+        if(selectedUser == null) {
+            event.preventDefault();
+            accessDenied()
+        }
     });
 
 </script>
