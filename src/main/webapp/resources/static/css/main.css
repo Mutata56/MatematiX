@@ -86,6 +86,7 @@ main {
     grid-row: 3;
     height: 450px;
     margin-top: -90px;
+    background-image: url("../img/card/DifferentEq.gif");
 }
 
 .main {

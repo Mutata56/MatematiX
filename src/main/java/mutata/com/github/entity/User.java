@@ -51,6 +51,9 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    private AvatarInfo avatarInfo;
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

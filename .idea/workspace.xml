@@ -10,14 +10,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/card/Bezu.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/repository/AvatarInfoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/profile/main.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/UnsetAvatar.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/card/DifferentEq.gif" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationSecurityInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationSecurityInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/DispatcherServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/DispatcherServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/SecurityConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/editUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/editUser.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/css/base/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/base/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/css/getInTouch.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/getInTouch.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/img/card/Eq.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/card/Eq.gif" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,13 +37,14 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="CSS File" />
         <option value="Jsp File" />
         <option value="JavaScript File" />
-        <option value="Interface" />
         <option value="package-info" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="CSS File" />
+        <option value="package.json" />
+        <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -57,26 +67,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Kirill/IdeaProjects/MatematixProject/src/main/webapp/resources/static/img/card&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;fd5599c42c3db50fa13c0d289e5f4355&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Kirill/IdeaProjects/MatematixProject/src/main/webapp/resources/static/img",
+    "list.type.of.created.stylesheet": "CSS",
+    "nodejs_package_manager_path": "npm",
+    "spring.configuration.checksum": "fd5599c42c3db50fa13c0d289e5f4355"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\card" />
-      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\logo" />
-      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\carousel" />
-      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject" />
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img" />
+      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\profile\aadxjtampt" />
+      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\profile\admin" />
+      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\profile" />
+      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\card" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img" />
@@ -235,7 +245,8 @@
       <workItem from="1666707140444" duration="46000" />
       <workItem from="1666723187649" duration="2444000" />
       <workItem from="1666987905812" duration="1423000" />
-      <workItem from="1666995234320" duration="9692000" />
+      <workItem from="1666995234320" duration="11044000" />
+      <workItem from="1667232061936" duration="57097000" />
     </task>
     <servers />
   </component>

@@ -24,19 +24,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
     private final UserService userService;
-    private final VerificationTokenService verificationTokenService;
-    private final ResetPasswordTokenService resetPasswordTokenService;
-
     private final ApplicationEventPublisher publisher;
-
     private final UserValidator userValidator;
     @Autowired
-    public AdminController(ApplicationEventPublisher publisher,UserValidator userValidator, UserService userService, VerificationTokenService verificationTokenService, ResetPasswordTokenService resetPasswordTokenService) {
+    public AdminController(ApplicationEventPublisher publisher,UserValidator userValidator, UserService userService) {
         this.userService = userService;
-        this.resetPasswordTokenService = resetPasswordTokenService;
-        this.verificationTokenService = verificationTokenService;
         this.userValidator = userValidator;
         this.publisher = publisher;
     }
