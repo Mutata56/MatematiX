@@ -53,9 +53,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                .antMatchers("/api/**").permitAll() // hasRole("ADMIN")
-                .antMatchers("/uploadAvatar").authenticated() // hasRole("ADMIN")
-                .antMatchers("/admin/**").permitAll()// hasRole("ADMIN")
+                .antMatchers("/api/**").permitAll() // FIXME: hasRole("ADMIN")
+                .antMatchers("/auth/ajax/**").permitAll()
+                .antMatchers("/admin/ajax/**").permitAll() // FIXME: hasRole("ADMIN")
+                .antMatchers("/uploadAvatar").authenticated()
+                .antMatchers("/admin/**").permitAll()// FIXME: hasRole("ADMIN")
                 .antMatchers("/").permitAll()
                 .antMatchers("/jax").permitAll()
                 .antMatchers("/articles/**").permitAll()

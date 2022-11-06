@@ -26,6 +26,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -140,12 +142,14 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
 
     // Themyleaf resolver,engine etc
     @Bean
+    @Description("Thymeleaf Template Resolver")
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
         resolver.setApplicationContext(applicationContext);
         resolver.setPrefix("/WEB-INF/view/");
         resolver.setSuffix(".html");
         resolver.setCharacterEncoding("UTF-8");
+        resolver.setTemplateMode("HTML5");
         return resolver;
     }
     @Bean
@@ -161,6 +165,7 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver =  new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
+        resolver.setContentType("text/html; charset=UTF-8");
         resolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(resolver);
     }
@@ -182,4 +187,5 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
 
         return new JavaMailSenderWrapper(javaMailSenderImpl);
     }
+
 }

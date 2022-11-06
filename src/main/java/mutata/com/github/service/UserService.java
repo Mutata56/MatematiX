@@ -153,4 +153,7 @@ public class UserService implements MyService<User> {
         user.setEnabled((byte) 0);
         saveWithoutPasswordEncryption(user);
     }
+    public long getCount() {
+        return userRepository.count();
+    }
 }

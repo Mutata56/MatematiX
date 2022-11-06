@@ -6,6 +6,8 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/articles/Pythagorean.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/articles" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/forgotPassword.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/login.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/register.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/resetPassword.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/base/header.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/view/base" />
       </map>
     </option>

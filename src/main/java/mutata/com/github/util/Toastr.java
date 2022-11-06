@@ -1,6 +1,11 @@
 package mutata.com.github.util;
 
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+
 import java.util.Arrays;
+import java.util.List;
 
 public class Toastr {
 
@@ -32,6 +37,20 @@ public class Toastr {
                 parseOptions(options) + "\n" +
                 "toastr." + action.action + "(\"" +message + "," + header + "\")"  ;
     }
+    public static void addErrorsToModel(Model model, BindingResult result) {
+        List<ObjectError> errors = result.getAllErrors();
+        StringBuilder builder = new StringBuilder();
+        errors.forEach(err -> builder.append(err.getDefaultMessage()).append("|"));
+        model.addAttribute("message",builder.toString());
+        model.addAttribute("success",0);
+    }
+
+    public static void addErrorToModel(Model model, String message) {
+        boolean hasOtherMessages = model.getAttribute("message") != null;
+        model.addAttribute("message",(hasOtherMessages ? model.getAttribute("message") : "") + "\n" + message);
+        model.addAttribute("success",0);
+    }
+
     private enum Action {
         SUCCESS("success"),WARNING("warning"),ERROR("error"),INFO("info");
         private final String action;

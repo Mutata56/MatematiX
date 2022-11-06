@@ -46,7 +46,6 @@ main nav ul {
     height: 140px;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid grey;
 }
 .about {
     display: flex;
@@ -149,11 +148,12 @@ textarea:focus {
 }
 #divForCroppingHeader {
     text-align: center;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 700;
     color: white;
     padding: 7px;
     margin-bottom: 50px;
+    margin-top: 10px
 }
 #imageWrapper {
     width: 300px;
@@ -172,6 +172,59 @@ textarea:focus {
     border-radius: 50%;
     overflow: hidden;
 }
+#previewDivComments {
+    width: 72px !important;
+    height: 72px !important;
+    border-radius: 50%;
+    overflow: hidden;
+}
 #secretSubmit {
     visibility: hidden;
+}
+#submitChangeAvatar:visited,#submitChangeAvatar:link {
+    text-decoration: none;
+    padding: 12px 215px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 20px;
+    transition: all 0.3s ease-out;
+    position: relative;
+    background-color: #28b485;
+    color: #E9F3F3;
+    font-weight: 500;
+}
+
+#submitChangeAvatar:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgb(0 0 0 / 40%);
+}
+#sendButton {
+    visibility: hidden;
+    margin-left: 1094px;
+    width: 150px;
+    color: rgb(233, 243, 243);
+    background-color: rgb(40, 180, 133);
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    height: 25px;
+    font-weight: 500;
+    transition: all 0.5s ease-out;
+}
+#sendButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 11px 12px 1px rgb(0 0 0 / 32%)
+}
+
+#sendCommentForm:after {
+    content: attr(content) ' / 300';
+    position: absolute;
+    right: 4px;
+    bottom: -25px;
+    color: white;
+    font-size: 14px;
+}
+#sendCommentForm {
+    position: relative;
 }

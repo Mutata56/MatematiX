@@ -15,6 +15,7 @@
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
     <link rel="manifest" th:href="@{/resources/static/img/logo/site.webmanifest}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 
 <body>
@@ -50,6 +51,7 @@
                     <input class="js-input name-input" maxlength="15" th:name="name" placeholder="Введите имя пользователя" th:type="text" th:id="name" th:value="${dto.getName()}">
                     <img th:unless="${#fields.hasErrors('name')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
                     <img th:if="${#fields.hasErrors('name')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                    <div style="position: absolute;" id="isLoginTakenRespond"></div>
                 </div>
 
 
@@ -72,6 +74,7 @@
                     <input class="js-input email-input" maxlength="45" th:name="email" placeholder="Введите E-mail" th:type="text" th:id="email" th:value="${dto.getEmail()}">
                     <img th:unless="${#fields.hasErrors('email')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
                     <img th:if="${#fields.hasErrors('email')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                    <div style="position: absolute;" id="isEmailTakenRespond"></div>
                 </div>
 
 
@@ -116,6 +119,7 @@
                     <input class="js-input passwordAgain-input" maxlength="60" th:name="passwordAgain"  placeholder="Введите пароль" th:id="passwordAgain" th:type="password">
                     <img th:unless="${#fields.hasErrors('passwordAgain')}" th:src="@{/resources/static/img/info.svg}" class="info-logo" alt="">
                     <img th:if="${#fields.hasErrors('passwordAgain')}" th:src="@{/resources/static/img/info_red.svg}" class="info-logo" alt="">
+                    <div style="position: absolute;" id="doPasswordsMatchRespond"></div>
                 </div>
 
 
@@ -127,7 +131,104 @@
         </div>
     </div>
 </div>
-<script th:src="@{/resources/static/js/ValidationRegisterPage.js}"></script>
 <script th:src="@{/resources/static/js/showInfo.js}"></script>
+<script type="text/javascript">
+    // https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
+    function delay(callback, ms) {
+        let timer = 0;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    let funcSuccessLogin = (data) => {
+        $("#respondFromServerLogin").remove();
+        let element = `<p style="font-size:12px;margin-left:300px;margin-top: 3px;" id="respondFromServerLogin"> ${data === true ? 'Имя уже занято' : 'Имя свободно'}</p>`;
+        $("#isLoginTakenRespond").append(element);
+        if(data)
+            $("#respondFromServerLogin").css({'color': '#dc3545'});
+        else
+            $("#respondFromServerLogin").css({'color': '#28a745'});
+    }
+    let funcSuccessEmail = (data) => {
+        $("#respondFromServerEmail").remove();
+        let element = `<p style="font-size:12px;margin-left:300px;margin-top: 3px;" id="respondFromServerEmail"> ${data === true ? 'Почта уже занята' : 'Почта свободна'}</p>`;
+        $("#isEmailTakenRespond").append(element);
+        if(data)
+            $("#respondFromServerEmail").css({'color': '#dc3545'});
+        else
+            $("#respondFromServerEmail").css({'color': '#28a745'});
+    }
+    let funcPasswordAgain = (data) => {
+        $("#doPasswordsMatch").remove();
+        let element = `<p style="font-size:12px;margin-left:272px;margin-top: 3px;" id="doPasswordsMatch"> ${data === true ? 'Пароли не совпадают' : 'Пароли совпадают'}</p>`;
+        $("#doPasswordsMatchRespond").append(element);
+        if(data)
+            $("#doPasswordsMatch").css({'color': '#dc3545'});
+        else
+            $("#doPasswordsMatch").css({'color': '#28a745'});
+    }
+
+    $(document).ready(
+        function() {
+            $("#name").bind("keyup",
+                delay(
+                    function () {
+                        $.ajax({
+                            url: "/auth/ajax/isLoginAlreadyTaken",
+                            type: "GET",
+                            data: ({login: document.getElementById("name").value}),
+                            success: funcSuccessLogin
+                        });
+                    }
+                    ,700
+                )
+            );
+            $("#email").bind("keyup",
+                delay(
+                    function () {
+                        $.ajax({
+                            url: "/auth/ajax/isEmailAlreadyTaken",
+                            type: "GET",
+                            data: ({email: document.getElementById("email").value}),
+                            success: funcSuccessEmail
+                        });
+                    }
+                    ,700
+                )
+            );
+            $("#passwordAgain").bind("keyup",
+                delay(
+                    function () {
+                        $.ajax({
+                            url: "/auth/ajax/doPasswordsNotMatch",
+                            type: "GET",
+                            data: ({passwordAgain: document.getElementById("passwordAgain").value,password: document.getElementById("password").value}),
+                            success: funcPasswordAgain
+                        });
+                    }
+                    ,700
+                )
+            );
+            $("#password").bind("keyup",
+                delay(
+                    function () {
+                        $.ajax({
+                            url: "/auth/ajax/doPasswordsNotMatch",
+                            type: "GET",
+                            data: ({passwordAgain: document.getElementById("passwordAgain").value,password: document.getElementById("password").value}),
+                            success: funcPasswordAgain
+                        });
+                    }
+                    ,700
+                )
+            );
+        }
+    );
+</script>
 </body>
 </html>

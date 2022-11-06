@@ -10,23 +10,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/repository/AvatarInfoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/profile/main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/UnsetAvatar.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/card/DifferentEq.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/repository/CommentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/js/autosize.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationSecurityInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/ApplicationSecurityInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/DispatcherServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/DispatcherServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/configuration/SecurityConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/controller/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/util/RegisterValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/util/RegisterValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/util/Toastr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/util/Toastr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/createUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/createUser.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/editUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/editUser.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/admin/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/resetPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/authorization/resetPassword.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/base/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/base/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/profile/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/view/profile/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/css/base/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/base/header.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/css/profile/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/css/profile/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/img/logo/site.webmanifest" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/img/logo/site.webmanifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/img/logout.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/static/js/showInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/static/js/showInfo.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +53,8 @@
         <option value="HTML File" />
         <option value="CSS File" />
         <option value="package.json" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -67,26 +77,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Kirill/IdeaProjects/MatematixProject/src/main/webapp/resources/static/img",
-    "list.type.of.created.stylesheet": "CSS",
-    "nodejs_package_manager_path": "npm",
-    "spring.configuration.checksum": "fd5599c42c3db50fa13c0d289e5f4355"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Kirill/IdeaProjects/MatematixProject/src/main/webapp/resources/static/js&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;fd5599c42c3db50fa13c0d289e5f4355&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\js" />
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img" />
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\profile\aadxjtampt" />
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\profile\admin" />
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\profile" />
-      <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img\card" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\webapp\resources\static\img" />
@@ -246,7 +256,17 @@
       <workItem from="1666723187649" duration="2444000" />
       <workItem from="1666987905812" duration="1423000" />
       <workItem from="1666995234320" duration="11044000" />
-      <workItem from="1667232061936" duration="57097000" />
+      <workItem from="1667232061936" duration="58951000" />
+      <workItem from="1667402830862" duration="7232000" />
+      <workItem from="1667414545424" duration="970000" />
+      <workItem from="1667482995999" duration="594000" />
+      <workItem from="1667497325130" duration="3897000" />
+      <workItem from="1667556198238" duration="7284000" />
+      <workItem from="1667576562029" duration="12733000" />
+      <workItem from="1667593049761" duration="3680000" />
+      <workItem from="1667598670742" duration="11727000" />
+      <workItem from="1667650917413" duration="14620000" />
+      <workItem from="1667671929094" duration="20424000" />
     </task>
     <servers />
   </component>
@@ -269,7 +289,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/controller/AuthController.java</url>
-          <line>147</line>
+          <line>154</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title th:if="${canChangeAvatar}">Мой Профиль</title>
+    <title th:unless="${canChangeAvatar}" th:text="'Профиль - ' + ${username}"></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,6 +19,7 @@
     <link rel="manifest" th:href="@{/resources/static/img/logo/site.webmanifest}">
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 
 <body id="body">
@@ -27,10 +30,10 @@
     <nav>
         <ul>
             <li style="color: white !important; font-size: 17px; cursor: pointer">Профиль</li>
-            <li><a class="nav-link" th:href="@{/}">Настройки</a></li>
-            <li><a class="nav-link" th:href="@{/}">Безопасность</a></li>
-            <li><a class="nav-link" th:href="@{/}">Интерфейс</a></li>
-            <li><a class="nav-link" th:href="@{/}">Уведомления</a></li>
+            <li th:if="${canChangeAvatar}" ><a class="nav-link" th:href="@{/}">Настройки</a></li>
+            <li th:if="${canChangeAvatar}"><a class="nav-link" th:href="@{/}">Безопасность</a></li>
+            <li th:if="${canChangeAvatar}"><a class="nav-link" th:href="@{/}">Интерфейс</a></li>
+            <li th:if="${canChangeAvatar}"><a class="nav-link" th:href="@{/}">Уведомления</a></li>
         </ul>
     </nav>
     <div class="about">
@@ -39,7 +42,7 @@
                 <img th:if="${hasAvatar}" th:id="avatar" alt="">
                 <img th:unless="${hasAvatar}" th:id="avatar" th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
             </label>
-            <form enctype="multipart/form-data" th:id="theForm" th:action="@{/uploadAvatar(${_csrf.parameterName}=${_csrf.token})}" th:method="POST">
+            <form th:if="${canChangeAvatar}" enctype="multipart/form-data" th:id="theForm" th:action="@{/uploadAvatar(${_csrf.parameterName}=${_csrf.token})}" th:method="POST">
                 <input th:id="secretInput" th:name="file" type="file" style="display: none" accept="image/*">
                 <input type="submit" th:id="secretSubmit">
                 <input th:id="x" type="hidden" th:name="x">
@@ -71,32 +74,58 @@
                 <div class="writeCommentSuggestionDiv">
                     <div style="display: flex;gap:50px;">
                         <div class="avatar-wrapper" style="width: 72px !important; height: 72px !important;border: none !important;">
-                            <img th:if="${hasMyAvatar}" th:id="avatarComments" alt="">
-                            <img th:unless="${hasMyAvatar}" th:id="avatarComments" th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
+                            <a th:href="@{/profile}">
+                                <img th:if="${hasMyAvatar}" th:id="avatarComments" alt="">
+                                <img th:unless="${hasMyAvatar}" th:id="avatarComments" th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
+                            </a>
                         </div>
-                        <textarea minlength="1" placeholder="Введите ваш комментарий..." name="" id=""  ></textarea>
+                        <form content="0" th:id="sendCommentForm" th:method="POST" th:action="@{/createComment}" style="width: 100%">
+                            <textarea minlength="1" maxlength="300" placeholder="Введите ваш комментарий..." th:name="content" th:id="content"></textarea>
+                            <input th:if="${username ne null}" type="hidden" th:name="receiver" th:id="receiver" th:value="${username}">
+                            <input th:if="${username eq null}" type="hidden" th:name="receiver" th:id="receiver" th:value="${currentUserName}">
+                        </form>
+                    </div>
+                    <div style="margin-top:5px">
+                        <input type="submit" th:id="sendButton">
                     </div>
                 </div>
+
+        </div>
+        <div th:if="${hasComments}" class="comment" th:each="comment : ${commentsOnTheWall}">
+            <div style="display: flex;gap:50px;">
+                <div class="avatar-wrapper" style="width: 72px !important; height: 72px !important;border: none !important;">
+                    <a th:href="@{/profile/{name}(name=${comment.username})}">
+                        <img style="width: 72px;height: 72px" th:if="${comment.username.length <= 0}"  th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
+                        <img style="width: 72px;height: 72px" th:unless="${comment.username.length <= 0}"  th:src="@{'data:image/' + ${comment.format} + ';base64,' + ${comment.avatar}}" alt="">
+                    </a>
+                </div>
+                    <textarea readonly th:class="toBeAutoGrown" th:text="${comment.content}"></textarea>
+            </div>
         </div>
     </div>
 </main>
 <div id="divForCropping">
     <div id="divForCroppingHeader">Измените ваше фото</div>
-    <div style="display: flex;align-items: center;justify-content: center;gap:40px">
+    <div style="display: flex;align-items: center;justify-content: center;gap:120px">
         <div id="imageWrapper">
             <img id="croppingImage" src="" alt="">
         </div>
-        <div id="previewDiv">
+        <div style="display: flex;flex-direction: column;align-items: center;gap:40px;align-self: flex-start;margin-top: 20px">
+            <div id="previewDiv">
 
+            </div>
+            <div id="previewDivComments">
+
+            </div>
         </div>
     </div>
-        <button id="changeAvatar">Выбрать другое изображение</button>
-        <input id="submitChangeAvatar" type="submit" value="Подтвердить">
+
+    <div style="text-align: center;width: 100%"><a id="submitChangeAvatar" href="">Подтвердить</a></div>
 </div>
 <div id="overlay">
 
 </div>
-<script type="text/javascript">
+<script type="text/javascript" th:if="${canChangeAvatar}">
     let croppingDiv = document.getElementById("divForCropping");
     let fileInput = document.getElementById("secretInput");
     let croppingImage = document.getElementById("croppingImage");
@@ -104,26 +133,24 @@
     let header = document.getElementById("headerDiv");
     let body = document.getElementById("body")
     let overlay = document.getElementById("overlay")
-    let changeAvatar = document.getElementById("changeAvatar");
     let submitChangeAvatar = document.getElementById("submitChangeAvatar");
     let theForm = document.getElementById("theForm");
-    let avatar = document.getElementById("avatar");
     submitChangeAvatar.addEventListener("click",(event) => {
-       event.preventDefault();
-       let data = cropper.getData();
-       document.getElementById("x").value = data.x;
-       document.getElementById("y").value = data.y;
-       document.getElementById("width").value = data.width;
-       document.getElementById("height").value = data.height;
-       document.getElementById("scaleX").value = data.scaleX;
-       document.getElementById("scaleY").value = data.scaleY;
-       theForm.submit();
-    });
+        event.preventDefault();
+        let data = cropper.getData();
+        document.getElementById("x").value = data.x;
+        document.getElementById("y").value = data.y;
+        document.getElementById("width").value = data.width;
+        document.getElementById("height").value = data.height;
+        document.getElementById("scaleX").value = data.scaleX;
+        document.getElementById("scaleY").value = data.scaleY;
+        theForm.submit();
+    })
     let uploadedImage = "";
     let choosingAvatar = false;
     let cropper = null;
-    let changeAvatarEvent = false;
-    // Close Logic
+    let cropperExists = false;
+
     let close = () => {
         choosingAvatar = false;
         croppingDiv.style.display = "none";
@@ -131,7 +158,7 @@
         header.style.filter = "none";
         overlay.style.visibility = "hidden";
         fileInput.value = null;
-        cropper.destroy();
+
     }
     overlay.addEventListener("click",(event) => {
         if(choosingAvatar) {
@@ -150,35 +177,34 @@
         if(fileInput.files[0] && fileInput.files) {
             const reader = new FileReader();
             reader.addEventListener("load",() => {
-                if(changeAvatarEvent)
-                    cropper.destroy()
                 choosingAvatar = true;
                 uploadedImage = reader.result;
                 croppingImage.setAttribute("src",uploadedImage);
                 let element = document.getElementById("previewDiv");
+                let element2 = document.getElementById("previewDivComments");
                 croppingDiv.style.display = "block";
                 overlay.style.visibility = "unset";
-                cropper = new Cropper(croppingImage, {
-                    aspectRatio: 1,
-                    viewMode: 2,
-                    preview: element,
-                    minCropBoxHeight: 138,
-                    minCropBoxWidth: 138,
-                    dragMode: "none",
-                    cropBoxResizable: false,
+                if(!cropperExists) {
+                    cropper = new Cropper(croppingImage, {
+                        aspectRatio: 1,
+                        viewMode: 2,
+                        preview: [element,element2],
+                        minCropBoxHeight: 138,
+                        minCropBoxWidth: 138,
+                        dragMode: "none",
+                        cropBoxResizable: false,
 
-                });
-                changeAvatarEvent = false;
+                    });
+                    cropperExists = true;
+                }
+                else {
+                    cropper.replace(uploadedImage);
+                }
             })
             reader.readAsDataURL(fileInput.files[0]);
         }
     });
-    changeAvatar.addEventListener("click",(event) =>
-    {
-        event.preventDefault()
-        fileInput.click();
-        changeAvatarEvent = true;
-    });
+
 
 </script>
 <script th:if="${hasAvatar}" th:inline="javascript">
@@ -187,12 +213,46 @@
     let format = [[${avatarFormat}]];
     theAvatar.src = `data:image/${format};base64,${str}`;
 </script>
-
 <script th:if="${hasMyAvatar}" th:inline="javascript">
     theAvatar = document.getElementById("avatarComments");
     let str1 = [[${myAvatar}]];
     let format1 = [[${myAvatarFormat}]];
     theAvatar.setAttribute("src",`data:image/${format1};base64,${str1}`);
+</script>
+<script type="text/javascript">
+    let textArea = document.getElementById("content");
+    let sendButton = document.getElementById("sendButton");
+    let buttonIsVanished = true;
+    let commentForm = document.getElementById("sendCommentForm");
+    let buttonDisappear = () => {
+        sendButton.style.visibility = "hidden";
+    };
+    let buttonAppear = () => {
+        sendButton.style.visibility = "visible";
+    };
+    sendButton.addEventListener("click",() => {
+       commentForm.submit();
+    });
+    let func = () => {
+        if(textArea.value.length === 0) {
+            buttonDisappear();
+            buttonIsVanished = true;
+        } else if(buttonIsVanished) {
+            buttonAppear();
+            buttonIsVanished = false;
+        }
+    }
+    textArea.addEventListener("input",() => {
+        func();
+        let length = textArea.value.length;
+        commentForm.setAttribute("content",length);
+    });
+</script>
+<script type="module">
+    import autosize from "../../../resources/static/js/autosize.js";
+
+    autosize(textArea);
+    autosize(document.getElementsByClassName("toBeAutoGrown"));
 </script>
 
 </body>

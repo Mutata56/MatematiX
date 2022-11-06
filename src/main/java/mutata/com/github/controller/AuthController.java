@@ -14,6 +14,7 @@ import mutata.com.github.service.TokenService;
 import mutata.com.github.service.UserService;
 import mutata.com.github.service.VerificationTokenService;
 import mutata.com.github.util.RegisterValidator;
+import mutata.com.github.util.Toastr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -107,17 +108,23 @@ public class AuthController {
     public String resetPassword(@Valid @ModelAttribute PasswordDTO passwordDTO, BindingResult result,
                                 Model model) {
         String tokenString = passwordDTO.getToken();
+        boolean hasErrors = false;
         if(result.hasErrors()) {
             model.addAttribute("token",tokenString);
             model.addAttribute("passwordDTO",passwordDTO);
-            return "authorization/resetPassword";
+            Toastr.addErrorsToModel(model,result);
+            hasErrors = true;
         }
-        if(!passwordDTO.getPassword().equals(passwordDTO.getPasswordAgain())) {
-            model.addAttribute("token",tokenString);
-            model.addAttribute("passwordDTO",passwordDTO);
-            model.addAttribute("error",true);
-            return "authorization/resetPassword";
+        if(passwordDTO.getPassword() == null || !passwordDTO.getPassword().equals(passwordDTO.getPasswordAgain())) {
+            if(!hasErrors) {
+                model.addAttribute("token",tokenString);
+                model.addAttribute("passwordDTO",passwordDTO);
+            }
+            Toastr.addErrorToModel(model,"Пароли не совпадают");
+            hasErrors = true;
         }
+        if(hasErrors)
+            return "authorization/resetPassword";
         Token token = resetPasswordTokenService.findByToken(tokenString);
 
         if(token == null ) {
@@ -209,4 +216,19 @@ public class AuthController {
         webDataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
     }
     //FIXME ADD Change EMAIL OPTION
+    @GetMapping("/ajax/isLoginAlreadyTaken")
+    public @ResponseBody boolean isLoginAlreadyTakenAjax(@RequestParam String login) {
+        return login == null || registerValidator.isNameAlreadyTaken(login);
+    }
+    @GetMapping("/ajax/isEmailAlreadyTaken")
+    public @ResponseBody boolean isEmailAlreadyTakenAjax(@RequestParam String email) {
+        return email == null || registerValidator.isEmailAlreadyTaken(email);
+    }
+    @GetMapping("/ajax/doPasswordsNotMatch")
+    public @ResponseBody boolean doPasswordsNotMatchAjax(@RequestParam(required = false) String password,@RequestParam(required = false) String passwordAgain) {
+        if(password == null || passwordAgain == null)
+            return true;
+        return !password.equals(passwordAgain);
+    }
+
 }

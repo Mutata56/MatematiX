@@ -15,5 +15,4 @@ public interface UserRepository extends JpaRepository<User,String> {
 
      Optional<User> findUserByEmailIgnoreCase(String email);
 
-
 }

@@ -1,7 +1,5 @@
 let forms = document.getElementsByClassName("form-info");
 let infos = document.getElementsByClassName("info-logo");
-console.log(forms)
-console.log(infos)
 
 let func = (i) => {
     infos[i].addEventListener("mouseover",() => {

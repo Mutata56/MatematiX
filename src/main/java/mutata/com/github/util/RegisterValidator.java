@@ -43,10 +43,10 @@ public class RegisterValidator implements Validator {
 
 
 
-    boolean isEmailAlreadyTaken(String email) {
+    public boolean isEmailAlreadyTaken(String email) {
         return userService.findByEmailIgnoreCase(email) != null;
     }
-    boolean isNameAlreadyTaken(String name) {
+    public boolean isNameAlreadyTaken(String name) {
         return userService.findByNameIgnoreCase(name) != null;
     }
 }

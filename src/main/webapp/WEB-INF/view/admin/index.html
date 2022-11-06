@@ -60,7 +60,7 @@
                             <td class="td-role">Роль</td>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="theTBODY">
                         <tr th:each="user : ${objects} ">
                             <td th:text="${user.getName()}"></td>
                             <td th:text="${user.getEmail()}"></td>
@@ -86,10 +86,9 @@
                         <option th:selected="${sortBy eq 'enabled'}" th:value="enabled">Активирован</option>
                         <option th:selected="${sortBy eq 'role'}" th:value="role">Роль</option>
                     </select>
-                    <img th:id="sortArrowsAsc" th:if="${sortDirection eq 'asc' or sortDirection eq null}" style="width: 20px;height: 20px" th:src="@{/resources/static/img/sortArrowsAsc.svg}" alt="">
-                    <img th:id="sortArrowsDesc" th:if="${sortDirection eq 'desc'}" style="width: 20px;height: 20px"  th:src="@{/resources/static/img/sortArrowsDesc.svg}" alt="">
+                    <input th:id="sortDirection" type="checkbox">
                 </div>
-                <div class="bottom-nav" th:value="${currentPage}">
+                <div class="bottom-nav" id="theBottomDiv" th:value="${currentPage}">
 
                     <div th:if="${currentPage eq 1}" class="decorated-div" th:id="currentPage1st" th:content="1">1</div>
                     <div th:if="${currentPage eq 1 and total > 1}" class="decorated-div" th:id="currentPage2nd" th:content="2">2</div>
@@ -112,6 +111,154 @@
         </div>
     </main>
 
-    <script th:src="@{/resources/static/js/pagination.js}" ></script>
+
+
+    <script th:inline="javascript">
+        const successFunction = (data) => {
+            $("#theTBODY").empty();
+            for (index = 0;index < data.length;index++) {
+                let third = null;
+                let fourth = null;
+                if(data[index].blocked == 1)
+                    third =`<td><a class="unblockClass" href="/admin/unblock/${data[index].name}">Разблокировать</a></td>`;
+                else
+                    third =`<td><a class="blockClass" href="/admin/block/${data[index].name}">Заблокировать</a></td>`;
+                if(data[index].enabled == 1)
+                    fourth =`<td><a class="deactivateClass" href="/admin/deactivate/${data[index].name}">Да</a></td>`;
+                else
+                    fourth =`<td><a class="activateClass" href="/admin/activate/${data[index].name}">Нет</a></td>`;
+                let role = data[index].role === "ROLE_ADMIN" ? "Администратор" : "Пользователь";
+                let tr =
+                `<tr>
+                 <td>${data[index].name}</td>
+                 <td>${data[index].email}</td>
+                 ${third}
+                 ${fourth}
+                 <td>${role}</td>
+                </tr>`;
+                $("#theTBODY").append(tr);
+            }
+            $("#theBottomDiv").empty();
+            if(currentPage === 1) {
+             $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="1">1</div>`);
+                if(total > 1) {
+                    $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="2">2</div>`);
+                }
+                if(total > 2) {
+                    $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="3">3</div>`);
+                }
+            } else {
+                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="${currentPage - 1}">${currentPage - 1}</div>`);
+                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="${currentPage}">${currentPage}</div>`);
+                if(currentPage != total)
+                    $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="${currentPage + 1}">${currentPage + 1}</div>`);
+            }
+            if(total > 3 && currentPage < total - 1){
+                $("#theBottomDiv").append(`<div class="decorated-div">...</div>`);
+                $("#theBottomDiv").append(`<div id="currentPageLast" content="${total}" class="decorated-div">${total}</div>`);
+            }
+            sharedLogic();
+        }
+        const sendToTheServer = () => {
+            $.ajax({
+                url: "/admin/ajax/process",
+                type: "GET",
+                data: ({
+                    sortBy: sortByValue,
+                    findBy: findByValue,
+                    sortDirection: sortDirection,
+                    itemsPerPage: itemsPerPage,
+                    currentPage: currentPage,
+                    find: find
+                }),
+                success: successFunction
+            });
+        }
+        const sharedLogic = () => {
+            $(".blockClass, .unblockClass, .activateClass, .deactivateClass").click(function (event) {
+                event.preventDefault();
+                console.log(event.target);
+                console.log(event.target.getAttribute("href"));
+                $.ajax({
+                    url: event.target.getAttribute("href"),
+                    type: "GET",
+                    success: sendToTheServer
+                });
+            });
+
+            $("#currentPage1st").on("click",() => {
+                if(currentPage !== 1) {
+                    currentPage = Number($("#currentPage1st").attr("content"));
+                    sendToTheServer();
+                }
+            })
+            $("#currentPage3rd").on("click",() => {
+                if(currentPage + 1 <= total) {
+                    currentPage = Number($("#currentPage3rd").attr("content"));
+                    sendToTheServer();
+                }
+            })
+            $("#currentPageLast").on("click",() => {
+                currentPage = Number($("#currentPageLast").attr("content"));
+                sendToTheServer();
+            })
+            if(currentPage === 1) {
+                $("#currentPage2nd").on("click",() => {
+                    currentPage = 2;
+                    sendToTheServer();
+                })
+            }
+        }
+
+
+        let sortByValue = [[${sortBy}]];
+        if(sortByValue === undefined)
+            sortByValue = "noSort";
+        let find = [[${find}]];
+        let findByValue = [[${findBy}]];
+        let sortDirection = [[${sortDirection}]];
+        let itemsPerPage = [[${itemsPerPage}]];
+        let currentPage = [[${currentPage}]];
+        let total = [[${total}]];
+        let totalUsers = [[${totalUsers}]];
+        $(document).ready(
+            function () {
+                $("#sortBy").bind("change",() => {
+                    sortByValue = $("#sortBy").val();
+                    sendToTheServer();
+                });
+                $("#sortDirection").bind("change",() => {
+                    sortDirection = sortDirection === "asc" ? "desc" : "asc";
+
+                    sendToTheServer();
+                });
+                $("#search").bind("click",() => {
+                    find = $("#search-input").val();
+                    findByValue = $("#findBy").val();
+                    sendToTheServer();
+                });
+                $("#pagination15").bind("click",() => {
+                    itemsPerPage = 15;
+                    total = Math.ceil(totalUsers / (itemsPerPage));
+                    currentPage = 1;
+                    sendToTheServer();
+                });
+                $("#pagination50").bind("click",() => {
+                    itemsPerPage = 50;
+                    total = Math.ceil(totalUsers / (itemsPerPage));
+                    currentPage = 1;
+                    sendToTheServer();
+                });
+                $("#pagination100").bind("click",() => {
+                    itemsPerPage = 100;
+                    total = Math.ceil(totalUsers / (itemsPerPage));
+                    currentPage = 1;
+                    sendToTheServer();
+                });
+                sharedLogic();
+            }
+        );
+
+    </script>
 </body>
 </html>

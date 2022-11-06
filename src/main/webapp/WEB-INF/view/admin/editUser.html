@@ -42,7 +42,7 @@
             <a th:class="main-nav-option" th:href="@{/admin/deleteUser}">Удалить</a>
         </div>
         <div class="main-content">
-            <form th:method="POST" th:action="@{/admin/editUser}" th:object="${user}" class="main-content-form">
+            <form th:id="theForm" th:method="POST" th:action="@{/admin/editUser}" th:object="${user}" class="main-content-form">
                 <div class="main-content-input">
                     <div style="display: flex;justify-content: space-between">
                         <label th:for="name">Имя</label>
@@ -88,45 +88,13 @@
     </div>
 </main>
 <script th:inline="javascript">
-    function findByName(name) {
-        for (let i = 0; i < users.length; i++) {
-            if(users[i].name === name)
-                return users[i]
-        }
-        return null;
-    }
     toastr.options.preventDuplicates = true;
     toastr.options.progressBar = true;
-    let nameInput = document.getElementById("name");
     let emailInput = document.getElementById("email");
     let passInput = document.getElementById("encryptedPassword")
     let activatedSelect = document.getElementById("enabled")
     let blockedSelect = document.getElementById("blocked")
     let roleSelect = document.getElementById("role")
-    let users = [[${users}]]
-    let editButton = document.getElementById("editButton");
-    let loadButton = document.getElementById("loadButton");
-    loadButton.addEventListener("click",(event) => {
-        event.preventDefault();
-        let selectedUser = findByName(nameInput.value)
-        if(selectedUser !== null) {
-            toastr.options.timeOut = 30000;
-            toastr.options.extendedTimeOut = 60000
-            toastr.info("Пользователь загружен","Поиск")
-            emailInput.removeAttribute("disabled")
-            passInput.removeAttribute("disabled")
-            activatedSelect.removeAttribute("disabled")
-            blockedSelect.removeAttribute("disabled")
-            roleSelect.removeAttribute("disabled")
-            emailInput.value = selectedUser.email;
-            passInput.value = selectedUser.password;
-            activatedSelect.value = selectedUser.enabled;
-            blockedSelect.value = selectedUser.blocked;
-            roleSelect.value = selectedUser.role;
-        } else {
-            accessDenied()
-        }
-    })
     accessDenied = () => {
         toastr.options.timeOut = 0;
         toastr.options.extendedTimeOut = 0
@@ -142,14 +110,58 @@
         blockedSelect.value = 1;
         roleSelect.value = 1;
     }
-    editButton.addEventListener("click",(event) => {
-        let selectedUser = findByName(nameInput.value)
-        if(selectedUser == null) {
-            event.preventDefault();
-            accessDenied()
-        }
-    });
+</script>
+<script>
+    const loadUserSuccess = (data) => {
 
+            if(data.length === 0)
+                accessDenied();
+            else {
+                toastr.options.timeOut = 30000;
+                toastr.options.extendedTimeOut = 60000
+                toastr.info("Пользователь загружен","Поиск")
+                emailInput.removeAttribute("disabled")
+                passInput.removeAttribute("disabled")
+                activatedSelect.removeAttribute("disabled")
+                blockedSelect.removeAttribute("disabled")
+                roleSelect.removeAttribute("disabled")
+                emailInput.value = data[1];
+                passInput.value = data[2];
+                activatedSelect.value =data[3];
+                blockedSelect.value = data[4];
+                roleSelect.value = data[5];
+            }
+    }
+    const finalCheckBeforeSubmitting = (data) => {
+        if(!data) {
+            accessDenied();
+        }
+        else {
+            $("#theForm").submit();
+        }
+    }
+    $(document).ready(
+        function() {
+            $("#loadButton").on("click",(event) => {
+                    $.ajax({
+                        url: "/admin/ajax/loadUser",
+                        type: "GET",
+                        data: ({name: document.getElementById("name")}),
+                        success: loadUserSuccess
+                    });
+                    event.preventDefault();
+            });
+            $("editButton").on("click",(event) => {
+                $.ajax({
+                    url: "/admin/ajax/doesTheUserExist",
+                    type: "GET",
+                    data: ({name: document.getElementById("name").value}),
+                    success: finalCheckBeforeSubmitting
+                })
+                event.preventDefault();
+            });
+        }
+    );
 </script>
 </body>
 </html>
