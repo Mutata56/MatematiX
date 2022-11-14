@@ -1,11 +1,10 @@
 package mutata.com.github.configuration;
-
-import mutata.com.github.service.DetailsService;
+import mutata.com.github.security.AuthenticationProviderImpl;
+import mutata.com.github.service.MyUserDetailsService;
 import mutata.com.github.service.ResetPasswordTokenService;
 import mutata.com.github.service.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,14 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-
 import java.time.LocalDateTime;
-
-
-
 // Password Encoder was moved to Main App Config in order to avoid circular reference
-
-@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // Enable @PreAuthorize Annotation
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -32,15 +25,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ResetPasswordTokenService resetPasswordTokenService;
 
-    private final DetailsService detailsService;
+    private final MyUserDetailsService myUserDetailsService;
 
     @Autowired
-    public SecurityConfiguration(AuthenticationProvider provider, VerificationTokenService verificationTokenService,
-                                 ResetPasswordTokenService resetPasswordTokenService, DetailsService detailsService) {
+    public SecurityConfiguration(AuthenticationProviderImpl provider, VerificationTokenService verificationTokenService,
+                                 ResetPasswordTokenService resetPasswordTokenService, MyUserDetailsService myUserDetailsService) {
         this.provider = provider;
         this.verificationTokenService = verificationTokenService;
         this.resetPasswordTokenService = resetPasswordTokenService;
-        this.detailsService = detailsService;
+        this.myUserDetailsService = myUserDetailsService;
+    }
+    @Autowired
+    public void registerGlobalAuthentication(AuthenticationManagerBuilder builder) throws Exception {
+        builder.userDetailsService(myUserDetailsService);
     }
 
     // Configure Authentication
@@ -53,17 +50,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                .antMatchers("/api/**").permitAll() // FIXME: hasRole("ADMIN")
+                .antMatchers("/api/**").hasRole("ADMIN")
+                .antMatchers("/ajax/**").permitAll()
                 .antMatchers("/auth/ajax/**").permitAll()
-                .antMatchers("/admin/ajax/**").permitAll() // FIXME: hasRole("ADMIN")
                 .antMatchers("/uploadAvatar").authenticated()
-                .antMatchers("/admin/**").permitAll()// FIXME: hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/").permitAll()
                 .antMatchers("/jax").permitAll()
                 .antMatchers("/articles/**").permitAll()
                 .antMatchers("/getInTouch").permitAll()
                 .antMatchers("/process_getInTouch").permitAll()
-                .antMatchers("/process_getInTouchResult").permitAll()
                 .antMatchers("/auth/registrationConfirm").authenticated()
                 .antMatchers("/resources/**").permitAll()
                 .antMatchers("/logout").authenticated()

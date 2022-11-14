@@ -22,113 +22,122 @@
 
 <body>
 
-    <main>
-        <nav>
+<main>
+    <nav>
+        <div style="display: flex;flex-direction: column;position: fixed">
+            <a th:href="@{/}" style="margin-top:20px;margin-bottom:270px"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
             <a th:href="@{/admin/index}">Пользователи</a>
             <a href="">Статьи</a>
             <a href="">Роли</a>
             <a href="">Токены</a>
             <a href="">Рейтинг</a>
-            <a th:href="@{/}"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
-        </nav>
-        <div class="main">
-            <div class="upper-div">
-                <div>
-                        <input th:classappend="${itemsPerPage > 15 ? 'fix-search' : ''}" type="text" style="width:600px" id="search-input">
-                        <input th:classappend="${itemsPerPage > 15 ? 'fix-find' : ''}" type="image" th:src="@{/resources/static/img/find.svg}" id="search">
+        </div>
+    </nav>
+    <div class="main">
+        <div class="upper-div">
+            <div class="searchBox">
+                <div class="search" id="search">
+                    <ion-icon style="font-size: 1em" name="search-outline"></ion-icon>
                 </div>
-                <div style="display: flex">
-                    <p style="margin-right: 40px;margin-left: -160px; font-weight: 600;margin-top: 3px;">Искать по</p>
-                    <select th:name="findBy" th:id="findBy" style="padding-left: 5px;padding-right: 5px">
-                        <option th:selected="${findBy eq 'name'}" th:value="name">Имя</option>
-                        <option th:selected="${findBy eq 'email'}" th:value="email">E-Mail</option>
-                        <option th:selected="${findBy eq 'blocked'}" th:value="blocked">Заблокирован</option>
-                        <option th:selected="${findBy eq 'activated'}" th:value="activated">Активирован</option>
-                        <option th:selected="${findBy eq 'role'}" th:value="role">Роль</option>
-                    </select>
+                <div class="searchInput">
+                    <input type="text" id="search-input" placeholder="Поиск пользователя">
                 </div>
-                <input type="submit" onclick="location.href='/admin/createUser'" value="Управление">
+                <div class="erase">
+                    <ion-icon style="font-size: 1em" name="close-outline"></ion-icon>
+                </div>
             </div>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <td class="td-name">Имя</td>
-                            <td class="td-email">E-Mail</td>
-                            <td class="td-blocked">Заблокирован</td>
-                            <td>Активирован</td>
-                            <td class="td-role">Роль</td>
-                        </tr>
-                    </thead>
-                    <tbody id="theTBODY">
-                        <tr th:each="user : ${objects} ">
-                            <td th:text="${user.getName()}"></td>
-                            <td th:text="${user.getEmail()}"></td>
-                            <td th:if="${user.getBlocked() == 0}"><a class="blockClass" th:href="@{/admin/block/{name}(name=${user.getName()})}">Заблокировать</a></td>
-                            <td th:if="${user.getBlocked() == 1}"><a class="unblockClass" th:href="@{/admin/unblock/{name}(name=${user.getName()})}">Разблокировать</a></td>
-                            <td th:if="${user.getEnabled() == 1}"><a class="deactivateClass" th:href="@{/admin/deactivate/{name}(name=${user.getName()})}">Да</a></td>
-                            <td th:if="${user.getEnabled() == 0}"><a class="activateClass" th:href="@{/admin/activate/{name}(name=${user.getName()})}">Нет</a></td>
-                            <td th:if="${user.getRole() == 'ROLE_USER'}">Пользователь</td>
-                            <td th:if="${user.getRole() == 'ROLE_ADMIN'}">Администратор</td>
-                        </tr>
-                    </tbody>
-                </table>
-
+            <div style="display: flex">
+                <p style="margin-right: 40px;margin-left: -135px; font-weight: 600;margin-top: 6px;">Искать по</p>
+                <select th:name="findBy" th:id="findBy" style="padding-left: 5px;padding-right: 5px">
+                    <option th:selected="${findBy eq 'name'}" th:value="name">Имя</option>
+                    <option th:selected="${findBy eq 'email'}" th:value="email">E-Mail</option>
+                    <option th:selected="${findBy eq 'blocked'}" th:value="blocked">Заблокирован</option>
+                    <option th:selected="${findBy eq 'activated'}" th:value="activated">Активирован</option>
+                    <option th:selected="${findBy eq 'role'}" th:value="role">Роль</option>
+                </select>
             </div>
-            <div class="bottom">
-                <div class="sort-settings">
-                    <p style="margin-right: 40px;margin-left: -160px; font-weight: 600;margin-top: 3px;">Сортировать по</p>
-                    <select th:id="sortBy" th:name="sortBy" style="padding-left: 5px;padding-right: 5px">
-                        <option th:selected="${sortBy eq 'noSort'}" th:value="noSort">-</option>
-                        <option th:selected="${sortBy eq 'name'}" th:value="name">Имя</option>
-                        <option th:selected="${sortBy eq 'email'}" th:value="email">E-Mail</option>
-                        <option th:selected="${sortBy eq 'blocked'}" th:value="blocked">Заблокирован</option>
-                        <option th:selected="${sortBy eq 'enabled'}" th:value="enabled">Активирован</option>
-                        <option th:selected="${sortBy eq 'role'}" th:value="role">Роль</option>
-                    </select>
-                    <input th:id="sortDirection" type="checkbox">
-                </div>
-                <div class="bottom-nav" id="theBottomDiv" th:value="${currentPage}">
+            <input type="submit" onclick="location.href='/admin/createUser'" value="Управление">
+        </div>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <td class="td-name">Имя</td>
+                    <td class="td-email">E-Mail</td>
+                    <td class="td-blocked">Заблокирован</td>
+                    <td>Активирован</td>
+                    <td class="td-role">Роль</td>
+                </tr>
+                </thead>
+                <tbody id="theTBODY">
+                <tr th:each="user : ${objects} ">
+                    <td th:text="${user.getName()}"></td>
+                    <td th:text="${user.getEmail()}"></td>
+                    <td th:if="${user.getBlocked() == 0}"><a class="blockClass" th:href="@{/admin/block/{name}(name=${user.getName()})}">Заблокировать</a></td>
+                    <td th:if="${user.getBlocked() == 1}"><a class="unblockClass" th:href="@{/admin/unblock/{name}(name=${user.getName()})}">Разблокировать</a></td>
+                    <td th:if="${user.getEnabled() == 1}"><a class="deactivateClass" th:href="@{/admin/deactivate/{name}(name=${user.getName()})}">Да</a></td>
+                    <td th:if="${user.getEnabled() == 0}"><a class="activateClass" th:href="@{/admin/activate/{name}(name=${user.getName()})}">Нет</a></td>
+                    <td th:if="${user.getRole() == 'ROLE_USER'}">Пользователь</td>
+                    <td th:if="${user.getRole() == 'ROLE_ADMIN'}">Администратор</td>
+                </tr>
+                </tbody>
+            </table>
 
-                    <div th:if="${currentPage eq 1}" class="decorated-div" th:id="currentPage1st" th:content="1">1</div>
-                    <div th:if="${currentPage eq 1 and total > 1}" class="decorated-div" th:id="currentPage2nd" th:content="2">2</div>
-                    <div th:if="${currentPage eq 1 and total > 2}" class="decorated-div" th:id="currentPage3rd" th:content="3">3</div>
+        </div>
+        <div class="bottom">
+            <div class="sort-settings">
+                <p style="margin-right: 40px;margin-left: -160px; font-weight: 600;margin-top: 3px;">Сортировать по</p>
+                <select th:id="sortBy" th:name="sortBy" style="padding-left: 5px;padding-right: 5px">
+                    <option th:selected="${sortBy eq 'noSort'}" th:value="noSort">-</option>
+                    <option th:selected="${sortBy eq 'name'}" th:value="name">Имя</option>
+                    <option th:selected="${sortBy eq 'email'}" th:value="email">E-Mail</option>
+                    <option th:selected="${sortBy eq 'blocked'}" th:value="blocked">Заблокирован</option>
+                    <option th:selected="${sortBy eq 'enabled'}" th:value="enabled">Активирован</option>
+                    <option th:selected="${sortBy eq 'role'}" th:value="role">Роль</option>
+                </select>
+                <input th:id="sortDirection" type="checkbox">
+            </div>
+            <div class="bottom-nav" id="theBottomDiv" th:value="${currentPage}">
+
+                <div th:if="${currentPage eq 1}" class="decorated-div" th:id="currentPage1st" th:content="1">1</div>
+                <div th:if="${currentPage eq 1 and total > 1}" class="decorated-div" th:id="currentPage2nd" th:content="2">2</div>
+                <div th:if="${currentPage eq 1 and total > 2}" class="decorated-div" th:id="currentPage3rd" th:content="3">3</div>
 
 
-                    <div th:if="${currentPage > 1}" class="decorated-div" th:id="currentPage1st" th:text="${currentPage - 1}" th:content="${currentPage - 1}">1</div>
-                    <div th:if="${total > 1 and currentPage > 1}" class="decorated-div" th:text="${currentPage}" th:id="currentPage2nd" th:content="${currentPage}">2</div>
-                    <div th:if="${total > 2 and currentPage > 1 and currentPage < total}" class="decorated-div" th:id="currentPage3rd" th:text="${currentPage + 1}" th:content="${currentPage + 1}">3</div>
+                <div th:if="${currentPage > 1}" class="decorated-div" th:id="currentPage1st" th:text="${currentPage - 1}" th:content="${currentPage - 1}">1</div>
+                <div th:if="${total > 1 and currentPage > 1}" class="decorated-div" th:text="${currentPage}" th:id="currentPage2nd" th:content="${currentPage}">2</div>
+                <div th:if="${total > 2 and currentPage > 1 and currentPage < total}" class="decorated-div" th:id="currentPage3rd" th:text="${currentPage + 1}" th:content="${currentPage + 1}">3</div>
 
-                    <div th:if="${total > 3 and currentPage < total - 1}" class="decorated-div">...</div>
-                    <div th:if="${total > 3 and currentPage < total - 1}" th:text="${total}" class="decorated-div" id="currentPageLast" th:content="${total}"></div>
-                </div>
-                <div class="pagination-settings" th:value="${itemsPerPage}">
-                    <div class="decorated-div" id="pagination15">15</div>
-                    <div class="decorated-div" id="pagination50">50</div>
-                    <div class="decorated-div" id="pagination100">100</div>
-                </div>
+                <div th:if="${total > 3 and currentPage < total - 1}" class="decorated-div">...</div>
+                <div th:if="${total > 3 and currentPage < total - 1}" th:text="${total}" class="decorated-div" id="currentPageLast" th:content="${total}"></div>
+            </div>
+            <div class="pagination-settings" th:value="${itemsPerPage}">
+                <div class="decorated-div" id="pagination15">15</div>
+                <div class="decorated-div" id="pagination50">50</div>
+                <div class="decorated-div" id="pagination100">100</div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
 
 
-    <script th:inline="javascript">
-        const successFunction = (data) => {
-            $("#theTBODY").empty();
-            for (index = 0;index < data.length;index++) {
-                let third = null;
-                let fourth = null;
-                if(data[index].blocked == 1)
-                    third =`<td><a class="unblockClass" href="/admin/unblock/${data[index].name}">Разблокировать</a></td>`;
-                else
-                    third =`<td><a class="blockClass" href="/admin/block/${data[index].name}">Заблокировать</a></td>`;
-                if(data[index].enabled == 1)
-                    fourth =`<td><a class="deactivateClass" href="/admin/deactivate/${data[index].name}">Да</a></td>`;
-                else
-                    fourth =`<td><a class="activateClass" href="/admin/activate/${data[index].name}">Нет</a></td>`;
-                let role = data[index].role === "ROLE_ADMIN" ? "Администратор" : "Пользователь";
-                let tr =
+<script th:inline="javascript">
+    const successFunction = (data) => {
+        $("#theTBODY").empty();
+        for (index = 0;index < data.length;index++) {
+            let third = null;
+            let fourth = null;
+            if(data[index].blocked == 1)
+                third =`<td><a class="unblockClass" href="/admin/unblock/${data[index].name}">Разблокировать</a></td>`;
+            else
+                third =`<td><a class="blockClass" href="/admin/block/${data[index].name}">Заблокировать</a></td>`;
+            if(data[index].enabled == 1)
+                fourth =`<td><a class="deactivateClass" href="/admin/deactivate/${data[index].name}">Да</a></td>`;
+            else
+                fourth =`<td><a class="activateClass" href="/admin/activate/${data[index].name}">Нет</a></td>`;
+            let role = data[index].role === "ROLE_ADMIN" ? "Администратор" : "Пользователь";
+            let tr =
                 `<tr>
                  <td>${data[index].name}</td>
                  <td>${data[index].email}</td>
@@ -136,129 +145,134 @@
                  ${fourth}
                  <td>${role}</td>
                 </tr>`;
-                $("#theTBODY").append(tr);
-            }
-            $("#theBottomDiv").empty();
-            if(currentPage === 1) {
-             $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="1">1</div>`);
-                if(total > 1) {
-                    $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="2">2</div>`);
-                }
-                if(total > 2) {
-                    $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="3">3</div>`);
-                }
-            } else {
-                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="${currentPage - 1}">${currentPage - 1}</div>`);
-                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="${currentPage}">${currentPage}</div>`);
-                if(currentPage != total)
-                    $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="${currentPage + 1}">${currentPage + 1}</div>`);
-            }
-            if(total > 3 && currentPage < total - 1){
-                $("#theBottomDiv").append(`<div class="decorated-div">...</div>`);
-                $("#theBottomDiv").append(`<div id="currentPageLast" content="${total}" class="decorated-div">${total}</div>`);
-            }
-            sharedLogic();
+            $("#theTBODY").append(tr);
         }
-        const sendToTheServer = () => {
+        $("#theBottomDiv").empty();
+        if(currentPage === 1) {
+            $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="1">1</div>`);
+            if(total > 1) {
+                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="2">2</div>`);
+            }
+            if(total > 2) {
+                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="3">3</div>`);
+            }
+        } else {
+            $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="${currentPage - 1}">${currentPage - 1}</div>`);
+            $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="${currentPage}">${currentPage}</div>`);
+            if(currentPage != total)
+                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="${currentPage + 1}">${currentPage + 1}</div>`);
+        }
+        if(total > 3 && currentPage < total - 1){
+            $("#theBottomDiv").append(`<div class="decorated-div">...</div>`);
+            $("#theBottomDiv").append(`<div id="currentPageLast" content="${total}" class="decorated-div">${total}</div>`);
+        }
+        sharedLogic();
+    }
+    const sendToTheServer = () => {
+        $.ajax({
+            url: "/admin/ajax/process",
+            type: "GET",
+            data: ({
+                sortBy: sortByValue,
+                findBy: findByValue,
+                sortDirection: sortDirection,
+                itemsPerPage: itemsPerPage,
+                currentPage: currentPage,
+                find: find
+            }),
+            success: successFunction
+        });
+    }
+    const sharedLogic = () => {
+        $(".blockClass, .unblockClass, .activateClass, .deactivateClass").click(function (event) {
+            event.preventDefault();
             $.ajax({
-                url: "/admin/ajax/process",
-                type: "GET",
-                data: ({
-                    sortBy: sortByValue,
-                    findBy: findByValue,
-                    sortDirection: sortDirection,
-                    itemsPerPage: itemsPerPage,
-                    currentPage: currentPage,
-                    find: find
-                }),
-                success: successFunction
+                url: event.target.getAttribute("href"),
+                method: "POST",
+                type: "POST",
+                success: sendToTheServer
             });
-        }
-        const sharedLogic = () => {
-            $(".blockClass, .unblockClass, .activateClass, .deactivateClass").click(function (event) {
-                event.preventDefault();
-                console.log(event.target);
-                console.log(event.target.getAttribute("href"));
-                $.ajax({
-                    url: event.target.getAttribute("href"),
-                    type: "GET",
-                    success: sendToTheServer
-                });
-            });
+        });
 
-            $("#currentPage1st").on("click",() => {
-                if(currentPage !== 1) {
-                    currentPage = Number($("#currentPage1st").attr("content"));
-                    sendToTheServer();
-                }
-            })
-            $("#currentPage3rd").on("click",() => {
-                if(currentPage + 1 <= total) {
-                    currentPage = Number($("#currentPage3rd").attr("content"));
-                    sendToTheServer();
-                }
-            })
-            $("#currentPageLast").on("click",() => {
-                currentPage = Number($("#currentPageLast").attr("content"));
+        $("#currentPage1st").on("click",() => {
+            if(currentPage !== 1) {
+                currentPage = Number($("#currentPage1st").attr("content"));
+                sendToTheServer();
+            }
+        })
+        $("#currentPage3rd").on("click",() => {
+            if(currentPage + 1 <= total) {
+                currentPage = Number($("#currentPage3rd").attr("content"));
+                sendToTheServer();
+            }
+        })
+        $("#currentPageLast").on("click",() => {
+            currentPage = Number($("#currentPageLast").attr("content"));
+            sendToTheServer();
+        })
+        if(currentPage === 1) {
+            $("#currentPage2nd").on("click",() => {
+                currentPage = 2;
                 sendToTheServer();
             })
-            if(currentPage === 1) {
-                $("#currentPage2nd").on("click",() => {
-                    currentPage = 2;
-                    sendToTheServer();
-                })
-            }
         }
+    }
 
 
-        let sortByValue = [[${sortBy}]];
-        if(sortByValue === undefined)
-            sortByValue = "noSort";
-        let find = [[${find}]];
-        let findByValue = [[${findBy}]];
-        let sortDirection = [[${sortDirection}]];
-        let itemsPerPage = [[${itemsPerPage}]];
-        let currentPage = [[${currentPage}]];
-        let total = [[${total}]];
-        let totalUsers = [[${totalUsers}]];
-        $(document).ready(
-            function () {
-                $("#sortBy").bind("change",() => {
-                    sortByValue = $("#sortBy").val();
-                    sendToTheServer();
-                });
-                $("#sortDirection").bind("change",() => {
-                    sortDirection = sortDirection === "asc" ? "desc" : "asc";
+    let sortByValue = [[${sortBy}]];
+    if(sortByValue === undefined)
+        sortByValue = "noSort";
+    let find = [[${find}]];
+    let findByValue = [[${findBy}]];
+    let sortDirection = [[${sortDirection}]];
+    let itemsPerPage = [[${itemsPerPage}]];
+    let currentPage = [[${currentPage}]];
+    let total = [[${total}]];
+    let totalUsers = [[${totalUsers}]];
+    $(document).ready(
 
-                    sendToTheServer();
-                });
-                $("#search").bind("click",() => {
-                    find = $("#search-input").val();
-                    findByValue = $("#findBy").val();
-                    sendToTheServer();
-                });
-                $("#pagination15").bind("click",() => {
-                    itemsPerPage = 15;
-                    total = Math.ceil(totalUsers / (itemsPerPage));
-                    currentPage = 1;
-                    sendToTheServer();
-                });
-                $("#pagination50").bind("click",() => {
-                    itemsPerPage = 50;
-                    total = Math.ceil(totalUsers / (itemsPerPage));
-                    currentPage = 1;
-                    sendToTheServer();
-                });
-                $("#pagination100").bind("click",() => {
-                    itemsPerPage = 100;
-                    total = Math.ceil(totalUsers / (itemsPerPage));
-                    currentPage = 1;
-                    sendToTheServer();
-                });
-                sharedLogic();
-            }
-        );
+        function () {
+            $(document).ajaxSend(function(e,xhr,options) {
+                xhr.setRequestHeader("X-CSRF-TOKEN",[[${_csrf.token}]]);
+            });
+            $("#sortBy").bind("change",() => {
+                sortByValue = $("#sortBy").val();
+                sendToTheServer();
+            });
+            $("#sortDirection").bind("change",() => {
+                sortDirection = sortDirection === "asc" ? "desc" : "asc";
 
-    </script>
+                sendToTheServer();
+            });
+            $("#search").bind("click",() => {
+                find = $("#search-input").val();
+                findByValue = $("#findBy").val();
+                sendToTheServer();
+            });
+            $("#pagination15").bind("click",() => {
+                itemsPerPage = 15;
+                total = Math.ceil(totalUsers / (itemsPerPage));
+                currentPage = 1;
+                sendToTheServer();
+            });
+            $("#pagination50").bind("click",() => {
+                itemsPerPage = 50;
+                total = Math.ceil(totalUsers / (itemsPerPage));
+                currentPage = 1;
+                sendToTheServer();
+            });
+            $("#pagination100").bind("click",() => {
+                itemsPerPage = 100;
+                total = Math.ceil(totalUsers / (itemsPerPage));
+                currentPage = 1;
+                sendToTheServer();
+            });
+            sharedLogic();
+        }
+    );
+
+</script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class PasswordDTO {
 
     @NotNull(message = "Поле не может быть пустым")
-    @Length(min = 5,max = 45,message = "Длина пароля должна быть больше 5 и меньше 60")
+    @Length(min = 5,max = 60,message = "Длина пароля должна быть больше 5 и меньше 60")
     private String password;
 
     private String passwordAgain;

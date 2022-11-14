@@ -1,6 +1,6 @@
 package mutata.com.github.security;
 
-import mutata.com.github.service.DetailsService;
+import mutata.com.github.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,11 +16,11 @@ import java.util.Collections;
 @Component
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
-    private final DetailsService service;
+    private final MyUserDetailsService service;
     private final PasswordEncoder encoder;
     @Autowired
-    public AuthenticationProviderImpl(DetailsService detailsService,PasswordEncoder encoder) {
-        this.service = detailsService;
+    public AuthenticationProviderImpl(MyUserDetailsService myUserDetailsService, PasswordEncoder encoder) {
+        this.service = myUserDetailsService;
         this.encoder = encoder;
 
     }
@@ -35,7 +35,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
              details = service.loadUserByEmail(username);
         if(!encoder.matches(authentication.getCredentials().toString(),details.getPassword()))
             throw new BadCredentialsException("Неверный пароль!");
-        return new UsernamePasswordAuthenticationToken(details,details.getPassword(), Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(details,details.getPassword(), details.getAuthorities());
     }
 
     @Override

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -62,6 +63,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
     private List<Article> articles;
+
+    @Column(name = "last_time_online")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastTimeOnline;
 
     public User(String name, String email, String password, byte enabled, byte activated,String role) {
         this.name = name;

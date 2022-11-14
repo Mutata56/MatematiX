@@ -7,10 +7,13 @@ import mutata.com.github.entity.User;
 import mutata.com.github.event.OnRegistrationCompleteEvent;
 import mutata.com.github.service.*;
 import mutata.com.github.util.Toastr;
+import mutata.com.github.util.UserUtils;
 import mutata.com.github.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,11 +32,14 @@ public class AdminController {
     private final UserService userService;
     private final ApplicationEventPublisher publisher;
     private final UserValidator userValidator;
+
+    private final UserUtils userUtils;
     @Autowired
-    public AdminController(ApplicationEventPublisher publisher,UserValidator userValidator, UserService userService) {
+    public AdminController(ApplicationEventPublisher publisher,UserValidator userValidator, UserService userService,UserUtils userUtils) {
         this.userService = userService;
         this.userValidator = userValidator;
         this.publisher = publisher;
+        this.userUtils = userUtils;
     }
 
     @GetMapping(value={"/createUser","/users/create","/create/user"})
@@ -89,14 +95,13 @@ public class AdminController {
         return "/admin/createUser";
     }
     @GetMapping(value = {"/index","/",""})
-    public String showAdminPanel(Model model, @RequestParam(required = false) String sortBy,@RequestParam(required = false) String findBy,
-                                 @RequestParam(required = false) Integer currentPage,@RequestParam(required = false) Integer itemsPerPage,
+    public String showAdminPanel(CsrfToken token, Model model, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String findBy,
+                                 @RequestParam(required = false) Integer currentPage, @RequestParam(required = false) Integer itemsPerPage,
                                  @RequestParam(required = false) String find,
                                  @RequestParam(required = false) String sortDirection) {
         model.addAttribute("sortBy",sortBy);
         model.addAttribute("findBy",findBy);
-
-
+        model.addAttribute("csrfToken",token.getToken());
         sortBy = "noSort".equals(sortBy) ? null : sortBy;
         paginationUser(userService,itemsPerPage,currentPage,sortBy,find,findBy,sortDirection,model);
 
@@ -138,25 +143,25 @@ public class AdminController {
 
     }
 
-    @GetMapping("/block/{username}")
+    @PostMapping("/block/{username}")
     public @ResponseBody String block(@PathVariable String username) {
         userService.block(username);
         return "";
     }
 
-    @GetMapping("/unblock/{username}")
+    @PostMapping("/unblock/{username}")
     public @ResponseBody String unblock(@PathVariable String username) {
         userService.unblock(username);
         return "";
     }
 
-    @GetMapping("/activate/{username}")
+    @PostMapping("/activate/{username}")
     public @ResponseBody String activate(@PathVariable String username) {
         userService.activate(username);
         return "";
     }
 
-    @GetMapping("/deactivate/{username}")
+    @PostMapping("/deactivate/{username}")
     public @ResponseBody String deactivate(@PathVariable String username) {
         userService.deactivate(username);
         return "";

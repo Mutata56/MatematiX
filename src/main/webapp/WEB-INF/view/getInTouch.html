@@ -13,43 +13,64 @@
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="manifest" th:href="@{/resources/static/img/logo/site.webmanifest}">
 </head>
 
 <body>
 
 <div class="main">
-    <h1>Свяжитесь с нами</h1>
-    <form th:action="@{/process_getInTouch}" th:object="${messageDTO}" th:method="POST" class="form">
+    <h1 id="h1">Свяжитесь с нами</h1>
+    <form id="theForm" th:action="@{/process_getInTouch}" th:method="POST" class="form">
         <div class="flexbox">
             <div class="name-div">
                 <label for="name">Имя</label>
-                <input th:value="${messageDTO.name}" th:classappend="${#fields.hasErrors('name')} ? input-error : nothing" class="name-input" maxlength="45" placeholder="Введите ваше имя" type="text" id="name" name="name">
+                <input class="name-input" maxlength="45" placeholder="Введите ваше имя" type="text" id="name" name="name">
             </div>
             <div class="email-div">
                 <label for="email">E-mail</label>
-                <input th:value="${messageDTO.email}" th:classappend="${#fields.hasErrors('name')} ? input-error : nothing" class="email-input" maxlength="61" placeholder="Введите ваш e-mail" type="email" id="email" name="email">
+                <input class="email-input" maxlength="61" placeholder="Введите ваш e-mail" type="email" id="email" name="email">
             </div>
 
         </div>
         <div class="subject-div">
             <label for="subject">Тема</label>
-            <input th:value="${messageDTO.subject}" th:classappend="${#fields.hasErrors('subject')} ? input-error : nothing" class="topic-input"  maxlength="60"  placeholder="Введите тему" id="subject" type="text" name="subject">
+            <input class="topic-input"  maxlength="60"  placeholder="Введите тему" id="subject" type="text" name="subject">
 
         </div>
         <div class="message-div" content="0">
             <label th:for="message">Сообщение</label>
 
-                <textarea content="0" th:value="${messageDTO.message}"  th:classappend="${#fields.hasErrors('message')} ? input-error-textarea : nothing"  maxlength="2000" cols="43" rows="10" th:name="message" th:id="message" class="textarea-input" style="resize: none;" wrap="hard" placeholder="Введите ваше сообщение"></textarea>
+                <textarea content="0" maxlength="2000" cols="43" rows="10" th:name="message" th:id="message" class="textarea-input" style="resize: none;" wrap="hard" placeholder="Введите ваше сообщение"></textarea>
 
 
         </div>
         <div class="submit-div" style="text-align: center">
-            <input type="submit" value="Отправить">
+            <input style="color: black !important;" type="submit" id="sendButton" value="Отправить">
             <a th:href="@{/}" style="display:inline-block; margin-top: 40px">Вернуться на главную</a>
         </div>
     </form>
 </div>
-<script th:src="@{/resources/static/js/validation.js}"></script>
+<script th:inline="javascript">
+    $(document).ready(function() {
+            $("#sendButton").on("click",function(event) {
+               event.preventDefault();
+                $(document).ajaxSend(function(e,xhr,options) {
+                    xhr.setRequestHeader("X-CSRF-TOKEN",[[${_csrf.token}]]);
+               });
+               $.ajax({
+                  url: "/process_getInTouch",
+                  method: "POST",
+                  type: "POST",
+                  data: {name:$("#name").val(),email:$("#email").val(),subject:$("#subject").val(),message:$("#message").val()},
+               });
+                $("#h1").text("Благодарим за обратную связь!");
+                $("#theForm").remove();
+                let element = `<h2>Через 5 секунд вы будете перенаправлены на главую страницу, <a href="/">если этого не произошло</a></h2>`
+                $(".main").append(element);
+                //setTimeout(() => {location.href = '/'},5000);
+            });
+    });
+</script>
 </body>
 </html>

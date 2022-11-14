@@ -2,6 +2,7 @@
   "name": "MatematixProject",
   "version": "1.0.0",
   "dependencies": {
-    "cropperjs": "^1.5.12"
+    "cropperjs": "^1.5.12",
+    "stompjs": "^2.3.3"
   }
 }

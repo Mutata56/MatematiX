@@ -24,34 +24,28 @@
     <div th:if="${success}" th:insert="~{base/toastSuccess :: toast}"></div>
         <div class="main">
             <div class="frame">
-                <div class="left">
-                    <a th:href="@{/}"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
-                    <div class="desc">
-                        <h2>Авторизация</h2>
-                        <h3>Войдите в свой аккаунт MatematiX</h3>
-                    </div>
-                </div>
-                <div class="right">
-                    <h2>Добро пожаловать!</h2>
-
-
-
+                <div class="frame--content">
+                    <h2>Вход</h2>
                     <form th:action="@{/auth/process_login}" th:method="POST" class="form">
-                        <label for="username">Имя пользователя или E-mail</label>
-                        <input class="email-input" maxlength="45" placeholder="Введите имя или E-mail" type="text" id="username" name="username">
+                        <div class="inputBox">
+                            <input class="email-input" maxlength="45" required type="text" id="username" name="username">
+                            <span>Логин / Email</span>
 
-                        <p class="error error1" th:if="${param.userNotFound}">Пользователь не найден!</p>
+                            <p style="top: 59px;left: 252px;width:157px" class="error error1" th:if="${param.userNotFound}">Пользователь не найден</p>
+                        </div>
+                        <div class="inputBox">
+                            <input class="password-input" required maxlength="60"   id="password" type="password" name="password">
+                            <p style="top: 11px;right: 0px;cursor: pointer;position: absolute;" id="theEyeSpan"><ion-icon style="font-size:20px;color:#45a0da" class="theEye hidden" content="password" name="eye-outline"></ion-icon></p>
+                            <span>Пароль</span>
 
-                        <label for="password">Пароль</label>
-                        <input class="password-input" maxlength="60"  placeholder="Введите пароль" id="password" type="password" name="password">
-
-
+                            <p style="top:44px" class="error error2" th:if="${param.incorrectPassword}">Неверный Пароль</p>
+                        </div>
 
                         <h4 class="forgotPassword-h4">
-                            <p class="errorWithoutMarginTop error2" th:if="${param.incorrectPassword}">Неверный Пароль!</p>
                             <a th:href="@{/auth/forgotPassword}">Забыли пароль?</a>
                         </h4>
-                        <div class="flexbox-register-finish" th:classappend="${param.incorrectPassword} or ${param.userNotFound} or ${param.error} ? fix : nothing">
+
+                        <div class="flexbox-register-finish">
                             <input type="submit" value="Войти">
                             <h4 class="noAccount"><a th:href="@{/auth/register}">Нет Аккаунта?</a></h4>
                         </div>
@@ -59,6 +53,24 @@
                 </div>
             </div>
         </div>
-        <script th:src="@{/resources/static/js/disappearErrors.js}"></script>
+        <script type="text/javascript">
+            let error1 = document.querySelector(".error1");
+            let usernameInput = document.getElementById("username");
+            let error2 = document.querySelector(".error2");
+            let passwordInput = document.getElementById("password");
+            usernameInput.addEventListener("keyup",() => {
+                if(usernameInput.value.length >= 1 && error1 != null) {
+                    error1.classList.add("disappear");
+                }
+            })
+            passwordInput.addEventListener("keyup", () => {
+                if(passwordInput.value.length >= 1 && error2 != null) {
+                    error2.classList.add("disappear");
+                }
+            })
+        </script>
+        <script th:src="@{/resources/static/js/showHidePassword.js}" type="text/javascript"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>
 </html>

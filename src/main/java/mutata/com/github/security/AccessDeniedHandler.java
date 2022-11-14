@@ -1,7 +1,6 @@
 package mutata.com.github.security;
 
 import org.springframework.security.access.AccessDeniedException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

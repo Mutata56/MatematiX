@@ -12,3 +12,75 @@ input[type="submit"] {
 .frame {
     height: 700px;
 }
+.frame-helper {
+    border-radius: 8px;
+    width: 300px;
+    height: 100px;
+    box-shadow: -2px 4px 10px 9px rgb(0 0 0 / 30%);
+    position: relative;
+    overflow: hidden;
+}
+.frame-helper::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 450px;
+    height: 100px;
+    background: linear-gradient(0deg, transparent,#45a0da,#45a0da);
+    animation: animate 6s linear infinite;
+    transform-origin: bottom right;
+    border-radius: 8px;
+}
+.frame-helper::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 450px;
+    height: 100px;
+    background: linear-gradient(0deg, transparent,#45a0da,#45a0da);
+    animation: animate 6s linear infinite;
+    transform-origin: bottom right;
+    animation-delay: -3s;
+    border-radius: 8px;
+}
+.tooltip {
+    width: 450px;
+    height: 100px;
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    transition: 1s all;
+    right: -460px;
+}
+.frame--content ul li {
+    font-size: 14px;
+    padding: 3px;
+    list-style: none;
+}
+.frame--content ul li::before {
+    content: "\f192";
+    width: 20px;
+    height: 10px;
+    font-family: fontAwesome;
+    display: inline-flex;
+}
+.frame--content ul li.valid {
+    color: rgba(255,255,255,0.5);
+}
+.frame--content ul li.valid::before {
+    content: "\f00c";
+    color: #28a745;
+}
+.frame--content {
+    padding: 10px;
+}
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

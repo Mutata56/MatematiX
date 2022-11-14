@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru">
-
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,6 @@
         <script src="https://code.jquery.com/jquery-latest.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="apple-touch-icon" sizes="180x180" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
         <link rel="icon" type="image/png" sizes="32x32" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
         <link rel="icon" type="image/png" sizes="16x16" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
@@ -27,8 +26,8 @@
         <div th:if="${expired} " th:insert="~{base/toastExpired :: toast}"></div>
         <div th:if="${nonValidUser} or ${param.nonValidUser}" th:insert="~{base/toastRegisterError :: toast}"></div>
         <div th:if="${successEmailConfirmation}" th:insert="~{base/toastEmailConfirmation :: toast}"></div>
-        <div th:if="${not seenJaxToast}" th:insert="~{base/toastAjax :: toast}"></div>
-        <header th:insert="~{base/header :: copy}">&nbsp;</header>
+        <div th:if="${seenJaxToast ne null and not seenJaxToast}" th:insert="~{base/toastAjax :: toast}"></div>
+        <header th:insert="~{base/header :: copy}"></header>
         <div class="carousel">
             <div class="carousel--ul">
                     <input type="radio" name="radio-btn" id="radio1">
@@ -64,20 +63,21 @@
             <main>
                 <div class="grid-column1-row1 grid-content" onclick="location.href = '/articles/Pythagorean'"></div>
                 <div class="grid-column2-row1 grid-content" onclick="location.href = `/articles/Formulas`"></div>
-                <div class="grid-column3-row1 grid-content">&nbsp;</div>
-                <div class="grid-column4-row1 grid-content">&nbsp;</div>
+                <div class="grid-column3-row1 grid-content"></div>
+                <div class="grid-column4-row1 grid-content"></div>
 
-                <div class="grid-column1-row2 grid-content">&nbsp;</div>
-                <div class="grid-column2-row2 grid-content">&nbsp;</div>
-                <div class="grid-column4-row2 grid-content">&nbsp;</div>
+                <div class="grid-column1-row2 grid-content"></div>
+                <div class="grid-column2-row2 grid-content"></div>
+                <div class="grid-column4-row2 grid-content"></div>
 
-                <div class="grid-column1-row3 grid-content">&nbsp;</div>
-                <div class="grid-column3-row3 grid-content">&nbsp;</div>
-                <div class="grid-column4-row3 grid-content">&nbsp;</div>
+                <div class="grid-column1-row3 grid-content"></div>
+                <div class="grid-column3-row3 grid-content"></div>
+                <div class="grid-column4-row3 grid-content"></div>
             </main>
         </div>
 
         <footer th:insert="~{base/footer :: copy}"></footer>
-        <script th:src="@{/resources/static/js/carousel.js}"></script>
+        <script th:src="@{/resources/static/js/min/carousel.js}"></script>
+        <script type="text/javascript" th:src="@{/resources/static/js/ping.js}" sec:authorize="isAuthenticated()"></script>
     </body>
 </html>

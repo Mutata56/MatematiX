@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,12 +29,14 @@
 </div>
 <main>
   <nav>
-    <a th:href="@{/admin/index}">Пользователи</a>
-    <a href="">Статьи</a>
-    <a href="">Роли</a>
-    <a href="">Токены</a>
-    <a href="">Рейтинг</a>
-    <a th:href="@{/}"> <img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+    <div style="display: flex;flex-direction: column;position: fixed">
+      <a th:href="@{/}" style="margin-top:20px;margin-bottom:270px"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+      <a th:href="@{/admin/index}">Пользователи</a>
+      <a href="">Статьи</a>
+      <a href="">Роли</a>
+      <a href="">Токены</a>
+      <a href="">Рейтинг</a>
+    </div>
   </nav>
   <div class="main" style="padding-top: 15px; padding-bottom: 50px;padding-left: 20px;min-height: 800px">
     <div class="main-nav">
@@ -58,5 +61,6 @@
       window.location.search = "name=" + document.getElementById("deleteInput").value;
     });
   </script>
+<script type="text/javascript" th:src="@{/resources/static/js/ping.js}" sec:authorize="isAuthenticated()"></script>
 </body>
 </html>

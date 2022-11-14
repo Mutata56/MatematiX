@@ -4,6 +4,8 @@ import mutata.com.github.entity.Comment;
 import mutata.com.github.entity.User;
 import mutata.com.github.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,4 +31,7 @@ public class CommentService {
         return repository.findCommentsByReceiver(user);
     }
 
+    public Page<Comment> findAllReturnPage(User user,int page,int itemsPerPage) {
+      return repository.findCommentsByReceiverOrderByDateDesc(user,PageRequest.of(page,itemsPerPage));
+    }
 }

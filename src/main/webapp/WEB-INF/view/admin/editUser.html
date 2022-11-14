@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,12 +29,14 @@
 </div>
 <main>
     <nav>
-        <a th:href="@{/admin/index}">Пользователи</a>
-        <a href="">Статьи</a>
-        <a href="">Роли</a>
-        <a href="">Токены</a>
-        <a href="">Рейтинг</a>
-        <a th:href="@{/}"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+        <div style="display: flex;flex-direction: column;position: fixed">
+            <a th:href="@{/}" style="margin-top:20px;margin-bottom:270px"><img class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+            <a th:href="@{/admin/index}">Пользователи</a>
+            <a href="">Статьи</a>
+            <a href="">Роли</a>
+            <a href="">Токены</a>
+            <a href="">Рейтинг</a>
+        </div>
     </nav>
     <div class="main" style="padding-top: 15px; padding-bottom: 50px;padding-left: 20px;min-height: 800px">
         <div class="main-nav">
@@ -87,7 +90,8 @@
 
     </div>
 </main>
-<script th:inline="javascript">
+
+<script type="text/javascript" th:inline="javascript">
     toastr.options.preventDuplicates = true;
     toastr.options.progressBar = true;
     let emailInput = document.getElementById("email");
@@ -110,10 +114,7 @@
         blockedSelect.value = 1;
         roleSelect.value = 1;
     }
-</script>
-<script>
     const loadUserSuccess = (data) => {
-
             if(data.length === 0)
                 accessDenied();
             else {
@@ -132,36 +133,34 @@
                 roleSelect.value = data[5];
             }
     }
+    let theForm = document.getElementById("theForm");
+    let loadButton = document.getElementById("loadButton");
+    let editButton = document.getElementById("editButton");
     const finalCheckBeforeSubmitting = (data) => {
-        if(!data) {
+        if(!data)
             accessDenied();
-        }
-        else {
-            $("#theForm").submit();
-        }
-    }
-    $(document).ready(
-        function() {
-            $("#loadButton").on("click",(event) => {
-                    $.ajax({
+        else
+            theForm.submit();
+    };
+    loadButton.onclick = (event) => {
+        event.preventDefault();
+        $.ajax({
                         url: "/admin/ajax/loadUser",
-                        type: "GET",
-                        data: ({name: document.getElementById("name")}),
+                        method: "GET",
+                        data: {name: document.getElementById("name").value},
                         success: loadUserSuccess
                     });
-                    event.preventDefault();
-            });
-            $("editButton").on("click",(event) => {
-                $.ajax({
+    }
+    editButton.onclick = (event) => {
+        event.preventDefault();
+        $.ajax({
                     url: "/admin/ajax/doesTheUserExist",
                     type: "GET",
                     data: ({name: document.getElementById("name").value}),
                     success: finalCheckBeforeSubmitting
-                })
-                event.preventDefault();
             });
-        }
-    );
+    };
 </script>
+<script type="text/javascript" th:src="@{/resources/static/js/ping.js}" sec:authorize="isAuthenticated()"></script>
 </body>
 </html>

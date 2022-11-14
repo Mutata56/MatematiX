@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
-
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatematiX</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,28 +19,28 @@
 </head>
 
 <body>
-    <header th:insert="~{base/header :: copy}">&nbsp;</header>
+    <header th:insert="~{base/header :: copy}"></header>
     <main>
         <h1>Что такое MathJax, и почему это важно?</h1>
         <div class="content">
-            <img th:src="@{/resources/static/img/Mathjax.png}" alt="">
+            <img th:src="@{/resources/static/img/Mathjax.png}" src="" alt="MathJax">
             <p>MathJax - кроссбраузерная библиотека, позволяющая записывать математические формулы в удобном для пользователя виде.Но Почему  мы считаем важным оповестить вас, наших пользователей, об использовании данной технологии?</p>
             <p>MathJax добавляет к формулам контекстное меню, вызываемое правой кнопкой мыши или щелчком с нажатой Ctrl:</p>
-            <img th:src="@{/resources/static/img/Example1.png}" alt="">
+            <img th:src="@{/resources/static/img/Example1.png}" src="" alt="Первый Пример">
             <p><b>“Настройки Math”</b> позволяют настраивать возможности MathJax, например, размер формул и механизм их показа.</p>
-            <img th:src="@{/resources/static/img/Example2.png}" alt="">
+            <img th:src="@{/resources/static/img/Example2.png}" src="" alt="Второй пример">
             <p><b>Обратите внимание: при слишком большом увеличении, формулы могут выглядеть некорректно и не соответствовать исходному виду.</b></p>
             <p>С помощью отрисовщика формул вы можете выбрать наиболее удобный вариант отображения формул:</p>
             <figure>
-                <img th:src="@{/resources/static/img/Example3.png}" alt="">
+                <img th:src="@{/resources/static/img/Example3.png}" src="" alt="HTML CSS">
                 <figcaption>Вариант HTML CSS</figcaption>
             </figure>
             <figure>
-                <img th:src="@{/resources/static/img/Example4.png}" alt="">
+                <img th:src="@{/resources/static/img/Example4.png}" src="" alt="SVG">
                 <figcaption>Вариант SVG</figcaption>
             </figure>
             <figure>
-                <img th:src="@{/resources/static/img/Example5.png}" alt="">
+                <img th:src="@{/resources/static/img/Example5.png}" src="" alt="Preview HTML">
                 <figcaption style="margin-bottom: 40px">Вариант Preview HTML</figcaption>
             </figure>
             <p><b>Администрация нашего сайта настоятельно рекомендует использовать HTML CSS.</b></p>
@@ -49,5 +48,6 @@
         </div>
     </main>
     <footer th:insert="~{base/footer :: copy}"></footer>
+    <script type="text/javascript" th:src="@{/resources/static/js/ping.js}" sec:authorize="isAuthenticated()"></script>
 </body>
 </html>

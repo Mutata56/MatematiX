@@ -12,12 +12,12 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -26,7 +26,6 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -39,13 +38,11 @@ import java.util.Properties;
 @PropertySource(value = "classpath:hibernate.properties")
 @EnableAspectJAutoProxy
 @EnableScheduling
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class ApplicationConfiguration implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
 
     private final Environment environment; // Will be injected by Spring automatically
-
-
-
 
 
     @Autowired
@@ -75,6 +72,8 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
+
+
     //Hibernate Connection Configuration
 
     @Bean
@@ -96,6 +95,7 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
         properties.put("hibernate.show_sql",environment.getRequiredProperty("hibernate.show_sql"));
         return properties;
     }
+
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {

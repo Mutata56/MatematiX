@@ -6,7 +6,6 @@ import mutata.com.github.entity.dto.PasswordDTO;
 import mutata.com.github.entity.dto.RegisterDTO;
 import mutata.com.github.entity.token.Token;
 import mutata.com.github.entity.token.TokenType;
-
 import mutata.com.github.event.OnRegistrationCompleteEvent;
 import mutata.com.github.event.OnResetPasswordEvent;
 import mutata.com.github.service.ResetPasswordTokenService;
@@ -40,8 +39,8 @@ public class AuthController {
     private final RegisterValidator registerValidator;
     private final UserService userService;
     private final VerificationTokenService verificationTokenService;
-
     private final ResetPasswordTokenService resetPasswordTokenService;
+
 
 
 
@@ -54,10 +53,7 @@ public class AuthController {
         this.registerValidator = registerValidator;
         this.resetPasswordTokenService = resetPasswordTokenService;
     }
-    @GetMapping("/error")
-    public String showErrorPage() {
-        return "authorization/error";
-    }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "authorization/login";
@@ -74,10 +70,12 @@ public class AuthController {
     }
     @PostMapping("/register")
     public String registerUser(HttpServletRequest request, @Valid @ModelAttribute(name = "dto",binding = true) RegisterDTO registerDTO,
-                               BindingResult result) {
+                               BindingResult result,Model model) {
         registerValidator.validate(registerDTO,result);
-        if(result.hasErrors())
+        if(result.hasErrors()) {
+            Toastr.addErrorsToModel(model,result);
             return "/authorization/register";
+        }
 
         User user = new User();
         user.setEncryptedPassword(registerDTO.getPassword());
@@ -190,24 +188,20 @@ public class AuthController {
 
 
 
-    @PostMapping("/process_forgotPassword")
-    public String processForgotPassword(@RequestParam(name = "username",required = false) String username,HttpServletRequest request,Model model) {
+    @PostMapping("/ajax/process_forgotPassword")
+    public @ResponseBody boolean processForgotPassword(@RequestParam(name = "username",required = false) String username,HttpServletRequest request) {
         User user = null;
-            if(username != null) {
+            if(username != null)
                 if(username.contains("@"))
                     user = userService.findByEmailIgnoreCase(username);
                 else
                     user = userService.findByNameIgnoreCase(username);
-            }
-        if(user == null ) {
-            model.addAttribute("notFound",true);
-            return "authorization/forgotPassword";
-        }
 
+        if(user == null )
+            return false;
         if(user.getResetPasswordToken() == null)
             publisher.publishEvent(new OnResetPasswordEvent(user,request.getContextPath()));
-        model.addAttribute("showInfo",true);
-        return "redirect:/auth/login";
+        return true;
     }
 
     @InitBinder

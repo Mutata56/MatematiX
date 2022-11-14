@@ -58,9 +58,13 @@ main nav ul {
     height: 100%;
 }
 .desc p,.sort-settings-li {
-    color: white;
+    color: rgba(255,255,255,0.85);
     font-weight: 700;
 }
+.sort-settings-li.active {
+    color: white;
+}
+
 .desc {
     display: flex;
     flex-direction: column;
