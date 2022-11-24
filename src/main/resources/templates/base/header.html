@@ -23,7 +23,7 @@
             <div class="loggedIn" sec:authorize="isAuthenticated()">
 
                     <div class="avatar" style="width: 50px;height: 50px;overflow: hidden;border-radius: 50%">
-                        <a th:href="@{/templates/profile}">
+                        <a th:href="@{/profile}">
                             <img style="width: 50px;height: 50px" th:id="theAvatar" th:src="@{/img/UnsetAvatar.gif}"  alt="Profile">
                         </a>
                     </div>

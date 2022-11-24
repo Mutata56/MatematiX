@@ -10,22 +10,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/resources/static/css/base/base.css}">
-    <link rel="stylesheet" th:href="@{/resources/static/css/profile/main.css}">
-    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/resources/static/img/logo/apple-touch-icon.png}">
-    <link rel="manifest" th:href="@{/resources/static/img/logo/site.webmanifest}">
+    <link rel="stylesheet" th:href="@{/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/css/profile/main.css}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script th:src="@{/resources/static/js/min/stomp.orig.js}"></script>
+    <script th:src="@{/js/min/stomp.orig.js}"></script>
 </head>
 
 <body id="body">
 <header id="headerDiv">
-    <a th:href="@{/}"><img src="" class="frame-logo" th:src="@{/resources/static/img/logo_white.svg}" alt="MatematiX"></a>
+    <a th:href="@{/}"><img src="" class="frame-logo" th:src="@{/img/logo_white.svg}" alt="MatematiX"></a>
 </header>
 <main id="mainDiv">
     <nav>
@@ -43,7 +43,7 @@
         <div class="avatar-wrapper">
             <label th:for="secretInput" style="cursor:pointer">
                 <img src="" th:if="${hasAvatar}" th:id="avatar" alt="">
-                <img src="" th:unless="${hasAvatar}" th:id="avatar" th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
+                <img src="" th:unless="${hasAvatar}" th:id="avatar" th:src="@{/img/UnsetAvatar.gif}" alt="">
             </label>
             <form th:if="${canChangeAvatar}" enctype="multipart/form-data" th:id="theForm" th:action="@{/uploadAvatar(${_csrf.parameterName}=${_csrf.token})}" th:method="POST">
                 <input th:id="secretInput" th:name="file" type="file" style="display: none" accept="image/*">
@@ -79,7 +79,7 @@
                         <div class="avatar-wrapper" style="width: 72px !important; height: 72px !important;border: none !important;">
                             <a th:href="@{/profile}">
                                 <img src="" th:if="${hasMyAvatar}" th:id="avatarComments" alt="">
-                                <img src="" th:unless="${hasMyAvatar}" th:id="avatarComments" th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
+                                <img src="" th:unless="${hasMyAvatar}" th:id="avatarComments" th:src="@{/img/UnsetAvatar.gif}" alt="">
                             </a>
                         </div>
                         <form content="0" th:id="sendCommentForm" th:method="POST" th:action="@{/createComment}" style="width: 100%">
@@ -100,7 +100,7 @@
                 <div style="display: flex;gap:50px;position: relative">
                     <div class="avatar-wrapper" style="width: 72px !important; height: 72px !important;border: none !important;position: relative">
                         <a style="position: relative" th:href="@{/profile/{name}(name=${comment.username})}">
-                            <img src="" style="width: 72px;height: 72px" th:if="${comment.avatar eq null }"  th:src="@{/resources/static/img/UnsetAvatar.gif}" alt="">
+                            <img src="" style="width: 72px;height: 72px" th:if="${comment.avatar eq null }"  th:src="@{/img/UnsetAvatar.gif}" alt="">
                             <img src="" style="width: 72px;height: 72px" th:unless="${comment.avatar eq null}"  th:src="@{'data:image/' + ${comment.format} + ';base64,' + ${comment.avatar}}" alt="">
                         </a>
                     </div>
@@ -141,7 +141,7 @@
 <div id="overlay" style="z-index: 1001 !important;">
 
 </div>
-<script type="text/javascript" th:src="@{/resources/static/js/min/canChangeAvatar.js}" th:if="${canChangeAvatar}"></script>
+<script type="text/javascript" th:src="@{/js/min/canChangeAvatar.js}" th:if="${canChangeAvatar}"></script>
 <script th:if="${hasAvatar}" th:inline="javascript">
     let name = [[${name}]];
     let theAvatar = document.getElementById("avatar");
@@ -181,9 +181,9 @@
         commentForm.setAttribute("content",length);
     });
 </script>
-<script type="text/javascript" th:src="@{/resources/static/js/ping.js}" sec:authorize="isAuthenticated()"></script>
+<script type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
 <script th:inline="javascript" th:type="module">
-    import autosize from "../../static/js/autosize.js";
+    import autosize from "/js/autosize.js";
     const pingAutoSize = () => {
         autosize(document.getElementsByClassName("toBeAutoGrown"));
     }
@@ -215,6 +215,7 @@
     }
     $("#sendButton").on("click",sendMessage);
     function sendMessage() {
+
         stompClient.send("/application/sendComment", {},
             JSON.stringify({
                 'username':[[${currentUserName}]],
@@ -228,7 +229,7 @@
     function getComment(obj) {
         let img = null;
         if(obj.avatar == null || obj.avatar.length <= 0)
-            img = `<img src="/resources/static/img/UnsetAvatar.gif" style="width:72px;height: 72px;" alt="${obj.username}'s avatar">`;
+            img = `<img src="/img/UnsetAvatar.gif" style="width:72px;height: 72px;" alt="${obj.username}'s avatar">`;
         else
             img = `<img src="data:image/${obj.format};base64,${obj.avatar}" style="width:72px;height: 72px;" alt="${obj.username}'s avatar">`;
         let status = null
@@ -256,7 +257,7 @@
     }
     let newMessages = [];
     function prepareToAddComment(obj) {
-       if(null === [[${username}]])
+       if(null === [[${username}]] || [[${username}]] === [[${currentUserName}]])
            addComment(obj);
         else {
            let loadNewComments =  document.getElementById("loadNewComments");
