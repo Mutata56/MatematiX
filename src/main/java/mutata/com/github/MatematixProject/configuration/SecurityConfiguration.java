@@ -70,6 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/forgotPassword").anonymous()
                 .antMatchers("/auth//process_forgotPassword").anonymous()
                 .antMatchers("/auth/resetPassword").anonymous()
+                .antMatchers("/h2/**").permitAll() // FIXME TEST PURPOSES ONLY
                 .anyRequest().authenticated().and()
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/auth/process_login")
