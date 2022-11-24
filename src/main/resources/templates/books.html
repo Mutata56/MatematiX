@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ошибка</title>
+    <link rel="stylesheet" th:href="@{/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/css/base/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/base/header.css}">
+    <link rel="stylesheet" th:href="@{/css/books.css}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
+</head>
+
+<body>
+<header th:insert="~{base/header :: copy}"></header>
+
+    <main>
+        <div>
+            <h2>Знакомство с высшей математикой</h2>
+            <div class="flexbox">
+                <div th:each="object : ${AdvancedBooks}">
+                    <img th:src="@{/img/books/advanced/{fileName}(fileName = ${object.getFileName()})}" alt="">
+                </div>
+                <a href=""> <button th:if="${hasMoreAdvancedBooks}">Больше книг</button> </a>
+            </div>
+        </div>
+        <div>
+            <h2>Другое</h2>
+            <div class="flexbox">
+                <div th:each="object : ${books}">
+                    <img th:src="@{/img/books/{fileName}(fileName = ${object.getFileName()})}" alt="">
+                </div>
+                <a href=""> <button th:if="${hasMoreBooksOthers}">Больше книг</button> </a>
+            </div>
+        </div>
+    </main>
+
+<footer th:insert="~{base/footer :: copy}"></footer>
+<script type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
+</body>
+
+</html>

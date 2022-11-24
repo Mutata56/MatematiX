@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Закладки</title>
+        <link rel="stylesheet" th:href="@{/css/base/base.css}">
+        <link rel="stylesheet" th:href="@{/css/base/footer.css}">
+        <link rel="stylesheet" th:href="@{/css/base/header.css}">
+        <link rel="stylesheet" th:href="@{/css/bookmarks.css}">
+        <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
+        <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
+        <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
+        <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
+    </head>
+
+    <body>
+        <header th:insert="~{base/header :: copy}"></header>
+        <main>
+            <ol>
+                <li th:each="article : ${articles}" th:text="${article.getName()}"></li>
+            </ol>
+        </main>
+        <footer th:insert="~{base/footer :: copy}"></footer>
+        <script type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
+    </body>
+
+</html>
