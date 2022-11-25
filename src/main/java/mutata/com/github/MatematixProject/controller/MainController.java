@@ -131,7 +131,6 @@ public class MainController {
         List<Message> list = new ArrayList<>();
         Page<Comment> thePage = commentService.findAllReturnPage(receiver,currentPage-1,pages);
         List<Comment> comments = reversedView(thePage.getContent());
-
         if(model != null)
             model.addAttribute("totalPages",thePage.getTotalPages());
         for (Comment comment : comments) {
@@ -139,6 +138,7 @@ public class MainController {
             jsc.setContent(comment.getContent());
             jsc.setRating(comment.getRating());
             jsc.setUsername(comment.getAuthor());
+            jsc.setRecipient(receiver.getName());
             jsc.setDate(Utils.formatDate(comment.getDate()));
             String actualData = null;
             Optional<AvatarInfo> data = avatarInfoService.findByName(comment.getAuthor());
@@ -170,7 +170,7 @@ public class MainController {
             //FIXME 404 ERROR PAGE
         }
         model.addAttribute("rating",user.getRating());
-        List<Message> commentsOnTheWall = initializeJSCL(user,1,3,model); // JavaScriptCommentsList
+        List<Message> commentsOnTheWall = initializeJSCL(user,1,8,model); // JavaScriptCommentsList
         Collections.reverse(commentsOnTheWall);
         model.addAttribute("hasComments",commentsOnTheWall.size() != 0);
         model.addAttribute("name",user.getName());
@@ -215,11 +215,11 @@ public class MainController {
         return "redirect:profile/" + name;
     }
 
-    private void postComment(Message message) {
+    private void postComment(Message message,Date date) {
         Comment comment = new Comment();
         comment.setContent(message.getContent());
         try {
-            comment.setDate(Utils.parseDate(message.getDate()));
+            comment.setDate(date);
         } catch (Exception exception) {
             log.error(exception.toString());
             comment.setDate(new Date());
@@ -231,19 +231,22 @@ public class MainController {
     }
     @MessageMapping("/sendComment") // /application/sendComment
     public void send(Message message) {
+        Date date = new Date();
         message.setRating(0);
         AvatarInfo info = avatarInfoService.findByName(message.getUsername()).orElse(null);
         if(info != null) {
             message.setFormat(info.getAvatarFormat());
             message.setAvatar(Utils.encodeAvatar(info.getAvatar()));
         }
-        message.setDate(Utils.formatDate(new Date()));
-        postComment(message);
+        message.setDate(Utils.formatDate(date));
+        postComment(message,date);
         messagingTemplate.convertAndSendToUser(message.getRecipient(),"/queue/messages",message);
     }
     @GetMapping("/ajax/nextComments")
     public @ResponseBody List<Message> getNextComments(String user,int currentPage) {
         User receiver = userService.findByNameIgnoreCase(user);
-        return initializeJSCL(receiver,currentPage,3,null);
+        var temp = initializeJSCL(receiver,currentPage,8,null);
+        Collections.reverse(temp);
+        return temp;
     }
 }

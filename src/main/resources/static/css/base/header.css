@@ -1,16 +1,18 @@
 .header {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 80px;
     z-index: 10;
-    max-width: 1622px;
+    background: #1f1f1f;
+    height: 70px;
     margin: auto;
     right: 0;
+    box-shadow: -4px 9px 12px 6px rgb(0 0 0 / 20%);
 }
 .header .logo-img {
     width: 11em;
@@ -33,18 +35,20 @@
     text-decoration: none;
     font-weight: 600;
     letter-spacing: 1px;
-    color: rgba(0, 0, 0, 0.65);
+    color: rgba(255,255,255,0.85);
     transition: all 0.3s ease-out;
 }
 .header .nav-links li a:hover {
-    color: rgba(0,0,0,0.8);
+    color: rgba(255,255,255,1);
+    text-decoration: underline;
 }
 .header .register .register-button {
-    border-radius: 10px;
+    border-radius: 4px;
     border-color: transparent;
-    background-color: black;
-    color: white;
-    width: 120px;
+    background-color: #45A0DA;
+    color: black;
+    width: 230px;
+    height: 30px;
     font-weight: 500;
     transition: all 0.4s ease-out;
 }

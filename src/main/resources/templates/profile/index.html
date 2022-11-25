@@ -222,7 +222,7 @@
                 'recipient': [[${name}]],
                 'content':$("#content").val(),
                 'isActive': true,
-                "date": null}));
+                "date": new Date()}));
     }
     let active = `<div style="position:absolute;top:52px;left:50px;border-radius:50%;width:17px;height: 17px;background-color:#55cd97;border:3px solid #1e1e1e"></div>`
     let notActive = `<div style="position:absolute;top:52px;left:50px;border-radius:50%;width:17px;height: 17px;background-color:#a4b4bf;border:3px solid #1e1e1e"></div>`
@@ -257,7 +257,7 @@
     }
     let newMessages = [];
     function prepareToAddComment(obj) {
-       if(null === [[${username}]] || [[${username}]] === [[${currentUserName}]])
+       if(null === [[${username}]] || obj.username === [[${currentUserName}]])
            addComment(obj);
         else {
            let loadNewComments =  document.getElementById("loadNewComments");
@@ -297,9 +297,12 @@
         const showComments = (data) => {
             $(data).each(function(index,item) {
                 let elem = getComment(item);
-                $(elem).insertBefore("#loadMoreButtonDiv")
-                if(totalPages == currentPage)
+                if(totalPages == currentPage) {
+                    $("#theDiv").append(elem);
                     $("#loadMoreButtonDiv").remove();
+                }
+                else
+                    $(elem).insertBefore("#loadMoreButtonDiv")
             });
         }
         $(document).ready(function() {
