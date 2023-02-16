@@ -1,5 +1,6 @@
 package mutata.com.github.MatematixProject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,16 +22,24 @@ public class Comment {
 
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonIgnore
     private Date date;
+
+    @Transient
+    private String stringDate;
 
     @Column(name = "author")
     private String author;
 
     @ManyToOne
     @JoinColumn(name = "receiver")
+    @JsonIgnore
     private User receiver;
 
     @Column(name = "rating")
     private long rating;
+
+
+
 
 }

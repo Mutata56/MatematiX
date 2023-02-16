@@ -1,5 +1,4 @@
 main {
-    margin-top: 150px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -9,6 +8,7 @@ h1 {
     margin-top: 70px;
     font-weight: 800;
     font-size: 32px;
+    color: white;
 }
 p {
     font-size: 20px;

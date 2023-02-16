@@ -5,36 +5,76 @@
 
     <body>
 
-        <div class="header"  th:fragment="copy">
-            <a th:href="@{/}"><img th:src="@{/img/logo_white.svg}" class="logo-img" alt=""></a>
+        <nav class="navbar navbar-expand-lg header"  th:fragment="copy">
 
-                <ul class="nav-links">
-                    <li><a href="#" class="nav-link">статьи</a></li>
-                    <li><a th:href="@{/bookmarks}" class="nav-link">закладки</a></li>
-                    <li><a href="#" class="nav-link">книги</a></li>
-                    <li><a href="#" class="nav-link">новости</a></li>
-                    <li><a href="#" class="nav-link">о нас</a></li>
-                </ul>
-            <div class="register" sec:authorize="isAnonymous()">
-                <form th:action="@{/auth/login}" method="GET">
-                    <button class="register-button">Начать свое обучение</button>
-                </form>
+            <div class="container-fluid">
+                <a aria-label="Главная Страница" class="ms-lg-4 navbar-brand" th:href="@{/}"><img th:src="@{/img/logo_white.svg}" class="logo-img" alt=""></a>
+                <div class="mt-lg-2 collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto me-auto mb-3 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Статьи
+                            </a>
+                            <ul style="background-color: #a7a5a5" class="dropdown-menu">
+                                <li><a style="font-weight: 500;color:black" class="dropdown-item" href="#">Геометрия</a></li>
+                                <li><a style="font-weight: 500;color:black" class="dropdown-item" href="#">Алгебра</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a style="font-weight: 500;color:black" class="dropdown-item" href="#">Общее</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/bookmarks}" class="nav-link">Закладки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Книги</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Новости</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">О нас</a>
+                        </li>
+                    </ul>
+                        <div class="register" sec:authorize="isAnonymous()">
+                            <form th:action="@{/auth/login}" method="GET">
+                                <button class="register-button">Начать свое обучение</button>
+                            </form>
+                        </div>
+                        <div class="loggedIn" sec:authorize="isAuthenticated()">
+                            <div class="dropdown" style="padding-left: 50px;padding-right: 50px">
+                                <button style="border-radius: 50%;border:none" type="button" id="profileMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img style="width: 50px;height: 50px;border-radius: 50%" th:id="theAvatar" th:src="@{/img/UnsetAvatar.webp}"  alt="Profile">
+                                </button>
+                                <ul id="theProfileMenuDropDown" style="background-color: #a7a5a5;" class="dropdown-menu" aria-labelledby="profileMenu">
+                                    <li><a style="font-weight: 500;color:black" class="dropdown-item" th:href="@{/profile}">Профиль</a></li>
+                                    <li><a style="font-weight: 500;color:black" class="dropdown-item" th:href="@{/settings}">Настройки</a></li>
+                                    <li sec:authorize="hasRole('ADMIN')"><hr class="dropdown-divider"></li>
+                                    <li sec:authorize="hasRole('ADMIN')"><a class="dropdown-item" style="font-weight: 500;color:black" href="/admin">Админ</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a style="font-weight: 500;color:black" class="dropdown-item" id="logoutHref" href="#">Выход</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    <script th:if="${hasAvatar}" th:inline="javascript">
+                        theAvatar = document.getElementById("theAvatar");
+                        let str1 = [[${theAvatar}]];
+                        let format1 = [[${avatarFormat}]];
+                        theAvatar.setAttribute("src",`data:image/${format1};base64,${str1}`);
+                    </script>
+                </div>
             </div>
-            <div class="loggedIn" sec:authorize="isAuthenticated()">
-
-                    <div class="avatar" style="width: 50px;height: 50px;overflow: hidden;border-radius: 50%">
-                        <a th:href="@{/profile}">
-                            <img style="width: 50px;height: 50px" th:id="theAvatar" th:src="@{/img/UnsetAvatar.gif}"  alt="Profile">
-                        </a>
-                    </div>
-                <script th:if="${hasAvatar}" th:inline="javascript">
-                    theAvatar = document.getElementById("theAvatar");
-                    let str1 = [[${avatar}]];
-                    let format1 = [[${avatarFormat}]];
-                    theAvatar.setAttribute("src",`data:image/${format1};base64,${str1}`);
-                </script>
-            </div>
-        </div>
+            <form th:action="@{/logout}" th:method="POST" id="logoutForm">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+            </form>
+            <script sec:authorize="isAuthenticated()">
+                document.getElementById("logoutHref").addEventListener("click",(event) => {
+                    event.preventDefault();
+                    document.getElementById("logoutForm").submit();
+                })
+            </script>
+        </nav>
 
 
     </body>

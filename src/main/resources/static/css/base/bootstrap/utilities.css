@@ -1,0 +1,31 @@
+.d-flex {
+    display: flex!important;
+}
+.justify-content-evenly {
+    justify-content: space-evenly!important;
+}
+.flex-column {
+    flex-direction: column!important;
+}
+
+@media (min-width: 992px) {
+    .me-lg-5 {
+        margin-right: 3rem!important;
+    }
+    .mt-lg-2 {
+        margin-top: 0.5rem !important;
+    }
+    .ms-auto {
+        margin-left: auto !important;
+    }
+
+    .me-auto {
+        margin-right: auto !important;
+    }
+    .mb-3 {
+        margin-bottom: 1rem !important;
+    }
+    .mb-lg-0 {
+        margin-bottom: 0 !important;
+    }
+}

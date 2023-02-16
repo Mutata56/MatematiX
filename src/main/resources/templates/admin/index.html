@@ -1,141 +1,156 @@
 <!DOCTYPE html>
-<html lang="ru">
-
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Администрирование</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title th:if="${canChangeAvatar}">Администрирование</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <link rel="preload" th:href="@{/css/admin/base.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" th:href="@{/css/profile/main.css}"></noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" th:href="@{/css/base/base.css}">
-    <link rel="stylesheet" th:href="@{/css/admin/base.css}">
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
+    <script src="https://kit.fontawesome.com/43505ce75b.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
 </head>
-
 <body>
 
-<main>
-    <nav>
-        <div style="display: flex;flex-direction: column;position: fixed">
-            <a th:href="@{/}" style="margin-top:20px;margin-bottom:270px"><img class="frame-logo" th:src="@{/img/logo_white.svg}" alt="MatematiX"></a>
-            <a th:href="@{/admin/index}">Пользователи</a>
-            <a href="">Статьи</a>
-            <a href="">Роли</a>
-            <a href="">Токены</a>
-            <a href="">Рейтинг</a>
-        </div>
+<header id="headerDiv">
+    <a th:href="@{/}"><img src="" class="frame-logo" th:src="@{/img/logo_white.svg}" alt="MatematiX"></a>
+</header>
+
+<main id="mainDiv">
+    <nav style="min-width: 95%;max-width: 95%">
+        <ul class="line-bottom" style="padding-left:0 !important;width: auto !important;">
+            <li style="font-weight:700;color: white !important; font-size: 17px; cursor: pointer">Пользователи</li>
+            <li><a style="font-weight: 700" class="nav-link" th:href="@{/settings}">Статьи</a></li>
+            <li><a style="font-weight: 700" class="nav-link" th:href="@{/}">Роли</a></li>
+            <li><a style="font-weight: 700" class="nav-link" th:href="@{/}">Токены</a></li>
+            <li><a style="font-weight: 700" class="nav-link" th:href="@{/}">Рейтинг</a></li>
+        </ul>
     </nav>
-    <div class="main">
-        <div class="upper-div">
-            <div class="searchBox">
-                <div class="search" id="search">
-                    <ion-icon style="font-size: 1em" name="search-outline"></ion-icon>
-                </div>
-                <div class="searchInput">
-                    <input type="text" id="search-input" placeholder="Поиск пользователя">
-                </div>
-                <div class="erase">
-                    <ion-icon style="font-size: 1em" name="close-outline"></ion-icon>
-                </div>
+    <div style="min-width: 270px;">
+        <table class="table table-dark table-stripped table-hover table-borderless align-middle" style="table-layout: fixed;">
+            <thead>
+            <tr>
+                <td style="font-size:20px;font-weight: 600" class="td-name">Имя</td>
+                <td style="font-size:20px;font-weight: 600" class="td-email">E-Mail</td>
+                <td style="font-size:20px;font-weight: 600" class="td-role">Заблокирован</td>
+                <td style="font-size:20px;font-weight: 600" class="td-blocked">Активирован</td>
+                <td style="font-size:20px;font-weight: 600">Роль</td>
+                <td style="text-align:center;font-size:20px;font-weight: 600"><button class="btn btn-outline-primary">Новый пользователь</button></td>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            <tr th:each="user : ${objects} ">
+                <td th:text="${user.getName()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td th:if="${user.getBlocked() == 1}"><i style="color:#a5eb78" class="fa-solid fa-check"></i></td>
+                <td th:if="${user.getBlocked() == 0}"><i style="color:#f44336" class="fa-solid fa-xmark"></i></td>
+                <td th:if="${user.getEnabled() == 1}"><i style="color:#a5eb78" class="fa-solid fa-check"></i></td>
+                <td th:if="${user.getEnabled() == 0}"><i style="color:#f44336" class="fa-solid fa-xmark"></i></td>
+                <td th:if="${user.getRole() == 'ROLE_USER'}">Пользователь</td>
+                <td th:if="${user.getRole() == 'ROLE_ADMIN'}">Администратор</td>
+                <td style="text-align: center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Действия
+                        </button>
+                        <ul style="width: 1px" class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                            <li><a class="dropdown-item" href="#">Удалить</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="min-width: 95%;max-width: 95%">
+        <ul class="line-top" style="padding-left:0 !important;width: auto !important;display: flex;justify-content: space-between">
+            <li style="padding-top: 5px"><a data-bs-toggle="modal" data-target="#showSettingsModal" class="nav-link" style="color:white !important;text-decoration: underline" href="#showSettingsModal">Настроить показ результатов</a></li>
+            <li style="padding-top: 5px"><span><input id="enterThePage" type="tel" th:value="${currentPage}"> <span id="totalCounter" style="color:white" th:text="'из ' + ${total} + ' страница'"></span></span></li>
+        </ul>
+    </div>
+</main>
+<div class="modal fade" id="showSettingsModal" tabindex="-1" aria-labelledby="showSettingsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content" id="showSettingsModalContent">
+            <div class="modal-header text-center">
+                <h5 style="color:white" class="modal-title" id="showSettingsModalLabel">Настройки</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
             </div>
-            <div style="display: flex">
-                <p style="margin-right: 40px;margin-left: -135px; font-weight: 600;margin-top: 6px;">Искать по</p>
-                <select th:name="findBy" th:id="findBy" style="padding-left: 5px;padding-right: 5px">
+            <div class="modal-body d-flex" style="color:white;padding:40px;flex-wrap: wrap;" id="showSettingsModalBody">
+                <div style="margin-bottom: 20px" class="input-group">
+                    <input id="findValue" style="border-top-right-radius: 0 !important;border-bottom-right-radius: 0 !important;" type="search" class="form-control rounded" placeholder="Например, placeholder@gmail.com" aria-label="Search" aria-describedby="search-addon" />
+                    <button id="find" type="button" class="btn btn-outline-primary">Поиск</button>
+                </div>
+                <p><span style="margin-right:10px">Искать по: </span> <select th:name="findBy" th:id="findBy" style="padding-left: 5px;padding-right: 5px">
                     <option th:selected="${findBy eq 'name'}" th:value="name">Имя</option>
                     <option th:selected="${findBy eq 'email'}" th:value="email">E-Mail</option>
                     <option th:selected="${findBy eq 'blocked'}" th:value="blocked">Заблокирован</option>
                     <option th:selected="${findBy eq 'activated'}" th:value="activated">Активирован</option>
                     <option th:selected="${findBy eq 'role'}" th:value="role">Роль</option>
-                </select>
-            </div>
-            <input type="submit" onclick="location.href='/admin/createUser'" value="Управление">
-        </div>
-        <div>
-            <table>
-                <thead>
-                <tr>
-                    <td class="td-name">Имя</td>
-                    <td class="td-email">E-Mail</td>
-                    <td class="td-blocked">Заблокирован</td>
-                    <td>Активирован</td>
-                    <td class="td-role">Роль</td>
-                </tr>
-                </thead>
-                <tbody id="theTBODY">
-                <tr th:each="user : ${objects} ">
-                    <td th:text="${user.getName()}"></td>
-                    <td th:text="${user.getEmail()}"></td>
-                    <td th:if="${user.getBlocked() == 0}"><a class="blockClass" th:href="@{/admin/block/{name}(name=${user.getName()})}">Заблокировать</a></td>
-                    <td th:if="${user.getBlocked() == 1}"><a class="unblockClass" th:href="@{/admin/unblock/{name}(name=${user.getName()})}">Разблокировать</a></td>
-                    <td th:if="${user.getEnabled() == 1}"><a class="deactivateClass" th:href="@{/admin/deactivate/{name}(name=${user.getName()})}">Да</a></td>
-                    <td th:if="${user.getEnabled() == 0}"><a class="activateClass" th:href="@{/admin/activate/{name}(name=${user.getName()})}">Нет</a></td>
-                    <td th:if="${user.getRole() == 'ROLE_USER'}">Пользователь</td>
-                    <td th:if="${user.getRole() == 'ROLE_ADMIN'}">Администратор</td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-        <div class="bottom">
-            <div class="sort-settings">
-                <p style="margin-right: 40px;margin-left: -160px; font-weight: 600;margin-top: 3px;">Сортировать по</p>
-                <select th:id="sortBy" th:name="sortBy" style="padding-left: 5px;padding-right: 5px">
+                </select></p>
+                <p><span style="margin-right:10px">Записей на страницу:</span> <input id="ipp" th:value="${itemsPerPage}" value="15" type="tel"></p>
+                <p><span style="margin-right:10px">Сортировать по:</span> <select th:id="sortBy" th:name="sortBy" style="padding-left: 5px;padding-right: 5px">
                     <option th:selected="${sortBy eq 'noSort'}" th:value="noSort">-</option>
                     <option th:selected="${sortBy eq 'name'}" th:value="name">Имя</option>
                     <option th:selected="${sortBy eq 'email'}" th:value="email">E-Mail</option>
                     <option th:selected="${sortBy eq 'blocked'}" th:value="blocked">Заблокирован</option>
                     <option th:selected="${sortBy eq 'enabled'}" th:value="enabled">Активирован</option>
                     <option th:selected="${sortBy eq 'role'}" th:value="role">Роль</option>
-                </select>
-                <input th:id="sortDirection" type="checkbox">
+                </select></p>
+                <p><span style="margin-right:10px">Сортировать в порядке:</span> <select th:name="sortDirection" th:id="sortDirection" style="padding-left: 5px;padding-right: 5px">
+                    <option th:selected="${sortDirection eq 'asc'}" th:value="asc">возрастания</option>
+                    <option th:selected="${sortDirection ne 'asc'}" th:value="desc">убывания</option>
+                </select></p>
             </div>
-            <div class="bottom-nav" id="theBottomDiv" th:value="${currentPage}">
-
-                <div th:if="${currentPage eq 1}" class="decorated-div" th:id="currentPage1st" th:content="1">1</div>
-                <div th:if="${currentPage eq 1 and total > 1}" class="decorated-div" th:id="currentPage2nd" th:content="2">2</div>
-                <div th:if="${currentPage eq 1 and total > 2}" class="decorated-div" th:id="currentPage3rd" th:content="3">3</div>
-
-
-                <div th:if="${currentPage > 1}" class="decorated-div" th:id="currentPage1st" th:text="${currentPage - 1}" th:content="${currentPage - 1}">1</div>
-                <div th:if="${total > 1 and currentPage > 1}" class="decorated-div" th:text="${currentPage}" th:id="currentPage2nd" th:content="${currentPage}">2</div>
-                <div th:if="${total > 2 and currentPage > 1 and currentPage < total}" class="decorated-div" th:id="currentPage3rd" th:text="${currentPage + 1}" th:content="${currentPage + 1}">3</div>
-
-                <div th:if="${total > 3 and currentPage < total - 1}" class="decorated-div">...</div>
-                <div th:if="${total > 3 and currentPage < total - 1}" th:text="${total}" class="decorated-div" id="currentPageLast" th:content="${total}"></div>
-            </div>
-            <div class="pagination-settings" th:value="${itemsPerPage}">
-                <div class="decorated-div" id="pagination15">15</div>
-                <div class="decorated-div" id="pagination50">50</div>
-                <div class="decorated-div" id="pagination100">100</div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="submitSettings">Применить</button>
+                <button id="buttonClose2" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
             </div>
         </div>
     </div>
-</main>
-
-
-
+</div>
 <script th:inline="javascript">
+    let button = `<td style="text-align: center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Действия
+                                    </button>
+                                    <ul style="width: 1px" class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                                    </ul>
+                                </div>
+                            </td>`;
+    let totalUsers = [[${totalUsers}]];
     const successFunction = (data) => {
-        $("#theTBODY").empty();
+        $("#tableBody").empty();
         for (index = 0;index < data.length;index++) {
             let third = null;
             let fourth = null;
             if(data[index].blocked == 1)
-                third =`<td><a class="unblockClass" href="/admin/unblock/${data[index].name}">Разблокировать</a></td>`;
+                third =`<td><i style="color:#a5eb78" class="fa-solid fa-check"></td>`;
             else
-                third =`<td><a class="blockClass" href="/admin/block/${data[index].name}">Заблокировать</a></td>`;
+                third =`<td><i style="color:#f44336" class="fa-solid fa-xmark"></i></td>`;
             if(data[index].enabled == 1)
-                fourth =`<td><a class="deactivateClass" href="/admin/deactivate/${data[index].name}">Да</a></td>`;
+                fourth =`<td><i style="color:#a5eb78" class="fa-solid fa-check"></td>`;
             else
-                fourth =`<td><a class="activateClass" href="/admin/activate/${data[index].name}">Нет</a></td>`;
+                fourth =`<td><i style="color:#f44336" class="fa-solid fa-xmark"></i></td>`;
             let role = data[index].role === "ROLE_ADMIN" ? "Администратор" : "Пользователь";
             let tr =
                 `<tr>
@@ -144,29 +159,12 @@
                  ${third}
                  ${fourth}
                  <td>${role}</td>
+                 ${button}
                 </tr>`;
-            $("#theTBODY").append(tr);
+            $("#tableBody").append(tr);
         }
-        $("#theBottomDiv").empty();
-        if(currentPage === 1) {
-            $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="1">1</div>`);
-            if(total > 1) {
-                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="2">2</div>`);
-            }
-            if(total > 2) {
-                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="3">3</div>`);
-            }
-        } else {
-            $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage1st" content="${currentPage - 1}">${currentPage - 1}</div>`);
-            $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage2nd" content="${currentPage}">${currentPage}</div>`);
-            if(currentPage != total)
-                $("#theBottomDiv").append(`<div class="decorated-div" id="currentPage3rd" content="${currentPage + 1}">${currentPage + 1}</div>`);
-        }
-        if(total > 3 && currentPage < total - 1){
-            $("#theBottomDiv").append(`<div class="decorated-div">...</div>`);
-            $("#theBottomDiv").append(`<div id="currentPageLast" content="${total}" class="decorated-div">${total}</div>`);
-        }
-        sharedLogic();
+        console.log("success")
+        console.log(data)
     }
     const sendToTheServer = () => {
         $.ajax({
@@ -183,41 +181,6 @@
             success: successFunction
         });
     }
-    const sharedLogic = () => {
-        $(".blockClass, .unblockClass, .activateClass, .deactivateClass").click(function (event) {
-            event.preventDefault();
-            $.ajax({
-                url: event.target.getAttribute("href"),
-                method: "POST",
-                type: "POST",
-                success: sendToTheServer
-            });
-        });
-
-        $("#currentPage1st").on("click",() => {
-            if(currentPage !== 1) {
-                currentPage = Number($("#currentPage1st").attr("content"));
-                sendToTheServer();
-            }
-        })
-        $("#currentPage3rd").on("click",() => {
-            if(currentPage + 1 <= total) {
-                currentPage = Number($("#currentPage3rd").attr("content"));
-                sendToTheServer();
-            }
-        })
-        $("#currentPageLast").on("click",() => {
-            currentPage = Number($("#currentPageLast").attr("content"));
-            sendToTheServer();
-        })
-        if(currentPage === 1) {
-            $("#currentPage2nd").on("click",() => {
-                currentPage = 2;
-                sendToTheServer();
-            })
-        }
-    }
-
 
     let sortByValue = [[${sortBy}]];
     if(sortByValue === undefined)
@@ -227,52 +190,132 @@
     let sortDirection = [[${sortDirection}]];
     let itemsPerPage = [[${itemsPerPage}]];
     let currentPage = [[${currentPage}]];
-    let total = [[${total}]];
-    let totalUsers = [[${totalUsers}]];
     $(document).ready(
-
         function () {
             $(document).ajaxSend(function(e,xhr,options) {
                 xhr.setRequestHeader("X-CSRF-TOKEN",[[${_csrf.token}]]);
             });
-            $("#sortBy").bind("change",() => {
-                sortByValue = $("#sortBy").val();
-                sendToTheServer();
-            });
-            $("#sortDirection").bind("change",() => {
-                sortDirection = sortDirection === "asc" ? "desc" : "asc";
-
-                sendToTheServer();
-            });
-            $("#search").bind("click",() => {
-                find = $("#search-input").val();
-                findByValue = $("#findBy").val();
-                sendToTheServer();
-            });
-            $("#pagination15").bind("click",() => {
-                itemsPerPage = 15;
-                total = Math.ceil(totalUsers / (itemsPerPage));
-                currentPage = 1;
-                sendToTheServer();
-            });
-            $("#pagination50").bind("click",() => {
-                itemsPerPage = 50;
-                total = Math.ceil(totalUsers / (itemsPerPage));
-                currentPage = 1;
-                sendToTheServer();
-            });
-            $("#pagination100").bind("click",() => {
-                itemsPerPage = 100;
-                total = Math.ceil(totalUsers / (itemsPerPage));
-                currentPage = 1;
-                sendToTheServer();
-            });
-            sharedLogic();
         }
     );
+    $("#enterThePage").keypress(function (event) {
+        if(event.keyCode === 13) {
+            currentPage = $("#enterThePage").val()
+            sendToTheServer()
+        }
+    });
+    const sharedLogic = () => {
+        findByValue = $("#findBy").val();
+        itemsPerPage = $("#ipp").val();
+        sortByValue = $("#sortBy").val();
+        sortDirection = $("#sortDirection").val();
+        find = $("#findValue").val();
+        total = Math.ceil(totalUsers / itemsPerPage);
+        $("#totalCounter").text(`из ${total} страница`);
+        sendToTheServer();
+        $("#showSettingsModal").modal("toggle");
+    }
+    $("#submitSettings").click(function (event) {
+        sharedLogic()
+    })
+    $("#find").click(function (event) {
+        sharedLogic()
+    })
 
+    $(document).click(function(event) {
+        let target = event.target;
+        if(target.nodeName === "A" && target.textContent === "Редактировать") {
+
+            let actions = target.parentElement.parentElement;
+            let tr = target.parentElement.parentElement.parentElement.parentElement.parentElement;
+            let children = tr.children;
+            let blocked = children[2].children[0].classList.contains("fa-xmark") ? "" : "checked";
+            let activated = children[3].children[0].classList.contains("fa-xmark") ? "" : "checked";
+            let selectedAdmin = children[4].textContent.startsWith("Админ") ? "selected" : "";
+            let selectedUser = children[4].textContent.startsWith("Польз") ? "selected" : "";
+            $(children[1]).replaceWith(`<td><input type="email" value="${children[1].textContent}"></td>`);
+            $(children[2]).replaceWith(`<td><input ${blocked} type="checkbox" value="blocked"></td>`);
+            $(children[3]).replaceWith(`<td><input ${activated} type="checkbox" value="activated"></td>`);
+            $(children[4]).replaceWith(`<td><select><option ${selectedAdmin} value="admin">Администратор</option><option ${selectedUser} value="user">Пользователь</option></select></td>`);
+            $(actions.children[0]).replaceWith("<li><a class='dropdown-item' href='#'>Применить</a></li>")
+        } else if((target.nodeName === "A" && target.textContent === "Применить") || (target.nodeName === "BUTTON" && target.textContent === "Сохранить")) {
+            let hasToBeSaved = target.textContent === "Сохранить";
+            let tr = hasToBeSaved ? target.parentElement.parentElement : target.parentElement.parentElement.parentElement.parentElement.parentElement;
+            let children = tr.children;
+            let blocked = children[2].children[0].checked;
+            let activated = children[3].children[0].checked;
+            let isAdmin = children[4].children[0].value == "admin";
+            let email = children[1].children[0].value
+            let username = hasToBeSaved ? children[0].children[0].value : children[0].textContent;
+            $.ajax({
+                url: "/admin/ajax/update",
+                type: "PATCH",
+                data: ({
+                    username: username,
+                    email: email,
+                    blocked: blocked,
+                    activated: activated,
+                    role: isAdmin ? "ROLE_ADMIN" : "ROLE_USER"
+                }),
+                success: function (data) {
+                    toastr.options.preventDuplicates = true;
+                    toastr.options.progressBar = true;
+                    if(data) {
+                        toastr.success("","Успех!");
+                        $(children[1]).replaceWith(`<td>${email}</td>`);
+                        $(children[2]).replaceWith(`<td>${blocked ? `<i style="color:#a5eb78" class="fa-solid fa-check"></i>` : `<i style="color:#f44336" class="fa-solid fa-xmark"></i>`} </td>`);
+                        $(children[3]).replaceWith(`<td>${activated ? `<i style="color:#a5eb78" class="fa-solid fa-check"></i>` : `<i style="color:#f44336" class="fa-solid fa-xmark"></i>`} </td>`);
+                        $(children[4]).replaceWith(`<td>${isAdmin ? "Администратор" : "Пользователь"}</td>`);
+                        if(!hasToBeSaved) $(actions.children[0]).replaceWith("<li><a class='dropdown-item' href='#'>Редактировать</a></li>")
+                        else {
+                            $(children[0]).replaceWith(`<td>${username}</td>`);
+                            totalUsers+=1;
+                            itemsPerPage = Number(itemsPerPage) + 1;
+                            total = Math.ceil(totalUsers / itemsPerPage);
+                            $(children[5]).replaceWith(button);
+                            $("#ipp").val(itemsPerPage);
+                            $("#totalCounter").text(`из ${total} страница`);
+                        }
+                    } else {
+                        toastr.error("Попробуйте снова.","Ошибка!");
+                    }
+                }
+            });
+        }
+        else if (target.nodeName === "A" && target.textContent === "Удалить") {
+            $.ajax({
+                url: "/admin/ajax/delete",
+                type: "DELETE",
+                data: ({
+                    username: target.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].textContent,
+                }),
+                success: function (data) {
+                    toastr.options.preventDuplicates = true;
+                    toastr.options.progressBar = true;
+                    if(data) {
+                        toastr.success("","Успех!");
+                        totalUsers-=1;
+                        total = Math.ceil(totalUsers / itemsPerPage);
+                        $("#totalCounter").text(`из ${total} страница`);
+                        sendToTheServer();
+                    } else {
+                        toastr.error("Попробуйте снова.","Ошибка!");
+                    }
+                }
+            });
+        }
+        else if(target.nodeName === "BUTTON" && target.textContent === "Новый пользователь") {
+            let tableBody = $("#tableBody");
+            tableBody.prepend(
+                `<tr>
+                    <td><input type="text"></td>
+                    <td><input type="email"></td>
+                    <td><input type="checkbox" value="blocked"></td>
+                    <td><input type="checkbox" value="activated"></td>
+                    <td><select><option value="admin">Администратор</option><option value="user">Пользователь</option></select></td>
+                    <td style="text-align: center"><button class="btn btn-outline-success">Сохранить</button></td>
+                </tr>`)
+        }
+    })
 </script>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

@@ -15,5 +15,16 @@ h6 {
     font-weight: normal;
 }
 body {
-    background-color: #1e1e1e;
+    background-color: #1e1e1e !important;
+    min-width: 350px;
+}
+body::-webkit-scrollbar {
+    width: 11px;               /* ширина scrollbar */
+}
+body::-webkit-scrollbar-track {
+    background: #595c62;        /* цвет дорожки */
+}
+body::-webkit-scrollbar-thumb {
+    background-color: #2b2b2b;    /* цвет плашки */
+    border-radius: 20px;
 }

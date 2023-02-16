@@ -1,39 +1,47 @@
 package mutata.com.github.MatematixProject.service;
 
-import mutata.com.github.MatematixProject.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class MyRestService {
 
-    private final UserService userService;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public MyRestService(UserService service) {
-        this.userService = service;
+    public MyRestService(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
     }
 
-    public List<User> getUsers() {
-        return userService.findAll();
+    public String convertToWebp(String fileExtension,String base64String) {
+        String url = "https://webp.phip1611.dev/convert";
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // create a map for post parameters
+        Map<String, Object> map = new HashMap<>();
+        map.put("fileExtension", fileExtension);
+        map.put("base64String", base64String);
+        // build the request
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
+
+        // send POST request
+        ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
+
+        return response.getBody();
     }
 
-
-    public User getUserByName(String name) {
-        return userService.findByNameIgnoreCase(name);
-    }
-
-    public User getUserByEmail(String email) {
-        return userService.findByEmailIgnoreCase(email);
-    }
-
-    public void delete(User user) {
-        userService.delete(user);
-    }
-
-    public void save(User user) {
-        userService.save(user);
-    }
 }

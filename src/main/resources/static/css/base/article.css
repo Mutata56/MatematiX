@@ -1,78 +1,137 @@
-main {
-    margin-top: 150px
+body {
+    color: white;
 }
 .article-header {
+    background-color: #3c3f41;
+}
+
+.article-header h1 {
+    font-size: 40px;
     color: white;
-    background-color: #28B485;
-    padding: 10px 10px 10px 30px;
-}
-h1 {
-    margin-bottom: 16px;
-    font-size: 44px;
     font-weight: 500;
+    padding: 25px;
 }
-h4 {
-    font-size: 16px;
-    padding-left: 6px;
+article {
+    margin-left: 30px;
 }
-.article-main-content {
-    position: relative;
-    padding: 0 50px 50px;
-}
-
-.toc {
-    font-size: 28px;
-    font-weight: 500;
-}
-.article-nav {
-    padding: 15px;
-}
-
-
-h2 {
-    font-size: 36px;
-    font-weight: 500;
-    margin-top: 50px;
-}
-h3 {
-    font-size: 28px;
-    margin-top: 20px;
-    font-weight: 500;
-    margin-bottom: 12px;
-}
-p {
-    margin-left: 20px;
-    font-size: 18px;
-    line-height: 30px;
-}
-.article-nav-bar {
+.slider-container {
     position: fixed;
-    right: 6px;
-    top: 310px;
+    right: 2%;
+    bottom: 2%;
+    background: transparent;
+    z-index: 100;
 }
-.circle {
-    width: 33px;
-    height: 33px;
-    -webkit-border-radius: 25px;
-    -moz-border-radius: 25px;
-    border-radius: 25px;
-    background: green;
-    margin-bottom: 30px;
+.slider-container button {
+    background: transparent;
+    padding: 5px;
+    color: white;
+    border: none;
 }
-.frac {
-    display: inline-block;
+.footer-flexbox {
+    z-index: 101;
+}
+input[type='range']::-webkit-slider-thumb {
+    pointer-events: none;
+
+}
+input[type='range'] {
+    -webkit-appearance: none;
+    margin-right: 15px;
+    width: 200px;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+    background-size: 70% 100%;
+    background-repeat: no-repeat;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #45a0da;
+    cursor: ew-resize;
+    box-shadow: 0 0 2px 0 #555;
+    transition: background .3s ease-in-out;
+}
+
+
+input[type="range"]::-ms-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    cursor: ew-resize;
+    box-shadow: 0 0 2px 0 #555;
+    transition: background .3s ease-in-out;
+}
+footer {
     position: relative;
-    vertical-align: middle;
-    letter-spacing: 0.001em;
+    z-index: 101;
+}
+.h2 {
+    background-color: #3F3F3F ;
+    color:white;
+}
+.articleAccordion .accordion-button:not(.collapsed), .h3 {
+    background-color: #3F3F3F ;
+    color:white;
+}
+
+.articleAccordion, .articleAccordion .accordion-item {
+    background: transparent;
+    color: white;
+    border: none;
+}
+.articleAccordion .accordion-button.collapsed::after, .articleAccordion .accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+.articleAccordion .accordion-button:focus {
+    box-shadow: none;
+}
+.articleAccordion .accordion-button:not(.collapsed)::after {
+    transform: rotate(-180deg);
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+footer {
+    margin-top:auto;
+}
+.accordion-body-flexbox {
+    display: flex;
+}
+.accordion-body-flexbox-text {
+    width: 50%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
-.frac > span {
-    display: block;
-    padding: 0.1em;
+.accordion-body-flexbox-img {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.frac span.bottom {
-    border-top: thin solid black;
+.link:link,.link:hover,.link:focus,.link {
+    color: #e83e8c !important;
+    text-decoration: underline;
 }
-.frac span.symbol {
-    display: none;
+.imgHover {
+
+    transition: all 0.5s ease-out;
+}
+.imgHover:hover {
+
+}
+.proved {
+    font-weight: 600;
+    font-size: 22px;
+}
+.MathJax {
+    font-size: 1.3em !important;
 }

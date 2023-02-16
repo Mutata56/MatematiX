@@ -3,6 +3,7 @@ package mutata.com.github.MatematixProject.service;
 
 import mutata.com.github.MatematixProject.dao.MyResponse;
 import mutata.com.github.MatematixProject.dao.UserDAO;
+import mutata.com.github.MatematixProject.entity.Comment;
 import mutata.com.github.MatematixProject.entity.User;
 import mutata.com.github.MatematixProject.repository.UserRepository;
 import org.hibernate.Hibernate;
@@ -152,5 +153,9 @@ public class UserService implements MyService<User> {
     }
     public long getCount() {
         return userRepository.count();
+    }
+
+    public MyResponse<User> findAllFriendsReturnPage(User user, int page, int itemsPerPage) {
+        return userDAO.findAllFriendsReturnPage(user,PageRequest.of(page,itemsPerPage));
     }
 }

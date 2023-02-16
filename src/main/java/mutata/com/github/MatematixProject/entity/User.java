@@ -4,13 +4,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mutata.com.github.MatematixProject.entity.token.ResetPasswordToken;
 import mutata.com.github.MatematixProject.entity.token.VerificationToken;
+import mutata.com.github.MatematixProject.util.Utils;
 import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import static java.awt.SystemColor.info;
 
 @Entity
 @Table(name = "users")
@@ -56,16 +60,33 @@ public class User {
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private AvatarInfo avatarInfo;
 
+    public void storeAvatar(HashMap<String,AvatarInfo> map) {
+        if (!map.containsKey(getName())) {
+            map.put(getName(),avatarInfo);
+            if(avatarInfo != null)
+                avatarInfo.setEncodedAvatar(Utils.encodeAvatar(avatarInfo.getAvatar()));
+        }
+    }
+
     @OneToMany(mappedBy = "receiver")
     private List<Comment> comments; // Comments on the wall (profile)
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "user_article",
+            name = "user_articles",
             joinColumns = @JoinColumn(name = "name"),
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
     private List<Article> articles;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name="user_friends",
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "friend_name")
+    )
+    private List<User> friends;
+
 
     @Column(name = "last_time_online")
     @Temporal(TemporalType.TIMESTAMP)

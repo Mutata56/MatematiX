@@ -3,6 +3,8 @@ package mutata.com.github.MatematixProject.dao;
 import mutata.com.github.MatematixProject.entity.User;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,5 +85,21 @@ public class UserDAO {
         countQuery.setParameter("pattern",patternFindBy);
         long total = (Long) countQuery.getSingleResult();
         return new MyResponse<User>(query.getResultList(),total);
+    }
+
+    public MyResponse<User> findAllFriendsReturnPage(User user, PageRequest of) {
+        Session session = entityManager.unwrap(Session.class);
+        Query query = entityManager.createQuery("SELECT friend FROM User user JOIN user.friends friend WHERE user.name = :username");
+        query.setParameter("username",user.getName());
+        query.setFirstResult((of.getPageNumber()) * of.getPageSize());
+        query.setMaxResults(of.getPageSize());
+        return new MyResponse<User>(query.getResultList(),countOfFriends(user));
+    }
+    public Long countOfFriends(User user) {
+        Session session = entityManager.unwrap(Session.class);
+        Query countQuery = entityManager.createQuery("SELECT COUNT(friend) FROM User user JOIN user.friends friend WHERE user.name = :username");
+        countQuery.setParameter("username",user.getName());
+        long total = (Long) countQuery.getSingleResult();
+        return total;
     }
 }

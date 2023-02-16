@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Настройки</title>
+    <style>
+        body{background-color:#1e1e1e!important;width:100%;height:100%}main{display:flex;flex-direction:column;align-items:center;align-content:center}header,main{text-align:center}header{margin-top:20px}.frame-logo{cursor:pointer;width:200px}main nav ul li{display:inline-block;font-weight:700}main nav ul{margin-top:65px;list-style:none;display:flex;padding-bottom:4px;border-bottom:1px solid #fff;justify-content:space-between;width:1400px;margin-right:auto;margin-left:auto}.nav-link:link,.nav-link:visited,.nav-link:hover,.nav-link:focus{text-decoration:none;font-size:17px;color:rgba(255,255,255,0.85)}.avatar-wrapper{position:relative;border-radius:50%;width:140px;height:140px;overflow:hidden;cursor:pointer}.avatar-wrapper-medium{min-width:72px;max-width:72px;min-height:72px;max-height:72px;border:none!important}.about{display:flex;gap:70px;margin-top:30px}.friends-flex{display:flex;gap:20px;width:256px;flex-wrap:wrap}#friends-p{margin-bottom:15px}#friends-a:link,#friends-a:active,#friends-a:visited,#friends-a:hover{color:rgba(255,255,255,0.85);font-size:18px;text-decoration:none;font-weight:600}.profile-settings{width:1400px;margin:35px auto 100px;display:flex;justify-content:space-between}.desc p,.sort-settings-li{color:rgba(255,255,255,0.85);font-weight:700}.sort-settings-li.active{color:#fff}.desc{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-evenly}.comments-header{color:#fff;font-weight:700;padding-bottom:4px;border-bottom:1px solid #fff;display:flex;justify-content:space-between}.comments{width:1400px;margin-right:auto;margin-left:auto}.sort-settings-ul{display:flex;gap:20px;list-style:none}.sort-settings-li{cursor:pointer}.comments-content{display:flex;flex-direction:column}#loadMoreButton,#loadNewComments,#loadComments{background-color:#45a0da;width:300px;height:30px;color:#000;font-size:18px;font-weight:500;transition:all .5s ease-out;border:none;border-radius:2px;cursor:pointer}
+    </style>
+    <link rel="preload" th:href="@{/css/profile/main.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" th:href="@{/css/profile/main.min.css}"></noscript>
+    <link rel="preload" th:href="@{/css/base/bootstrap/modal.min.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" th:href="@{/css/base/bootstrap/modal.min.css}"></noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/css/base/bootstrap/button.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base/bootstrap/container.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base/bootstrap/utilities.min.css}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
+</head>
+
+<body id="body">
+
+<header id="headerDiv">
+    <a th:href="@{/}"><img src="" class="frame-logo" th:src="@{/img/logo_white.svg}" alt="MatematiX"></a>
+</header>
+
+<main id="mainDiv">
+    <label style="font-size:40px;margin-top:200px;color:white;text-decoration: underline;cursor:pointer;font-weight: 500;" th:for="secretInput"> Поменять аватарку </label>
+   <form  enctype="multipart/form-data" th:id="theForm" th:action="@{/uploadAvatar(${_csrf.parameterName}=${_csrf.token})}" th:method="POST">
+        <div class="modal fade" id="changeYourAvatarModal" tabindex="-1" aria-labelledby="changeYourAvatarModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content" id="changeYourAvatarModalContent">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title" id="changeYourAvatarModalLabel">Измените ваше фото</h5>
+                        <button id="buttonClose1" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
+                    </div>
+                    <div class="modal-body" id="changeYourAvatarModalBody">
+                        <div id="divForCropping" class="container-fluid d-flex">
+                            <div class="me-lg-5" id="imageWrapper">
+                                <img id="croppingImage" src="" alt="">
+                            </div>
+                            <div class="d-flex justify-content-evenly flex-column" style="align-items: center">
+                                <div id="previewDiv">
+
+                                </div>
+                                <div id="previewDivComments">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="submitChangeAvatar">Сохранить</button>
+                        <button id="buttonClose2" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input onclick="this.value=null;" th:id="secretInput" th:name="file" type="file" style="display: none" accept="image/*">
+        <input type="submit" th:id="secretSubmit">
+        <input th:id="x" type="hidden" th:name="x">
+        <input th:id="y" type="hidden" th:name="y">
+        <input th:id="width" type="hidden" th:name="width">
+        <input th:id="height" type="hidden" th:name="height">
+        <input th:id="scaleX" type="hidden" th:name="scaleX">
+        <input th:id="scaleY" type="hidden" th:name="scaleY">
+    </form>
+</main>
+<script defer src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script defer type="module" th:src="@{/js/base/bootstrap/modal.js}"></script>
+<script defer type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
+<script defer th:inline="javascript">
+    let success = [[${success}]];
+    let message = [[${message}]]
+    success&&(toastrEl.href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css",toastrEl.rel="stylesheet",toastrEl.type="text/css",document.getElementsByTagName("head")[0].appendChild(toastrEl),(toastrEl=document.createElement("script")).src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js",toastrEl.async=!0,toastrEl.onload=()=>{"|"!==message.charAt(message.length-1)&&(message+="|");let t=-1,s=0;for(;(t=message.indexOf("|",s))>=0;){let e=message.substring(s,t);toastr.error(e,"Ошибка!"),s=t+1}},document.getElementsByTagName("head")[0].appendChild(toastrEl));
+</script>
+<script defer th:src="@{/js/canChangeAvatar.min.js}"></script>
+<script>
+    document.getElementById("buttonClose1").addEventListener("click",(event) => {
+        event.preventDefault();
+        changeYourAvatarModal.modal("toggle");
+    })
+    document.getElementById("buttonClose2").addEventListener("click",(event) => {
+        event.preventDefault();
+        changeYourAvatarModal.modal("toggle");
+    })
+</script>
+</body>
+</html>

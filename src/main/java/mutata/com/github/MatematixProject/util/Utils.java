@@ -1,5 +1,9 @@
 package mutata.com.github.MatematixProject.util;
 
+import mutata.com.github.MatematixProject.entity.Comment;
+import mutata.com.github.MatematixProject.entity.dto.CommentDTO;
+import mutata.com.github.MatematixProject.service.UserService;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -7,10 +11,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 public class Utils {
+
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM, yyyy H:mm");
 
     public static String encodeFromIsoToUTF8(String content) {
@@ -19,6 +26,9 @@ public class Utils {
 
     public static String encodeAvatar(byte[] data) {
         return Base64.getEncoder().withoutPadding().encodeToString(data);
+    }
+    public static byte[] decodeAvatar(String base64) {
+        return Base64.getDecoder().decode(base64);
     }
 
     public static BufferedImage cropAnImage(double x, double y, double scaleX, double scaleY, BufferedImage src, double width, double height) {
@@ -39,5 +49,37 @@ public class Utils {
     }
     public static Date parseDate(String string) throws ParseException {
         return dateFormat.parse(string);
+    }
+
+    public static <T> List<T> reversedView(final List<T> list)
+    {
+        return new AbstractList<>()
+        {
+            @Override
+            public T get(int index)
+            {
+                return list.get(list.size()-1-index);
+            }
+
+            @Override
+            public int size()
+            {
+                return list.size();
+            }
+        };
+    }
+    public static Comment toComment(CommentDTO commentDTO, UserService service) {
+        Comment comment =new Comment();
+        comment.setContent(commentDTO.getContent());
+        comment.setRating(commentDTO.getRating());
+        comment.setReceiver(service.findByNameIgnoreCase(commentDTO.getRecipient()));
+        comment.setAuthor(commentDTO.getUsername());
+        try {
+            comment.setDate(new Date(commentDTO.getDate()));
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            comment.setDate(new Date());
+        }
+        return comment;
     }
 }

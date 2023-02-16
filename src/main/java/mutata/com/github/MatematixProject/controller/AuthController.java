@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -79,9 +80,9 @@ public class AuthController {
 
         User user = new User();
         user.setEncryptedPassword(registerDTO.getPassword());
-        user.setEmail(registerDTO.getEmail());
+        user.setEmail(StringUtils.capitalize(registerDTO.getEmail().toLowerCase()));
         user.setRole("ROLE_USER");
-        user.setName(registerDTO.getName());
+        user.setName(StringUtils.capitalize(registerDTO.getName().toLowerCase()));
 
         userService.save(user);
         publisher.publishEvent(new OnRegistrationCompleteEvent(user,request.getContextPath()));

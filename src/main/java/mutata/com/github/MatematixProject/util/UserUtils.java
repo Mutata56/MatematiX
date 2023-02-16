@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 @Component
 public class UserUtils {
@@ -50,22 +48,16 @@ public class UserUtils {
         }
         return true;
     }
-
-    public boolean hasAvatar(String username, Model model,String prefix) {
-        AvatarInfo info = avatarInfoService.findByName(username).orElse(null);
-        boolean result = info == null;
-        if(result)
-            model.addAttribute(String.format("has%sAvatar", StringUtils.capitalize(prefix)),false);
-        else {
-            model.addAttribute(String.format("has%sAvatar", StringUtils.capitalize(prefix)),true);
-            model.addAttribute(String.format("%s%s", prefix,"".equals(prefix) ? "avatar" : StringUtils.capitalize("avatar")),
-                    Utils.encodeAvatar(info.getAvatar()));
-            model.addAttribute(String.format("%s%s", prefix,"".equals(prefix) ? "avatarFormat" : StringUtils.capitalize("avatarFormat")),
-                    info.getAvatarFormat());
-        }
-        return result;
+    public void loadAvatar(String username, HashMap<String,AvatarInfo> map,Model model,String prefix) {
+        var temp = avatarInfoService.findByName(username).orElse(null);
+        if(temp != null && temp.getEncodedAvatar() == null)
+            temp.setEncodedAvatar(Utils.encodeAvatar(temp.getAvatar()));
+        map.putIfAbsent(username,temp);
+        model.addAttribute(String.format("has%sAvatar",StringUtils.capitalize(prefix)),temp != null);
     }
-    public boolean hasAvatar(String username,Model model) {
-        return hasAvatar(username,model,"");
+    public void loadAvatar(String username,Model model,String prefix) {
+        var temp = avatarInfoService.findByName(username).orElse(null);
+        model.addAttribute(String.format("has%sAvatar",StringUtils.capitalize(prefix)),temp != null);
+        model.addAttribute("theAvatar",temp ==  null ? null : Utils.encodeAvatar(temp.getAvatar()));
     }
 }

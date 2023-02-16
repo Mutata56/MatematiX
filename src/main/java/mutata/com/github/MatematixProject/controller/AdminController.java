@@ -4,94 +4,25 @@ package mutata.com.github.MatematixProject.controller;
 
 import mutata.com.github.MatematixProject.dao.MyResponse;
 import mutata.com.github.MatematixProject.entity.User;
-import mutata.com.github.MatematixProject.event.OnRegistrationCompleteEvent;
 import mutata.com.github.MatematixProject.service.*;
-import mutata.com.github.MatematixProject.util.Toastr;
-import mutata.com.github.MatematixProject.util.UserUtils;
-import mutata.com.github.MatematixProject.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
-    private final ApplicationEventPublisher publisher;
-    private final UserValidator userValidator;
-
-    private final UserUtils userUtils;
     @Autowired
-    public AdminController(ApplicationEventPublisher publisher,UserValidator userValidator, UserService userService,UserUtils userUtils) {
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.userValidator = userValidator;
-        this.publisher = publisher;
-        this.userUtils = userUtils;
     }
 
-    @GetMapping(value={"/createUser","/users/create","/create/user"})
-    public String showCreateUserPage(Model model) {
-        model.addAttribute("user",new User());
-        return "/admin/createUser";
-    }
-    @GetMapping(value = "/deleteUser")
-    public String deleteUser(@RequestParam(required = false) Optional<String> name,Model model) {
-        if(name.isPresent()) {
-            String res = name.get();
-            User user = res.contains("@") ? userService.findByEmailIgnoreCase(res) : userService.findByNameIgnoreCase(res);
-            if(user != null) {
-                model.addAttribute("success",true);
-                userService.delete(user);
-            } else {
-                model.addAttribute("success",false);
-                model.addAttribute("message","Такого пользователя не существует");
-            }
-        }
-        return "/admin/deleteUser";
-    }
-    @GetMapping("/editUser")
-    public String showEditUserPage(Model model) {
-        model.addAttribute("user",new User());
-        return "/admin/editUser";
-    }
-
-    @PostMapping(value = "/editUser")
-    public String editUser(@ModelAttribute(name = "user") @Valid User editedUser,BindingResult result,Model model) {
-
-        if(result.hasErrors() || userService.findByNameIgnoreCase(editedUser.getName()) == null) {
-            Toastr.addErrorsToModel(model,result);
-            return showEditUserPage(model);
-        } else {
-            userService.save(editedUser);
-            model.addAttribute("success",true);
-        }
-        return "/admin/editUser";
-    }
-
-    @PostMapping(value={"/createUser","/users/create","/create/user"})
-    public String createNewUser(@ModelAttribute @Valid User user, BindingResult result, Model model, HttpServletRequest request) {
-        userValidator.validate(user,result);
-        if(result.hasErrors()) {
-            Toastr.addErrorsToModel(model,result);
-        } else {
-            model.addAttribute("success",true);
-            userService.save(user);
-            if(user.getEnabled() == 0)
-                publisher.publishEvent(new OnRegistrationCompleteEvent(user,request.getContextPath()));
-        }
-        return "/admin/createUser";
-    }
     @GetMapping(value = {"/index","/",""})
     public String showAdminPanel(CsrfToken token, Model model, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String findBy,
                                  @RequestParam(required = false) Integer currentPage, @RequestParam(required = false) Integer itemsPerPage,
@@ -102,7 +33,6 @@ public class AdminController {
         model.addAttribute("csrfToken",token.getToken());
         sortBy = "noSort".equals(sortBy) ? null : sortBy;
         paginationUser(userService,itemsPerPage,currentPage,sortBy,find,findBy,sortDirection,model);
-
         return "/admin/index";
     }
 
@@ -141,49 +71,41 @@ public class AdminController {
 
     }
 
-    @PostMapping("/block/{username}")
-    public @ResponseBody String block(@PathVariable String username) {
-        userService.block(username);
-        return "";
+    @PatchMapping("/ajax/update")
+    public @ResponseBody boolean updatePersonAjax(@RequestParam String username,@RequestParam String email,@RequestParam Boolean blocked,
+                                                      @RequestParam Boolean activated,@RequestParam String role) {
+        var tempUser = userService.findByNameIgnoreCase(username);
+        boolean hasToBeCreated = tempUser == null;
+        if (hasToBeCreated) {
+            tempUser = new User();
+            tempUser.setName(username);
+            tempUser.setEncryptedPassword("12345");
+        }
+        tempUser.setEmail(email);
+        tempUser.setBlocked((byte) (blocked ? 1 : 0));
+        tempUser.setEnabled((byte) (activated ? 1 : 0));
+        tempUser.setRole(role);
+        try {
+            if(hasToBeCreated)
+                userService.save(tempUser);
+            else
+                userService.saveWithoutPasswordEncryption(tempUser);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return true;
     }
-
-    @PostMapping("/unblock/{username}")
-    public @ResponseBody String unblock(@PathVariable String username) {
-        userService.unblock(username);
-        return "";
-    }
-
-    @PostMapping("/activate/{username}")
-    public @ResponseBody String activate(@PathVariable String username) {
-        userService.activate(username);
-        return "";
-    }
-
-    @PostMapping("/deactivate/{username}")
-    public @ResponseBody String deactivate(@PathVariable String username) {
-        userService.deactivate(username);
-        return "";
-    }
-
-    @GetMapping("/ajax/loadUser")
-    public @ResponseBody String[] loadUserAjax(@RequestParam(required = false) String name) {
-        if(name == null)
-            return new String[0];
-        User user = userService.findByNameIgnoreCase(name);
-        if(user == null)
-            return new String[0];
-        String[] data = new String[6];
-        data[0] = name;
-        data[1] = user.getEmail();
-        data[2] = user.getEncryptedPassword();
-        data[3] = user.getEnabled() + "";
-        data[4] = user.getBlocked() + "";
-        data[5] = user.getRole();
-        return data;
-    }
-    @GetMapping("/ajax/doesTheUserExist")
-    public @ResponseBody boolean doesTheUserExistAjax(@RequestParam(required = false) String name) {
-        return name == null || userService.findByNameIgnoreCase(name) != null;
+    @DeleteMapping("/ajax/delete")
+    public @ResponseBody boolean deletePersonAjax(@RequestParam String username) {
+        var tempUser = userService.findByNameIgnoreCase(username);
+        try {
+            userService.delete(tempUser);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return false;
+        }
+        return true;
     }
     private class JavaScriptUser {
         public final String name;

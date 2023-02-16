@@ -1,5 +1,6 @@
 package mutata.com.github.MatematixProject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "avatars")
 @Data
-@NoArgsConstructor
 public class AvatarInfo {
 
     @Id
@@ -18,10 +18,19 @@ public class AvatarInfo {
     @Column(name=  "avatar")
     private byte[] avatar;
 
-    @Column(name = "avatar_format")
-    private String avatarFormat;
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
+    @JsonIgnore
     private User user;
+
+    @Transient
+    @JsonIgnore
+    private String encodedAvatar;
+
+    public AvatarInfo() {
+
+    }
+    public AvatarInfo(String username) {
+        this.username = username;
+    }
 }

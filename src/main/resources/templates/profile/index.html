@@ -6,60 +6,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title th:if="${canChangeAvatar}">Мой Профиль</title>
-    <title th:unless="${canChangeAvatar}" th:text="'Профиль - ' + ${username}"></title>
+    <title th:unless="${canChangeAvatar}" th:text="'Профиль - ' + ${name}"></title>
+    <style>
+        body{background-color:#1e1e1e!important;width:100%;height:100%}main{display:flex;flex-direction:column;align-items:center;align-content:center}header,main{text-align:center}header{margin-top:20px}.frame-logo{cursor:pointer;width:200px}main nav ul li{display:inline-block;font-weight:700}main nav ul{margin-top:65px;list-style:none;display:flex;padding-bottom:4px;border-bottom:1px solid #fff;justify-content:space-between;width:1400px;margin-right:auto;margin-left:auto}.nav-link:link,.nav-link:visited,.nav-link:hover,.nav-link:focus{text-decoration:none;font-size:17px;color:rgba(255,255,255,0.85)}.avatar-wrapper{position:relative;border-radius:50%;width:140px;height:140px;overflow:hidden;cursor:pointer}.avatar-wrapper-medium{min-width:72px;max-width:72px;min-height:72px;max-height:72px;border:none!important}.about{display:flex;gap:70px;margin-top:30px}.friends-flex{display:flex;gap:20px;width:256px;flex-wrap:wrap}#friends-p{margin-bottom:15px}#friends-a:link,#friends-a:active,#friends-a:visited,#friends-a:hover{color:rgba(255,255,255,0.85);font-size:18px;text-decoration:none;font-weight:600}.profile-settings{width:1400px;margin:35px auto 100px;display:flex;justify-content:space-between}.desc p,.sort-settings-li{color:rgba(255,255,255,0.85);font-weight:700}.sort-settings-li.active{color:#fff}.desc{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-evenly}.comments-header{color:#fff;font-weight:700;padding-bottom:4px;border-bottom:1px solid #fff;display:flex;justify-content:space-between}.comments{width:1400px;margin-right:auto;margin-left:auto}.sort-settings-ul{display:flex;gap:20px;list-style:none}.sort-settings-li{cursor:pointer}.comments-content{display:flex;flex-direction:column}#loadMoreButton,#loadNewComments,#loadComments{background-color:#45a0da;width:300px;height:30px;color:#000;font-size:18px;font-weight:500;transition:all .5s ease-out;border:none;border-radius:2px;cursor:pointer}
+    </style>
+    <link rel="preload" th:href="@{/css/profile/main.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" th:href="@{/css/profile/main.css}"></noscript>
+    <link rel="preload" th:href="@{/css/base/bootstrap/modal.min.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" th:href="@{/css/base/bootstrap/modal.min.css}"></noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" th:href="@{/css/base/base.css}">
-    <link rel="stylesheet" th:href="@{/css/profile/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base/bootstrap/button.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base/bootstrap/container.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base/bootstrap/utilities.min.css}">
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
-    <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script th:src="@{/js/min/stomp.orig.js}"></script>
 </head>
 
 <body id="body">
 <header id="headerDiv">
     <a th:href="@{/}"><img src="" class="frame-logo" th:src="@{/img/logo_white.svg}" alt="MatematiX"></a>
 </header>
+
 <main id="mainDiv">
     <nav>
         <ul>
             <li style="color: white !important; font-size: 17px; cursor: pointer">Профиль</li>
-            <li th:if="${canChangeAvatar}" ><a class="nav-link" th:href="@{/}">Настройки</a></li>
-            <li th:if="${canChangeAvatar}"><a class="nav-link" th:href="@{/}">Безопасность</a></li>
-            <li th:if="${canChangeAvatar}"><a class="nav-link" th:href="@{/}">Интерфейс</a></li>
-            <li th:if="${canChangeAvatar}"><a class="nav-link" th:href="@{/}">Уведомления</a></li>
+            <li th:if="${myProfile}" ><a class="nav-link" th:href="@{/settings}">Настройки</a></li>
+            <li th:if="${myProfile}"><a class="nav-link" th:href="@{/}">Безопасность</a></li>
+            <li th:if="${myProfile}"><a class="nav-link" th:href="@{/}">Интерфейс</a></li>
+            <li th:if="${myProfile}"><a class="nav-link" th:href="@{/}">Уведомления</a></li>
         </ul>
     </nav>
-    <div class="about" style="position: relative">
-        <div th:if="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #55cd97;position: absolute;border: 5px solid #1e1e1e;left: 118px;top: 100px;"></div>
-        <div th:unless="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #a4b4bf;position: absolute;border: 5px solid #1e1e1e;left: 118px;top: 100px;"></div>
-        <div class="avatar-wrapper">
-            <label th:for="secretInput" style="cursor:pointer">
-                <img src="" th:if="${hasAvatar}" th:id="avatar" alt="">
-                <img src="" th:unless="${hasAvatar}" th:id="avatar" th:src="@{/img/UnsetAvatar.gif}" alt="">
-            </label>
-            <form th:if="${canChangeAvatar}" enctype="multipart/form-data" th:id="theForm" th:action="@{/uploadAvatar(${_csrf.parameterName}=${_csrf.token})}" th:method="POST">
-                <input th:id="secretInput" th:name="file" type="file" style="display: none" accept="image/*">
-                <input type="submit" th:id="secretSubmit">
-                <input th:id="x" type="hidden" th:name="x">
-                <input th:id="y" type="hidden" th:name="y">
-                <input th:id="width" type="hidden" th:name="width">
-                <input th:id="height" type="hidden" th:name="height">
-                <input th:id="scaleX" type="hidden" th:name="scaleX">
-                <input th:id="scaleY" type="hidden" th:name="scaleY">
-            </form>
+    <div class="profile-settings">
+        <div class="about" style="position: relative">
+            <div title="Онлайн" th:if="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #55cd97;position: absolute;border: 5px solid #1e1e1e;left: 111px;top: 116px;"></div>
+            <div title="Офлайн" th:unless="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #a4b4bf;position: absolute;border: 5px solid #1e1e1e;left: 111px;top: 116px;"></div>
+            <div style="margin-top:10px" class="avatar-wrapper">
+                <img class="avatar-wrapper" th:if="${hasAvatar}" th:src="@{'data:image/webp;base64,' + ${avatars[__${name}__].encodedAvatar}}" alt="">
+                <img th:unless="${hasAvatar}" th:src="@{/img/UnsetAvatar.webp}" alt="">
+            </div>
+            <div class="desc">
+                <p th:text="'Имя: ' + ${name}"></p>
+                <p th:text="'Рейтинг: ' + ${rating}"></p>
+                <p th:text="'Уровень: ' + ${lvl}"></p>
+            </div>
         </div>
-        <div class="desc">
-            <p th:text="'Имя: ' + ${name}"></p>
-            <p th:text="'Рейтинг: ' + ${rating}"></p>
-            <p th:text="'Уровень: ' + ${lvl}"></p>
+        <div class="friends" th:if="${countOfFriends > 0}">
+            <p id="friends-p"><a data-bs-toggle="modal" data-target="#showFriendsModal" id="friends-a" href="#showFriendsModal">Друзья</a></p>
+            <div class="friends-flex" th:if="${countOfFriends >= 1}">
+                <div th:each="friend : ${friends}">
+                    <div class="avatar-wrapper-medium avatar-wrapper" style="width:72px;height: 72px;border-radius:50%;">
+                        <a th:href="@{/profile/{username}(username=${friend})}">
+                            <img th:unless="${avatars.get(friend) eq null}" style="width: 72px;height: 72px;border-radius: 50%;object-fit: cover" th:src="@{'data:image/webp;base64,' + ${avatars.get(friend).encodedAvatar}}" alt="Avatar">
+                            <img th:if="${avatars.get(friend) eq null}" style="width: 72px;height: 72px;border-radius: 50%;object-fit: cover" th:src="@{/img/UnsetAvatar.webp}" alt="Standard Avatar">
+                        </a>
+                    </div>
+                    <a style="text-decoration:none;" th:href="@{/profile/{username}(username=${friend})}">
+                        <p style="text-decoration:none;margin-top:10px;color: white;overflow-wrap: break-word;max-width: 72px" th:text="${friend}"></p>
+                    </a>
+                </div>
+
+            </div>
         </div>
     </div>
     <div id="commentsDiv" style="margin-bottom: 60px" class="comments">
@@ -73,252 +86,84 @@
                 </ul>
             </div>
         </div>
-        <div  class="comments-content">
-                <div class="writeCommentSuggestionDiv">
-                    <div style="display: flex;gap:50px;">
-                        <div class="avatar-wrapper" style="width: 72px !important; height: 72px !important;border: none !important;">
-                            <a th:href="@{/profile}">
-                                <img src="" th:if="${hasMyAvatar}" th:id="avatarComments" alt="">
-                                <img src="" th:unless="${hasMyAvatar}" th:id="avatarComments" th:src="@{/img/UnsetAvatar.gif}" alt="">
-                            </a>
-                        </div>
-                        <form content="0" th:id="sendCommentForm" th:method="POST" th:action="@{/createComment}" style="width: 100%">
-                            <textarea style="position: relative" minlength="1" maxlength="300" placeholder="Введите ваш комментарий..." th:name="content" th:id="content"></textarea>
-                            <input th:if="${username ne null}" type="hidden" th:name="receiver" th:id="receiver" th:value="${username}">
-                            <input th:if="${username eq null}" type="hidden" th:name="receiver" th:id="receiver" th:value="${currentUserName}">
-                        </form>
-                    </div>
-                    <div style="margin-top:5px">
-                        <input type="submit" th:id="sendButton">
-                    </div>
-                </div>
-
+        <div class="comments-content" style="align-items: center">
+                <button style="margin-top: 150px" id="loadComments">Загрузить комментарии</button>
         </div>
-        <div id="theDiv">
-            <div style="margin-top:70px;position: relative" th:if="${hasComments}" class="comment" th:each="comment : ${commentsOnTheWall}">
-                <div style="color:#e1e1e1;font-size:11px;position: absolute;right: 0;width: 100%;height: 20px;top:-21px;display: flex;justify-content: flex-end" th:text="${comment.date}"></div>
-                <div style="display: flex;gap:50px;position: relative">
-                    <div class="avatar-wrapper" style="width: 72px !important; height: 72px !important;border: none !important;position: relative">
-                        <a style="position: relative" th:href="@{/profile/{name}(name=${comment.username})}">
-                            <img src="" style="width: 72px;height: 72px" th:if="${comment.avatar eq null }"  th:src="@{/img/UnsetAvatar.gif}" alt="">
-                            <img src="" style="width: 72px;height: 72px" th:unless="${comment.avatar eq null}"  th:src="@{'data:image/' + ${comment.format} + ';base64,' + ${comment.avatar}}" alt="">
-                        </a>
-                    </div>
-                    <div style="position:absolute;top:52px;left:50px;border-radius:50%;width:17px;height: 17px;background-color:#55cd97;border:3px solid #1e1e1e" th:if="${comment.active}"></div>
-                    <div style="position:absolute;top:52px;left:50px;border-radius:50%;width:17px;height: 17px;background-color:#a4b4bf;border:3px solid #1e1e1e" th:unless="${comment.active}"></div>
-                        <textarea style="cursor: pointer" readonly th:class="toBeAutoGrown" th:text="${comment.content}"></textarea>
+    </div>
+    <div class="modal fade" id="showFriendsModal" tabindex="-1" aria-labelledby="showFriendsModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content" id="showFriendsModalContent">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title" id="showFriendsModalLabel">Друзья</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
-                <div style="display: flex;justify-content: flex-end;position: absolute;right: 2px;height: 20px;width: 100%  ">
-                    <p style="color: white"><span style="font-size: 14px;cursor:pointer"  class="dislike">👎</span><span class="rating" style="font-size:14px;margin-left: 5px;margin-right: 5px" th:text="${comment.rating}">0</span><span style="font-size: 15px;cursor:pointer" class="like">👍</span></p>
+                <div class="modal-body d-flex" style="padding:40px;flex-wrap: wrap;" id="showFriendsModalBody">
+
                 </div>
             </div>
-
-            <div id="loadMoreButtonDiv" th:if="${totalPages > 1}" style="margin-top: 100px;width: 100%;text-align: center;">
-                <button id="loadMoreButton">Load More</button>
-            </div>
-
         </div>
     </div>
 </main>
-<div id="divForCropping">
-    <div id="divForCroppingHeader">Измените ваше фото</div>
-    <div style="display: flex;align-items: center;justify-content: center;gap:120px">
-        <div id="imageWrapper">
-            <img id="croppingImage" src="" alt="">
-        </div>
-        <div style="display: flex;flex-direction: column;align-items: center;gap:40px;align-self: flex-start;margin-top: 20px">
-            <div id="previewDiv">
 
-            </div>
-            <div id="previewDivComments">
-
-            </div>
-        </div>
-    </div>
-
-    <div style="text-align: center;width: 100%"><a id="submitChangeAvatar" href="">Подтвердить</a></div>
-</div>
-<div id="overlay" style="z-index: 1001 !important;">
-
-</div>
-<script type="text/javascript" th:src="@{/js/min/canChangeAvatar.js}" th:if="${canChangeAvatar}"></script>
-<script th:if="${hasAvatar}" th:inline="javascript">
+<script defer src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script  defer th:inline="javascript">
+    let avatars = [[${avatars}]];
     let name = [[${name}]];
-    let theAvatar = document.getElementById("avatar");
-    let str = [[${avatar}]];
-    let format = [[${avatarFormat}]];
-    theAvatar.src = `data:image/${format};base64,${str}`;
+    let currentName = [[${currentUserName}]];
+    let isUserAlive = [[${isUserAlive}]];
+    let totalPages = [[${totalPages}]];
+    let hasMyAvatar = [[${hasMyAvatar}]];
+    let friends = [[${friends}]];
+    let countOfFriends = [[${countOfFriends}]]
 </script>
-<script th:if="${hasMyAvatar}" th:inline="javascript">
-    theAvatar = document.getElementById("avatarComments");
-    let str1 = [[${myAvatar}]];
-    let format1 = [[${myAvatarFormat}]];
-    theAvatar.setAttribute("src",`data:image/${format1};base64,${str1}`);
-</script>
-<script type="text/javascript">
-    let textArea = document.getElementById("content");
-    let sendButton = document.getElementById("sendButton");
-    let buttonIsVanished = true;
-    let commentForm = document.getElementById("sendCommentForm");
-    let buttonDisappear = () => {
-        sendButton.style.visibility = "hidden";
-    };
-    let buttonAppear = () => {
-        sendButton.style.visibility = "visible";
-    };
-    let func = () => {
-        if(textArea.value.length === 0) {
-            buttonDisappear();
-            buttonIsVanished = true;
-        } else if(buttonIsVanished) {
-            buttonAppear();
-            buttonIsVanished = false;
+
+<script defer src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script defer th:src="@{/js/stomp.orig.min.js}"></script>
+<script defer type="module" th:src="@{/js/profile/logic.js}"></script>
+<script defer type="module" th:src="@{/js/base/bootstrap/modal.js}"></script>
+<script defer type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
+<script defer>
+    let moduleBodyInitialized = false;
+    let modal = document.getElementById("showFriendsModalBody");
+    let currentFriendPage = 1;
+    document.getElementById("friends-a").addEventListener("click",() => {
+        if(!moduleBodyInitialized) {
+            for(let i =0;i < friends.length;i++) {
+                let el = avatars[friends[i]];
+                if(typeof el !== 'undefined' && el != null)
+                    modal.innerHTML = modal.innerHTML + `<a style="margin-bottom:20px;width: 33%;color:white;text-decoration: none" href="/profile/${friends[i]}"><img style="border-radius: 50%" class="avatar-wrapper-medium" src="data:image/webp;base64,${el.avatar}" alt=""><p style="font-size:16px;margin-top: 10px">${friends[i]}</p></a>`;
+                else
+                    modal.innerHTML = modal.innerHTML + `<a style="margin-bottom:20px;width:33%;color:white;text-decoration: none" href="/profile/${friends[i]}"><img style="border-radius: 50%" class="avatar-wrapper-medium"  src="/img/UnsetAvatar.webp" alt=""><p style="font-size:16px;margin-top: 10px">${friends[i]}</p></a>`;
+            }
+            moduleBodyInitialized = true;
+            if(countOfFriends > 6) {
+                let el = document.createElement("button");
+                el.id = "loadFriends";
+                el.textContent = "Больше друзей";
+                el.addEventListener("click",(event) => {
+                    event.preventDefault();
+                    $.ajax({
+                        url: "/ajax/nextFriends",
+                        data: {usersWhoseAvatarsAreLoaded: Object.keys(avatars).join(','),currentPage: currentFriendPage,user: name},
+                        success: renderFriends
+                    });
+                });
+                modal.append(el);
+                const renderFriends = (data) => {
+                    let arr = Object.keys(data);
+                    for (let i = 0; i < arr.length; i++) {
+                        let image = data[arr[i]].avatar == null ? "/img/UnsetAvatar.webp" : `data:image/webp;base64,${data[arr[i]].avatar}`;
+                        let element = `<a style="margin-bottom: 20px;width: 33%;color:white;text-decoration: none" href="/profile/${data[arr[i]].username}"><img style="border-radius: 50%" class="avatar-wrapper-medium" src="${image}" alt=""><p style="font-size: 16px;margin-top:10px">${data[arr[i]].username}</p></a>`
+                        $(element).insertBefore($("#loadFriends"));
+                    }
+                    if(6 + currentFriendPage * 6 >= countOfFriends) {
+                        $("#loadFriends").remove();
+                    }
+                }
+            }
         }
-    }
-    textArea.addEventListener("input",() => {
-        func();
-        let length = textArea.value.length;
-        commentForm.setAttribute("content",length);
     });
 </script>
-<script type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
-<script th:inline="javascript" th:type="module">
-    import autosize from "/js/autosize.js";
-    const pingAutoSize = () => {
-        autosize(document.getElementsByClassName("toBeAutoGrown"));
-    }
-    function formatLikes(num) {
-        return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'K' : Math.sign(num)*Math.abs(num)
-    }
-
-    $(document).ready( function() {
-            connect();
-            pingAutoSize();
-            autosize(textArea);
-            $(".rating").each(function(index,element) {
-                $(element).text(formatLikes($(element).text()));
-            });
-        }
-    );
-    let stompClient = null;
-
-    function connect() {
-        let socket = new SockJS("/listenToNewComments")
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function() {
-            stompClient.subscribe(`/user/` + [[${name}]] + `/queue/messages`, function(data) {
-                prepareToAddComment(JSON.parse(data.body));
-            });
-        },function () {
-            console.log("Error connecting...")
-        });
-    }
-    $("#sendButton").on("click",sendMessage);
-    function sendMessage() {
-
-        stompClient.send("/application/sendComment", {},
-            JSON.stringify({
-                'username':[[${currentUserName}]],
-                'recipient': [[${name}]],
-                'content':$("#content").val(),
-                'isActive': true,
-                "date": new Date()}));
-    }
-    let active = `<div style="position:absolute;top:52px;left:50px;border-radius:50%;width:17px;height: 17px;background-color:#55cd97;border:3px solid #1e1e1e"></div>`
-    let notActive = `<div style="position:absolute;top:52px;left:50px;border-radius:50%;width:17px;height: 17px;background-color:#a4b4bf;border:3px solid #1e1e1e"></div>`
-    function getComment(obj) {
-        let img = null;
-        if(obj.avatar == null || obj.avatar.length <= 0)
-            img = `<img src="/img/UnsetAvatar.gif" style="width:72px;height: 72px;" alt="${obj.username}'s avatar">`;
-        else
-            img = `<img src="data:image/${obj.format};base64,${obj.avatar}" style="width:72px;height: 72px;" alt="${obj.username}'s avatar">`;
-        let status = null
-        if(obj.active)
-            status = active;
-        else
-            status = notActive;
-        let element =
-            `<div style="margin-top:70px;position: relative" class="comment">
-                <div style="color:#e1e1e1;font-size:11px;position: absolute;right: 0;width: 100%;height: 20px;top:-21px;display: flex;justify-content: flex-end">${obj.date}</div>
-                <div style="position:relative; display: flex;gap:50px;">
-                <div class="avatar-wrapper" style="position: relative;width: 72px !important; height: 72px !important; border: none !important;">
-                    <a style="position: relative" href="/profile/${obj.username}">
-                        ${img}
-                    </a>
-                </div>
-                ${status}
-                <textarea readonly style="cursor: pointer;overflow: hidden;overflow-wrap:break-word;" class="toBeAutoGrown">${obj.content}</textarea>
-            </div>
-                <div style="display: flex;justify-content: flex-end;position: absolute;right: 2px;height: 20px;width: 100%  ">
-                    <p style="color: white"><span style="font-size: 14px;cursor:pointer"  class="dislike">👎</span><span class="rating" style="font-size:14px;margin-left: 5px;margin-right: 5px">${formatLikes(obj.rating)}</span><span style="font-size: 15px;cursor:pointer" class="like">👍</span></p>
-                </div>
-            </div>`
-        return element;
-    }
-    let newMessages = [];
-    function prepareToAddComment(obj) {
-       if(null === [[${username}]] || obj.username === [[${currentUserName}]])
-           addComment(obj);
-        else {
-           let loadNewComments =  document.getElementById("loadNewComments");
-           if(loadNewComments == null) {
-               let elem = `<button style="position: absolute;top:112px;left: 520px" id="loadNewComments">New Comments</button>`;
-               $(elem).insertAfter("#content");
-               loadNewComments =  document.getElementById("loadNewComments");
-               loadNewComments.addEventListener("click",function(event) {
-                   event.preventDefault();
-                   addComments(newMessages);
-               });
-           }
-           newMessages.push(obj);
-           $("#content").val('');
-           commentForm.setAttribute("content",0);
-           func()
-       }
-    }
-    function addComments(data) {
-        $(data).each(function(index,item) {
-           addComment(item);
-        });
-        newMessages = [];
-        $("#loadNewComments").remove();
-    }
-    function addComment(obj) {
-        let elem = getComment(obj);
-        $("#theDiv").prepend(elem);
-        $("#content").val('');
-        commentForm.setAttribute("content",0);
-        func();
-        pingAutoSize();
-    }
-    if([[${totalPages}]] > 1) {
-        let totalPages = [[${totalPages}]];
-        let currentPage = 1;
-        const showComments = (data) => {
-            $(data).each(function(index,item) {
-                let elem = getComment(item);
-                if(totalPages == currentPage) {
-                    $("#theDiv").append(elem);
-                    $("#loadMoreButtonDiv").remove();
-                }
-                else
-                    $(elem).insertBefore("#loadMoreButtonDiv")
-            });
-        }
-        $(document).ready(function() {
-            $("#loadMoreButton").click(function(event) {
-                event.preventDefault();
-                currentPage+=1;
-                $.ajax({
-                    url: "/ajax/nextComments",
-                    data: {currentPage: currentPage,user: [[${name}]]},
-                    success: showComments
-                });
-            });
-        });
-    }
-</script>
-
 </body>
 
 </html>

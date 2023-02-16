@@ -188,3 +188,9 @@ textarea:focus {
     background: #45a0da;
     z-index: 35;
 }
+.background {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(var(--columns),1fr);
+}

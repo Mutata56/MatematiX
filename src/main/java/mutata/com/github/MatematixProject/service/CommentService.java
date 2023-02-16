@@ -34,4 +34,8 @@ public class CommentService {
     public Page<Comment> findAllReturnPage(User user,int page,int itemsPerPage) {
       return repository.findCommentsByReceiverOrderByDateDesc(user,PageRequest.of(page,itemsPerPage));
     }
+
+    public Comment findById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 }

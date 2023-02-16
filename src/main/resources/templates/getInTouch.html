@@ -3,17 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Логин</title>
+  <title>Свяжитесь с нами</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/base/base.css}">
-  <link rel="stylesheet" th:href="@{/css/getInTouch.css}">
+  <link rel="stylesheet" th:href="@{/css/getInTouch.min.css}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
 </head>
 
@@ -58,19 +60,45 @@
                 $(document).ajaxSend(function(e,xhr,options) {
                     xhr.setRequestHeader("X-CSRF-TOKEN",[[${_csrf.token}]]);
                });
+                const processResult = (data) => {
+                    if(data === "success") {
+                        $("#h1").text("Благодарим за обратную связь!");
+                        $("#theForm").remove();
+                        let element = `<h2>Через 5 секунд вы будете перенаправлены на главую страницу, <a href="/">если этого не произошло</a></h2>`
+                        $(".main").append(element);
+                        setTimeout(() => {location.href = '/'},5000);
+                    } else {
+                        toastr.options.preventDuplicates = true;
+                        toastr.options.timeOut = 8000;
+                        toastr.options.extendedTimeOut = 2000;
+                        toastr.options.progressBar = true;
+                        let message = data;
+                        if(message.charAt(message.length - 1) !== "|")
+                            message+="|";
+                        let index = -1;
+                        let start = 0
+                        while((index = message.indexOf(`|`,start)) >= 0) {
+                            let substring = message.substring(start,index);
+                            toastr.error(substring,"Ошибка!");
+                            start = index + 1
+                        }
+                    }
+                }
                $.ajax({
                   url: "/process_getInTouch",
                   method: "POST",
                   type: "POST",
                   data: {name:$("#name").val(),email:$("#email").val(),subject:$("#subject").val(),message:$("#message").val()},
+                  success: processResult
                });
-                $("#h1").text("Благодарим за обратную связь!");
-                $("#theForm").remove();
-                let element = `<h2>Через 5 секунд вы будете перенаправлены на главую страницу, <a href="/">если этого не произошло</a></h2>`
-                $(".main").append(element);
-                setTimeout(() => {location.href = '/'},5000);
             });
+            let messageDiv = document.querySelector(".message-div");
+            let textArea = document.querySelector(".textarea-input");
+            textArea.addEventListener("input",() => {
+                messageDiv.setAttribute("content",textArea.value.length);
+            })
     });
 </script>
+
 </body>
 </html>

@@ -8,176 +8,208 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/base/base.css}">
-    <link rel="stylesheet" th:href="@{/css/base/footer.css}">
-    <link rel="stylesheet" th:href="@{/css/base/header.css}">
+    <link rel="stylesheet" th:href="@{/css/base/footer.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base/header.min.css}">
     <link rel="stylesheet" th:href="@{/css/base/article.css}">
-    <link rel="stylesheet" th:href="@{/css/article/Pythagorean.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
     <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
+<div class="slider-container">
+    <button type="button" id="btn1" name="btn1">-A</button>
+    <button type="button" id="btn2" name="btn2">A</button>
+    <button type="button" id="btn3" name="btn3">A+</button>
+    <input type="range" min="-20" max="20"
+           id="slider" value="0" />
+    <script th:src="@{/js/changeFontSize.js}" type="text/javascript"></script>
+</div>
     <header th:insert="~{base/header :: copy}"></header>
-
     <main>
-
+        <article>
         <div class="article-header">
             <h1>Теорема Пифагора и обратная ей</h1>
-            <h4 th:text="'Опубликовано пользователем ' + ${user} + ' ' + ${date}"> </h4>
         </div>
-        <div class="article-main-content">
-                <section>
-                <h2>1. Теоремы</h2>
-                <div style="padding-left: 20px">
-                    <h3>1.1 Теорема Пифагора</h3>
-                    <p>В любом прямоугольном треугольнике квадрат гипотенузы равен сумме квадратов
-                        катетов:</p>
-                    <img class="Py-img" style="margin: 20px" th:src="@{/img/article/Pythagorean/img1.png}" alt="">
-                    <h3>1.2 Обратная Теорема Пифагора</h3>
-                    <p>Если сумма квадратов двух сторон в треугольнике равна квадрату третьей стороны,
-                        данный треугольник является прямоугольным.</p>
-                    <img class="Py-img" style="margin: 20px" th:src="@{/img/article/Pythagorean/img2.png}" alt="">
-                    <p>Треугольник &#9651; ABC - прямоугольный, если сумма квадратов
-                        катетов равна квадрату гипотенузы. Получается то же
-                        уравнение, где квадрат гипотенузы стоит левее знака
-                        равенства, а сумма квадратов катетов правее.</p>
-                </div>
-            </section>
-            <section>
-                <h2>2. Доказательство Теорем</h2>
-                <div style="padding-left: 20px">
-                    <h3>2.1 Теорема Пифагора</h3>
-                    <p>Предположим, что у нас есть некий прямоугольный треугольник &#9651; ABC (&#8736; A = 90&deg;).
-                        Из прямого угла &#8736; А проведем перпендикуляр АА<sub>1</sub> и найдем значения косинуса углов
-                        &#8736; А и &#8736; С.</p>
-
-                    <div class="flexbox">
-                        <img class="Py-img" style="margin: 20px" th:src="@{/img/article/Pythagorean/img3.png}" alt="">
-                        <img class="Py-img" style="margin: 20px;height: 199px" th:src="@{/img/article/Pythagorean/img3_1.png}" alt="">
+            <div class="accordion articleAccordion" id="mainAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button h2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            1. Теоремы
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" >
+                        <div class="accordion-body">
+                            <div class="accordion articleAccordion" id="accordionSub1">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            1.1. Теорема Пифагора
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" >
+                                        <div class="accordion-body">
+                                                <div class="accordion-body-flexbox">
+                                                    <div class="accordion-body-flexbox-text">
+                                                        <p><a href="https://ru.wikipedia.org/wiki/Теорема_Пифагора" target="_blank" class="link">Теорема Пифагора</a> - это математическое утверждение, которое заключается в том, что в прямоугольном треугольнике (треугольник, в котором один угол прямой) квадрат длины
+                                                            <a href="https://ru.wikipedia.org/wiki/Гипотенуза" target="_blank" class="link">гипотенузы</a> (самой длинной стороны треугольника) равен сумме квадратов длин двух
+                                                            <a href="https://ru.wikipedia.org/wiki/Катет" target="_blank" class="link">катетов</a> (катеты - стороны треугольника, лежащие против угла прямой).</p>
+                                                            <p>Математическая формула <a href="https://ru.wikipedia.org/wiki/Теорема_Пифагора" target="_blank" class="link">теоремы Пифагора</a>: \(c^2 = a^2 + b^2\), где \(c\) - <a href="https://ru.wikipedia.org/wiki/Гипотенуза" target="_blank" class="link">гипотенуза</a> , \(a\) и \(b\) - <a href="https://ru.wikipedia.org/wiki/Катет" target="_blank" class="link">катеты</a> .</p>
+                                                        <p>Эта теорема может быть применена для решения различных задач по нахождению длин сторон треугольника, если известны две другие.</p>
+                                                    </div>
+                                                    <div class="accordion-body-flexbox-img">
+                                                        <img class="img-fluid imgHover" th:src="@{/img/article/Pythagorean/1.webp}" alt="">
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="h3 accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            1.2. Обратная Теорема Пифагора
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+                                        <div class="accordion-body">
+                                            <div class="accordion-body-flexbox">
+                                                <div class="accordion-body-flexbox-text">
+                                                    <p><a class="link" target="_blank" href="https://translated.turbopages.org/proxy_u/en-ru.ru.5b567b38-63d6340a-9c617006-74722d776562/https/en.wikipedia.org/wiki/Inverse_Pythagorean_theorem">Обратная теорема Пифагора</a> гласит, что если известны три стороны, причём сумма квадратов двух сторон равна квадрату третьей стороны, то данный треугольник прямоугольный, <a href="https://ru.wikipedia.org/wiki/Гипотенуза" target="_blank" class="link">гипотенузы</a> равна третьей стороне. Она может быть получена из <a href="https://ru.wikipedia.org/wiki/Теорема_Пифагора" target="_blank" class="link">теоремы Пифагора</a> и имеет следующую формулу:</p>
+                                                    <p>Обратная теорема Пифагора может быть применена в различных областях математики и инженерии, например, в геодезии и астрономии.</p>
+                                                </div>
+                                                <div class="accordion-body-flexbox-img">
+                                                    <img class="img-fluid imgHover" th:src="@{/img/article/Pythagorean/2.webp}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p>Приравнивая косинусы друг к другу получаем следующие равенства:</p>
-                        <p>AC<sup>2</sup> = BC × CA<sub>1</sub> <br>
-                            AB<sup>2</sup> = BA<sub>1</sub> × BC</p>
-                    <p>Складывая данные равенства получим:</p>
-                    <p>AB<sup>2</sup> + AC<SUP>2</SUP> = BC × (CA<sub>1</sub> + BA<sub>1</sub> ) <br>
-                        AB<sup>2</sup> + AC<SUP>2</SUP> = BC × BC <br>
-                        AB<sup>2</sup> + AC<SUP>2</SUP> = BC<sup>2</sup></p>
-                    <p style="font-weight: 600;margin-top: 60px">Что и требовалось доказать.</p>
-
-                    <h3>2.2 Обратная Теорема Пифагора</h3>
-                    <img class="Py-img" style="margin: 20px" th:src="@{/img/article/Pythagorean/img4.png}" alt="">
-                    <img class="Py-img  " style="margin: 20px 20px 20px 180px;" th:src="@{/img/article/Pythagorean/img5.png}" alt="">
-                    <p>Пусть в треугольнике &#9651; A<sub>1</sub>B<sub>1</sub>C<sub>1</sub> выполняется следующее равенство:
-                    a <sup>2</sup> + b <sup>2</sup> = c <sup>2</sup>.
-                        </p>
-                    <p> <span style="font-weight: 600; font-size: 20px">Докажем, что угол &#8736; A – прямой.</span> <br> Рассмотрим треугольник &#9651; A<sub>1</sub>B<sub>1</sub>C<sub>1</sub> с прямым углом &#8736; А<sub>1</sub> :
-                        <br>
-                        Его стороны соответственно равны сторонам треугольника &#9651; ABC
-                        (AB = A<sub>1</sub>B<sub>1</sub>, AC =A<sub>1</sub>C<sub>1</sub>). <br> По теореме Пифагора A<sub>1</sub>B<sub>1</sub><sup>2</sup> + A<sub>1</sub>C<sub>1</sub><sup>2</sup>  = B<sub>1</sub>C<sub>1</sub><sup>2</sup>.
-                        <br>
-                        Исходя из этого, треугольники ABC и A<sub>1</sub>B<sub>1</sub>C<sub>1</sub> равны по третьему признаку,
-                        тогда угол &#8736; А = углу &#8736; А<sub>1</sub> = 90&deg;.
-                    </p>
-                    <p style="font-weight: 600;margin-top: 60px">Что и требовалось доказать.</p>
                 </div>
-            </section>
-            <section>
-                <h2>3. Примеры Использования</h2>
-            </section>
-            <section>
-                <h2>4. Задачи</h2>
-            </section>
-            <section>
-                <h2>5. Пифагоровы Тройки</h2>
-                <div style="padding-left: 20px">
-                    <p>Пифагоровы тройки – комбинация из трёх целых чисел a, b, c, удовлетворяющих
-                        условию a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup> (Соотношение из теоремы Пифагора). Ниже приведены некоторые из них.
-                    </p>
-
-                    <table class="content-table">
-                        <thead>
-                        <tr>
-                            <th>a</th>
-                            <th>b</th>
-                            <th>c</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>12</td>
-                            <td>13</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>8</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>24</td>
-                            <td>25</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>15</td>
-                            <td>17</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>12</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td>24</td>
-                            <td>26</td>
-                        </tr>
-                        <tr>
-                            <td>12</td>
-                            <td>35</td>
-                            <td>37</td>
-                        </tr>
-                        <tr>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                        </tr>
-                        </tbody>
-
-                    </table>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button h2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            2. Доказательство Теорем
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour">
+                        <div class="accordion-body">
+                            <div class="accordion" id="accordionSub2">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingFive">
+                                        <button class="accordion-button collapsed h3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            1.1. Теорема Пифагора
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" >
+                                        <div class="accordion-body">
+                                            <p>В научной литературе зафиксировано не менее 400 доказательств теоремы Пифагора. Мы же приведём по одному доказательству каждой теоремы. Если вы хотите узнать о других способах доказательства данных теорем, советуем прочитать
+                                                <a href="ru.wikipedia.org/wiki/Теорема_Пифагора#Доказательства" class="link">данную статью</a>.</p>
+                                            <div class="accordion-body-flexbox">
+                                                <div class="accordion-body-flexbox-text">
+                                                    <p>Доказательство <a href="https://ru.wikipedia.org/wiki/Теорема_Пифагора" target="_blank" class="link">теоремы Пифагора</a> через подобие треугольников основывается на том, что треугольники, подобные одному и тому же треугольнику, имеют одинаковое соотношение.</p>
+                                                    <p>В \(\triangle ABC\) \(\angle BAC\)  = \(\alpha\), \(\angle BCA\)  = \(\beta\).</p>
+                                                    <p>Тогда \(\angle \text{CBH}  = \alpha\), \(\angle ABH  = \beta\).</p>
+                                                    <p>\(\triangle ABC\) ~ \(\triangle BHC\),\(\triangle BHC\) ~ \(\triangle ABH\) по двум углам.</p>
+                                                    <p> Если в \(\triangle ABC\) \(\angle ABC\) является прямым, то:</p>
+                                                    <p>1) \(\frac{b}{c} = \frac{HC}{b}\) из подобия \(\triangle BHC\) и \(\triangle ABC\), а так же \(\triangle AHC\) и \(\triangle ABH\) соответсвенно.</p>
+                                                    <p>2) \(\frac{a}{c} = \frac{AH}{a}\) из подобия \(\triangle BHC\) и \(\triangle ABC\), а так же \(\triangle AHC\) и \(\triangle ABH\) соответсвенно.</p>
+                                                    <p>3) Из первого: \(b^2 = HC * c\), из второго: \(a^2 = c * AH\)</p>
+                                                    <p>4) Складывая \(b^2 + a^2\), получаем:</p>
+                                                    <p>$$a^2 + b^2 = AH * c + HC * c$$</p>
+                                                    <p>$$a^2 + b^2 = c^2$$</p>
+                                                    <p class="proved">Что и требовалось доказать</p>
+                                                </div>
+                                                <div class="accordion-body-flexbox-img">
+                                                    <img src="" class="img-fluid imgHover" th:src="@{/img/article/Pythagorean/3.webp}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingSix">
+                                        <button class="accordion-button collapsed h3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            1.2. Обратная Теорема Пифагора
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix">
+                                        <div class="accordion-body">
+                                            <div class="accordion-body-flexbox">
+                                                <div class="accordion-body-flexbox-text">
+                                                    <p>Возьмём \(\triangle ABC\) со сторонами \(a, b, c\), у которого \(a^2 + b^2 = c^2\).</p>
+                                                    <p>Докажем, что \(\angle B\) - прямой.</p>
+                                                    <p>Рассмотрим \(\triangle A_1B_1C_1\), в котором <span style="margin-right:5px">\(A_1B_1=AB\),</span> \(B_1C_1=BC\)</p>
+                                                    <p>По теореме Пифагора: \(A_1B_1^2+B_1C_1^2 = A_1C_1^2\)</p>
+                                                    <p>\(A_1B_1 = \alpha, B_1C_1 = \beta\)</p>
+                                                    <p>$$\alpha^2 + \beta^2 = A_1B_1^2+B_1C_1^2 = A_1C_1^2$$</p>
+                                                    <p>$$c^2 = A_1C_1^2$$</p>
+                                                    <p>$$c = A_1C_1$$</p>
+                                                    <p>\(\triangle A_1B_1C_1 = \triangle ABC\) по трём сторонам, поэтому \(\angle B = \angle B_1 = 90^\circ\) </p>
+                                                    <p class="proved">Что и требовалось доказать</p>
+                                                </div>
+                                                <div class="accordion-body-flexbox-img" style="flex-direction: column">
+                                                    <img class="img-fluid imgHover" th:src="@{/img/article/Pythagorean/2.webp}" alt="">
+                                                    <img class="img-fluid imgHover" th:src="@{/img/article/Pythagorean/4.webp}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingEight">
+                        <button class="accordion-button h2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                            3. Примеры использования
+                        </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse show" aria-labelledby="headingEight">
+                        <div class="accordion-body">
 
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingNine">
+                        <button class="h2 accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="true" aria-controls="collapseNine">
+                            4. Задачи
+                        </button>
+                    </h2>
+                    <div id="collapseNine" class="accordion-collapse collapse show" aria-labelledby="headingNine">
+                        <div class="accordion-body">
 
-        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTen">
+                        <button class="h2 accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
+                            5. Пифагоровы тройки
+                        </button>
+                    </h2>
+                    <div id="collapseTen" class="accordion-collapse collapse show" aria-labelledby="headingTen">
+                        <div class="accordion-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
     </main>
-    <div class="article-nav-bar">
-        <div class="circle">
 
-        </div>
-        <div class="circle">
-
-        </div>
-        <div class="circle">
-
-        </div>
-        <div class="circle">
-
-        </div>
-        <div class="circle">
-
-        </div>
-    </div>
 
     <footer th:insert="~{base/footer :: copy}"></footer>
     <script type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>

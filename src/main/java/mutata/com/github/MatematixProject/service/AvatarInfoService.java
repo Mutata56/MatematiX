@@ -27,4 +27,11 @@ public class AvatarInfoService {
     public void save(AvatarInfo theInfo) {
         repository.save(theInfo);
     }
+
+    public AvatarInfo findByNameOrReturnEmpty(String name) {
+        var result = findByName(name).orElse(null);
+        if(result == null)
+            result = new AvatarInfo(name);
+        return result;
+    }
 }

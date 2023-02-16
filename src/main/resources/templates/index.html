@@ -1,82 +1,93 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Математикс</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" th:href="@{/css/base/base.css}">
-        <link rel="stylesheet" th:href="@{/css/base/footer.css}">
-        <link rel="stylesheet" th:href="@{/css/base/header.css}">
-        <link rel="stylesheet" th:href="@{/css/main.css}">
-        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-        <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
-        <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
-        <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
-        <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatematiX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/base/base.css}">
+    <link rel="stylesheet" th:href="@{/css/base/footer.min.css}">
+    <link rel="stylesheet" th:href="@{/css/base/header.min.css}">
+    <link rel="stylesheet" th:href="@{/css/main.min.css}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/logo/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+</head>
 
-    <body>
-        <div th:if="${notFound} " th:insert="~{base/toastNotFound :: toast}"></div>
-        <div th:if="${expired} " th:insert="~{base/toastExpired :: toast}"></div>
-        <div th:if="${nonValidUser} or ${param.nonValidUser}" th:insert="~{base/toastRegisterError :: toast}"></div>
-        <div th:if="${successEmailConfirmation}" th:insert="~{base/toastEmailConfirmation :: toast}"></div>
-        <div th:if="${seenJaxToast ne null and not seenJaxToast}" th:insert="~{base/toastAjax :: toast}"></div>
-        <header th:insert="~{base/header :: copy}"></header>
-        <div class="carousel">
-            <div class="carousel--ul">
-                    <input type="radio" name="radio-btn" id="radio1">
-                    <input type="radio" name="radio-btn" id="radio2">
-                    <input type="radio" name="radio-btn" id="radio3">
-                    <input type="radio" name="radio-btn" id="radio4">
-                    <input type="radio" name="radio-btn" id="radio5">
-
-                    <div class="carousel--card carousel--card-1">
-                        <p class="carousel--card--content"><em><strong style="color: #efefef;font-size: 40px;letter-spacing: 2px">
-                            МЕТОД РАЦИОНАЛИЗАЦИИ</strong></em></p>
-                    </div>
-                    <div class="carousel--card carousel--card-2">
-                        <p class="carousel--card--content"><em><strong style="color: #efefef;font-size: 40px;letter-spacing: 2px">
-                            ПРОИЗВОДНАЯ ФУНКЦИИ</strong></em></p>
-                    </div>
-                    <div class="carousel--card carousel--card-3">
-                        <p class="carousel--card--content"><em><strong style="color: #efefef;font-size: 40px;letter-spacing: 2px">
-                            МЕТОД РАЦИОНАЛИЗАЦИИ</strong></em></p>
-                    </div>
-                    <div class="carousel--card carousel--card-4">
-                        <p class="carousel--card--content"><em><strong style="color: #efefef;font-size: 40px;letter-spacing: 2px">
-                            УРАВНЕНИЯ ФИГУР</strong></em></p>
-                    </div>
-                    <div class="carousel--card carousel--card-5">
-                        <p class="carousel--card--content"><em><strong style="color: #efefef;font-size: 40px;letter-spacing: 2px">
-                            МЕТОД КООРДИНАТ</strong></em></p>
-                    </div>
-            </div>
+<body>
+<header th:insert="~{base/header :: copy}"></header>
+<div id="theCarousel" class="elementAfterHeader carousel slide">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#theCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#theCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#theCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#theCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="text-center carousel-item active" style="cursor: pointer">
+            <p class="d-block w-100 carousel--card--content">
+                <em><strong style="user-select:none;color: #efefef;font-size: 40px;letter-spacing: 2px">
+                МЕТОД РАЦИОНАЛИЗАЦИИ</strong></em>
+            </p>
         </div>
-        <div class="main">
-            <main>
-                <div class="grid-column1-row1 grid-content" onclick="location.href = '/articles/Pythagorean'"></div>
-                <div class="grid-column2-row1 grid-content" onclick="location.href = `/articles/Formulas`"></div>
-                <div class="grid-column3-row1 grid-content"></div>
-                <div class="grid-column4-row1 grid-content"></div>
-
-                <div class="grid-column1-row2 grid-content"></div>
-                <div class="grid-column2-row2 grid-content"></div>
-                <div class="grid-column4-row2 grid-content"></div>
-
-                <div class="grid-column1-row3 grid-content"></div>
-                <div class="grid-column3-row3 grid-content"></div>
-                <div class="grid-column4-row3 grid-content"></div>
-            </main>
+        <div class="text-center carousel-item" style="cursor: pointer">
+            <p class="d-block w-100 carousel--card--content"><em><strong style="user-select:none;color: #efefef;font-size: 40px;letter-spacing: 2px">
+                ПРОИЗВОДНАЯ ФУНКЦИИ</strong></em></p>
         </div>
+        <div class="text-center carousel-item" style="cursor: pointer">
+            <p class="d-block w-100 carousel--card--content"><em><strong style="user-select:none;color: #efefef;font-size: 40px;letter-spacing: 2px">
+                УРАВНЕНИЯ ФИГУР</strong></em></p>
+        </div>
+        <div class="text-center carousel-item" style="cursor: pointer">
+            <p class="d-block w-100 carousel--card--content"><em><strong style="user-select:none;color: #efefef;font-size: 40px;letter-spacing: 2px">
+                МЕТОД КООРДИНАТ</strong></em></p>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#theCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#theCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<div class="main">
+    <main>
+        <img alt="Пифагор"  th:src="@{/img/card/Pythagorean.webp}" class="img-fluid grid-column1-row1 grid-content res360x450" onclick="location.href = '/articles/Pythagorean'">
+        <img alt="Тригонометрия" th:src="@{/img/card/Trigonometry.webp}" class="img-fluid grid-column2-row1 grid-content res360x270" onclick="location.href = `/articles/Formulas`">
+        <img alt="Евклид" th:src="@{/img/card/Euclid.webp}" class="grid-column3-row1 grid-content res360x720">
+        <img alt="Теорема Виета" th:src="@{/img/card/Viet.webp}" class="grid-column4-row1 grid-content res360x450">
+        <img alt="Теорема Виета" th:src="@{/img/card/Viet.webp}" class="grid-column1-row2 grid-content res360x450">
 
-        <footer th:insert="~{base/footer :: copy}"></footer>
-        <script th:src="@{/js/min/carousel.js}"></script>
-        <script type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
-    </body>
+        <img alt="Теорема Безу" th:src="@{/img/card/Bezu.webp}" class="grid-column2-row2 grid-content res360x720">
+        <img alt="Модули" th:src="@{/img/card/Modules.webp}" class="grid-column4-row2 grid-content res360x360">
+
+        <img alt="Уравнения" th:src="@{/img/card/Eq.webp}" class="grid-column1-row3 grid-content res360x360">
+        <img alt="Модуль" th:src="@{/img/card/Module.webp}" class="grid-column3-row3 grid-content res360x720">
+        <img alt="Различные уравнения" th:src="@{/img/card/DifferentEq.webp}" class="grid-column4-row3 grid-content res360x450">
+    </main>
+</div>
+
+<footer th:insert="~{base/footer :: copy}"></footer>
+<script type="text/javascript" th:src="@{/js/fixedHeader.js}"></script>
+<script defer th:inline="javascript">
+    let loadToastr = [[${loadToastr}]],
+    nonValidUser = [[${nonValidUser}]] || [[${param.nonValidUser}]],
+    expired = [[${expired}]],
+    successEmailConfirmation = [[${successEmailConfirmation}]],
+    notFound = [[${notFound}]];
+</script>
+<script th:inline="javascript" defer th:if="${loadToastr} or ${expired} or ${nonValidUser} or ${successEmailConfirmation} or ${param.nonValidUser} or ${notFound}">
+    var toastrEl=document.createElement("link");toastrEl.href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css",toastrEl.rel="stylesheet",toastrEl.type="text/css",document.getElementsByTagName("head")[0].appendChild(toastrEl),(toastrEl=document.createElement("script")).src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js",toastrEl.async=!0,toastrEl.onload=(()=>{toastr.options.preventDuplicates=!0,toastr.options.progressBar=!1,toastr.options.timeOut=0,toastr.options.extendedTimeOut=0,toastr.options.closeButton=!0,loadToastr&&(toastr.options.onclick=function(){document.cookie="jax=true; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT; samesite",location.href="/jax"},toastr.options.onCloseClick=function(){document.cookie="jax=true; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT; samesite"},toastr.info("Что это значит?","Мы используем MathJax!")),nonValidUser&&toastr.error("Вы не авторизированны для этого действия.","Ошибка!"),expired&&(toastr.error("Заявка истекла.","Ошибка!"),toastr.info("На вашу почту была выслана новая ссылка.")),successEmailConfirmation&&toastr.success("Ваша почта подтверждена.","Успех!"),notFound&&toastr.error("Данной заявки не существует.","Ошибка!")}),document.getElementsByTagName("head")[0].appendChild(toastrEl);
+</script>
+<script defer type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
 </html>

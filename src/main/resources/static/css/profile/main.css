@@ -47,11 +47,53 @@ main nav ul {
     overflow: hidden;
     cursor: pointer;
 }
+.avatar-wrapper-medium {
+    min-width: 72px;
+    max-width: 72px;
+    min-height: 72px;
+    max-height: 72px;
+    border: none !important;
+}
 .about {
     display: flex;
-    width: 1400px;
     gap: 70px;
+    margin-top: 30px;
+}
+.friends-flex {
+    display: flex;
+    gap: 20px;
+    width: 256px;
+    flex-wrap: wrap;
+}
+#friends-p {
+    margin-bottom: 15px;
+}
+#friends-a:link,#friends-a:active,#friends-a:visited,#friends-a:hover {
+    color: rgba(255,255,255,0.85);
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.status-info {
+    position:absolute;
+    top:56px;
+    left:56px;
+    border-radius:50%;
+    width: 14px;
+    height: 14px;
+    border: 3px solid #1e1e1e
+}
+.status-info-active {
+    background-color:#55cd97;
+}
+.status-info-inactive {
+    background-color: #a4b4bf;
+}
+.profile-settings {
+    width: 1400px;
     margin: 35px auto 100px;
+    display: flex;
+    justify-content: space-between;
 }
 #avatar {
     width: 100%;
@@ -64,7 +106,6 @@ main nav ul {
 .sort-settings-li.active {
     color: white;
 }
-
 .desc {
     display: flex;
     flex-direction: column;
@@ -92,11 +133,12 @@ main nav ul {
 .sort-settings-li {
     cursor: pointer;
 }
+
 .comments-content {
     display: flex;
     flex-direction: column;
-
 }
+
 .writeCommentSuggestionDiv img {
  width: 100%;
  height: 100%;
@@ -121,54 +163,15 @@ textarea:focus {
     border: none;
     outline: none;
 }
-#divForCropping {
-    display: none;
-    position: fixed;
-    width: 700px;
-    margin: auto;
-    z-index: 10000;
-    background-color: #1E1E1E;
-    left: 50%;
-    top: 4%;
-    transform: translate(-50%,0);
-    padding-bottom: 20px;
-    border-radius: 6px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.85);
-}
-#overlay {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 5;
-    background: rgba(0,0,0,0.87);
-    visibility: hidden;
-}
-
 #croppingImage {
     display: block;
     max-width: 100%;
-}
-#divForCroppingHeader {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    color: white;
-    padding: 7px;
-    margin-bottom: 50px;
-    margin-top: 10px
 }
 #imageWrapper {
     width: 300px;
     height: 300px;
     border-radius: 6px;
     margin-bottom: 50px;
-}
-#avatarActions {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
 }
 #previewDiv {
     width: 138px;
@@ -185,24 +188,6 @@ textarea:focus {
 #secretSubmit {
     visibility: hidden;
 }
-#submitChangeAvatar:visited,#submitChangeAvatar:link {
-    text-decoration: none;
-    padding: 12px 215px;
-    display: inline-block;
-    text-align: center;
-    border-radius: 6px;
-    font-size: 20px;
-    transition: all 0.3s ease-out;
-    position: relative;
-    background-color: #28b485;
-    color: #E9F3F3;
-    font-weight: 500;
-}
-
-#submitChangeAvatar:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgb(0 0 0 / 40%);
-}
 #sendButton {
     visibility: hidden;
     margin-left: 1094px;
@@ -216,11 +201,10 @@ textarea:focus {
     font-weight: 500;
     transition: all 0.5s ease-out;
 }
-#sendButton:hover {
+#sendButton:hover,#loadMoreButton:hover,#loadNewComments:hover,#loadComments:hover,#loadFriends:hover {
     transform: translateY(-2px);
     box-shadow: 2px 11px 12px 1px rgb(0 0 0 / 32%)
 }
-
 #sendCommentForm:after {
     content: attr(content) ' / 300';
     position: absolute;
@@ -231,4 +215,28 @@ textarea:focus {
 }
 #sendCommentForm {
     position: relative;
+}
+#loadMoreButton,#loadNewComments,#loadComments,#loadFriends {
+    background-color: #45a0da;
+    width: 300px;
+    height: 30px;
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.5s ease-out;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+#changeYourAvatarModalContent,#showFriendsModalContent {
+    background: #1e1e1e;
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    --bs-modal-footer-border-color: #babec3;
+    --bs-modal-header-border-color: #babec3;
+}
+#loadFriends {
+    width: 100%;
+    margin-top:25px;
 }

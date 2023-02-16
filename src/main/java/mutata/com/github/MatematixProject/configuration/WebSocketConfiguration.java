@@ -26,8 +26,8 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/listenToNewComments");
-        registry.addEndpoint("/listenToNewComments").withSockJS();
+        registry.addEndpoint("/listenToNewEvents");
+        registry.addEndpoint("/listenToNewEvents").withSockJS();
         // In order to let Client connect to the web socket
     }
 
