@@ -12,6 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
+/**
+ * Сервис, связанный с Wrapper классом User
+ * @see MyUserDetails
+ * Transactional(readOnly = true) - данный сервис занимается только чтением, и никак не изменяет данные БД
+ */
+
+
 @Service
 @Transactional(readOnly = true)
 public class MyUserDetailsService implements UserDetailsService {
@@ -23,6 +30,11 @@ public class MyUserDetailsService implements UserDetailsService {
         this.repository = repository;
     }
 
+    /**
+     * Загрузка юзера по юзернейму
+     * @throws UsernameNotFoundException - ошибка "Юзер не найден"
+     */
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optional = repository.findUserByNameIgnoreCase(username);
@@ -32,6 +44,11 @@ public class MyUserDetailsService implements UserDetailsService {
             return new MyUserDetails(optional.get());
 
     }
+
+    /**
+     * Загрузка юзера по почте
+     * @throws UsernameNotFoundException - ошибка "Юзер не найден"
+     */
 
     public UserDetails loadUserByEmail(String email) {
         Optional<User> optional = repository.findUserByEmailIgnoreCase(email);

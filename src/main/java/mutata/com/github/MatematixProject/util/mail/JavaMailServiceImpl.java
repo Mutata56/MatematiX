@@ -6,15 +6,31 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-
+/**
+ *  Имплементация JavaMailService
+ */
 @Component
 @Data
 public class JavaMailServiceImpl  {
 
+    /**
+     * Адрес, откуда приходит сообщение
+     */
     private static final String FROM = "noreply@MatematiX.com";
+
+    /**
+     *
+     */
 
     @Autowired
     private JavaMailSender emailSender;
+
+    /**
+     * Метод отправки сообщения
+     * @param to - адрес, куда нужно отправить сообщение
+     * @param subject - тема сообщения
+     * @param text - текст сообщения
+     */
     public void send(String to,String subject,String text) {
         class SenderThread implements Runnable {
             private final SimpleMailMessage message;

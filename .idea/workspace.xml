@@ -10,114 +10,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/article.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/css/getInTouch.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/js/canChangeAvatar.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/js/fixedHeader.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/error/404.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/ResetPasswordDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/VerificationTokenDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/js/admin/pagination.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/resetPasswordTokens.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/verificationTokens.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/MatematixProjectApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/MatematixProjectApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/configuration/SecurityConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/configuration/WebSocketConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/configuration/WebSocketConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/IsAliveController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/IsAliveController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/MyRestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/MyErrorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/MyErrorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/MyResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/MyResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/Article.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/Article.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/AvatarInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/AvatarInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/CommentAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/CommentAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/CommentActionId.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/CommentActionId.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/CommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/CommentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/PasswordDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/PasswordDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/ResetPasswordToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/ResetPasswordToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/TokenType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/VerificationToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/token/VerificationToken.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/event/OnRegistrationCompleteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/event/OnRegistrationCompleteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/event/OnResetPasswordEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/event/OnResetPasswordEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/listener/RegistrationListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/listener/RegistrationListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/listener/ResetPasswordListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/listener/ResetPasswordListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/ArticleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/ArticleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/AvatarInfoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/AvatarInfoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/CommentActionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/CommentActionRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/CommentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/ResetPasswordTokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/ResetPasswordTokenRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/VerificationTokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/repository/VerificationTokenRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/AccessDeniedHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/AccessDeniedHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/AuthenticationFailureHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/AuthenticationFailureHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/AuthenticationProviderImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/AuthenticationProviderImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/MyUserDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/security/MyUserDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/AvatarInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/AvatarInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/CommentActionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/CommentActionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/CommentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/MyRestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/MyRestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/MyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/MyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/MyUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/MyUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/ResetPasswordTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/ResetPasswordTokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/TokenService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/JavaMailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/mail/JavaMailServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/entity/dto/CommentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/VerificationTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/VerificationTokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/RegisterValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/RegisterValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/Toastr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/Toastr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/UserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/UserUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/UserValidator.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/mail/JavaMailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/mail/JavaMailServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/admin/base.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/admin/base.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/article/Pythagorean.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/authorization/base.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/authorization/base.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/article.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/article.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/base.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/base.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/footer.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/footer.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/jax.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/jax.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/bootstrap/modal.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/bootstrap/modal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/base/bootstrap/modal.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/base/bootstrap/modal.min.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/profile/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/profile/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/MathJax.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/Rating.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/Tokens.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/UnsetAvatar.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/article/Pythagorean/img1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Bezu.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/DifferentEq.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Eq.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Euclid.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Module.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Modules.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Pythagorean.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Trigonometry.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/card/Viet.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/carousel/C1.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/carousel/C2.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/carousel/C3.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/carousel/C4.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/carousel/C5.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/find.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/github.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/img/github.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo/android-chrome-192x192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo/android-chrome-512x512.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/img/logo/android-chrome-512x512.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo/apple-touch-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/img/logo/apple-touch-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo/site.webmanifest" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/img/logo/site.webmanifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo_white.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/role.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/sortArrowsAsc.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/sortArrowsDesc.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/user.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/user_white.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/vk.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/img/vk.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/carousel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/delay.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/delay.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/min/canChangeAvatar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/min/carousel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/min/delay.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/delay.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/min/showTooltipsAndValidatePasswords.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/showTooltipsAndValidatePasswords.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/min/stomp.orig.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/stomp.orig.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/ping.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/ping.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/redirectToLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/redirectToLogin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/showHidePassword.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/showHidePassword.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/showTooltipsAndValidatePasswords.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/showTooltipsAndValidatePasswords.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/createUser.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/deleteUser.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/editUser.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/articles/Formulas.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/articles/Formulas.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/articles/Pythagorean.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/articles/Pythagorean.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/authorization/forgotPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/authorization/forgotPassword.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/authorization/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/authorization/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/authorization/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/authorization/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/authorization/resetPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/authorization/resetPassword.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/base/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/base/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/base/toastAjax.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/base/toastEmailConfirmation.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/base/toastExpired.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/base/toastNotFound.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/base/toastRegisterError.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/bookmarks.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/bookmarks.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/books.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/books.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/getInTouch.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/getInTouch.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/jax.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/jax.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/profile/logic.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/profile/logic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/profile/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/profile/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/profile/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/profile/settings.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,14 +95,26 @@
         <option value="Interface" />
         <option value="CSS File" />
         <option value="HTML File" />
-        <option value="Class" />
         <option value="JavaScript File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Mutata56&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Mutata56/MatematiX.git&quot;,
+    &quot;accountId&quot;: &quot;aa2ab809-306a-4190-95a8-e99163aa4a51&quot;
+  }
+}</component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -155,23 +125,30 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2DAGX0Nf5kdUGWpvKEvPfg5IcE6" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MatematixProjectApplication.executor&quot;: &quot;Run&quot;,
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.MatematixProjectApplicationTests.executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;16.16.0&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;16.18.3&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Kirill/IdeaProjects/MatematixProject/src/main/resources/static/img/article/Pythagorean&quot;,
@@ -200,7 +177,7 @@
       <recent name="C:\Users\Kirill\IdeaProjects\MatematixProject\src\main\resources\static\js\base\bootstrap" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.MatematixProjectApplication">
+  <component name="RunManager" selected="Application.MatematixProjectApplication">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="mutata.com.github.test.Main" />
       <module name="MatematixProject" />
@@ -214,9 +191,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MatematixProjectApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="mutata.com.github.MatematixProject.MatematixProjectApplication" />
+      <module name="MatematixProject" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="mutata.com.github.MatematixProject.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Test" />
       <module name="MatematixProject" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MatematixProjectApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="MatematixProject" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="mutata.com.github.MatematixProject.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="mutata.com.github.MatematixProject" />
+      <option name="MAIN_CLASS_NAME" value="mutata.com.github.MatematixProject.MatematixProjectApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -317,8 +322,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.MatematixProjectApplication" />
+        <item itemvalue="JUnit.MatematixProjectApplicationTests" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
@@ -427,8 +434,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/UserDAO.java</url>
-          <line>27</line>
+          <line>42</line>
           <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AdminController.java</url>
+          <line>233</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AdminController.java</url>
+          <line>216</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

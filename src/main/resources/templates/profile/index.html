@@ -37,26 +37,44 @@
     <nav>
         <ul>
             <li style="color: white !important; font-size: 17px; cursor: pointer">Профиль</li>
+            <li style="color: white !important; font-size: 17px; cursor: pointer"><a th:id="friendButton" class="nav-link">Друзья</a></li>
+            <li style="color: white !important; font-size: 17px; cursor: pointer"><a th:id="friendButton" class="nav-link">Поиск</a></li>
             <li th:if="${myProfile}" ><a class="nav-link" th:href="@{/settings}">Настройки</a></li>
-            <li th:if="${myProfile}"><a class="nav-link" th:href="@{/}">Безопасность</a></li>
-            <li th:if="${myProfile}"><a class="nav-link" th:href="@{/}">Интерфейс</a></li>
-            <li th:if="${myProfile}"><a class="nav-link" th:href="@{/}">Уведомления</a></li>
+            <form id="friendForm" th:if="not ${myProfile}" th:action="@{/friendAction}" th:method="POST" class="form">
+                <input type="hidden" th:value="*{name}" name="username">
+                <input type="hidden" th:value="*{aFriend}" name="isAFriend">
+            </form>
         </ul>
     </nav>
     <div class="profile-settings">
         <div class="about" style="position: relative">
-            <div title="Онлайн" th:if="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #55cd97;position: absolute;border: 5px solid #1e1e1e;left: 111px;top: 116px;"></div>
-            <div title="Офлайн" th:unless="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #a4b4bf;position: absolute;border: 5px solid #1e1e1e;left: 111px;top: 116px;"></div>
             <div style="margin-top:10px" class="avatar-wrapper">
+                <div th:if="${active}" title="Онлайн" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #55cd97;position: absolute;border: 5px solid #1e1e1e;left: 98px;top: 107px;"></div>
+                <div title="Офлайн" th:unless="${active}" style="z-index: 1000;border-radius: 50%;width: 22px;height: 22px;background-color: #a4b4bf;position: absolute;border: 5px solid #1e1e1e;left: 98px;top: 107px;"></div>
                 <img class="avatar-wrapper" th:if="${hasAvatar}" th:src="@{'data:image/webp;base64,' + ${avatars[__${name}__].encodedAvatar}}" alt="">
                 <img th:unless="${hasAvatar}" th:src="@{/img/UnsetAvatar.webp}" alt="">
             </div>
+
             <div class="desc">
                 <p th:text="'Имя: ' + ${name}"></p>
                 <p th:text="'Рейтинг: ' + ${rating}"></p>
                 <p th:text="'Уровень: ' + ${lvl}"></p>
             </div>
+
         </div>
+        <!-- Кнопки управления -->
+        <div class="action-buttons-container">
+            <!-- Кнопка "Добавить в друзья" -->
+            <button class="action-button add-friend-button">Добавить в друзья</button>
+
+            <!-- Кнопка "Написать сообщение" -->
+            <button class="action-button message-button">Написать сообщение</button>
+
+            <!-- Кнопка "Заблокировать" -->
+            <button class="action-button block-button">Заблокировать</button>
+        </div>
+
+
         <div class="friends" th:if="${countOfFriends > 0}">
             <p id="friends-p"><a data-bs-toggle="modal" data-target="#showFriendsModal" id="friends-a" href="#showFriendsModal">Друзья</a></p>
             <div class="friends-flex" th:if="${countOfFriends >= 1}">
@@ -80,9 +98,7 @@
             <p style="display: inline-block">Комментарии</p>
             <div class="sort-settings">
                 <ul class="sort-settings-ul">
-                    <li class="sort-settings-li">популярные</li>
-                    <li class="sort-settings-li">старые</li>
-                    <li class="sort-settings-li active">новые</li>
+
                 </ul>
             </div>
         </div>
@@ -123,6 +139,16 @@
 <script defer type="module" th:src="@{/js/base/bootstrap/modal.js}"></script>
 <script defer type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
 <script defer>
+
+    let frBt = document.getElementById("friendButton");
+
+    if(frBt != null) {
+        frBt.addEventListener("click",(event) => {
+            event.preventDefault();
+            document.getElementById("friendForm").submit();
+        });
+    }
+
     let moduleBodyInitialized = false;
     let modal = document.getElementById("showFriendsModalBody");
     let currentFriendPage = 1;
@@ -161,8 +187,12 @@
                     }
                 }
             }
+
         }
+
     });
+
+
 </script>
 </body>
 

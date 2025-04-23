@@ -6,9 +6,15 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+/**
+ * DTO - data transfer object - объект, используемый для передачи данных, в данном случае данных для регистрацации.
+ * Data - это сокращенная аннотация, сочетающая возможности @ToString, @EqualsAndHashCode, @Getter @Setter и @RequiredArgsConstructor
+ */
 @Data
 public class RegisterDTO {
-
+    /**
+     * Имя, почта и пароль с его повторным вводом с соотв. валидацией каждого поля
+     */
     @NotNull(message = "Поле не может быть пустым")
     @Length(min = 5,max = 15,message = "Длина логина должна быть больше 4 и меньше 16")
     @Pattern(regexp = "[a-zA-Z\\d]+",message = "Логин должно состоять из латинских букв и/или цифр")

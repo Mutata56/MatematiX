@@ -11,6 +11,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Простой REST сервис, используемый для конвертации base64String
+ * Transactional(readOnly = true) - данный сервис занимается только чтением, и никак не изменяет данные БД
+ */
 @Service
 public class MyRestService {
 
@@ -21,24 +25,30 @@ public class MyRestService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
+    /**
+     * Конвертация картинок в формат web64
+     * @param fileExtension - исходное расширение файла
+     * @param base64String - строка в формате base64
+     * @return изображение в формате webp64
+     */
     public String convertToWebp(String fileExtension,String base64String) {
         String url = "https://webp.phip1611.dev/convert";
 
-        // create headers
+        // Создание хедеров
         HttpHeaders headers = new HttpHeaders();
-        // set `content-type` header
+        // Установка хедера "conent-type"
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // set `accept` header
+        // Установка хедера "accept"
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        // create a map for post parameters
+        // Создание хеш карты для параметров
         Map<String, Object> map = new HashMap<>();
         map.put("fileExtension", fileExtension);
         map.put("base64String", base64String);
-        // build the request
+        // Создание запроса
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
 
-        // send POST request
+        // Отправка POST запроса
         ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
 
         return response.getBody();

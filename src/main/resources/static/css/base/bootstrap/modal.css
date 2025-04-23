@@ -290,3 +290,7 @@ h5.modal-title {
     font-weight: 500;
     font-size: 1.25rem;
 }
+
+html.pum-open.pum-open-overlay.pum-open-scrollable .pum-overlay.pum-active {
+    -webkit-overflow-scrolling: touch;}
+html { overflow-y: scroll !important; }

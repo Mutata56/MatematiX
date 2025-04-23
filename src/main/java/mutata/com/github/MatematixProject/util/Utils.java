@@ -16,14 +16,27 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Класс, представляющий утилиты для работы с разными классами.
+ */
 public class Utils {
 
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM, yyyy H:mm");
 
+    /**
+     * Метод для конвертирования из ISO в UTF8
+     * @param content
+     * @return
+     */
     public static String encodeFromIsoToUTF8(String content) {
         return new String(content.getBytes(StandardCharsets.ISO_8859_1),StandardCharsets.UTF_8);
     }
 
+    /**
+     * Закодировать аватарку в String64
+     * @param data
+     * @return
+     */
     public static String encodeAvatar(byte[] data) {
         return Base64.getEncoder().withoutPadding().encodeToString(data);
     }

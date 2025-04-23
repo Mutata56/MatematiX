@@ -12,6 +12,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 
+/**
+ * Класс, представляющий утилиты для работы с классом User
+ */
 @Component
 public class UserUtils {
     private  final UserService userService;
@@ -25,6 +28,11 @@ public class UserUtils {
         this.avatarInfoService = avatarInfoService;
     }
 
+    /**
+     * Находится ли юзер в сети (онлайн)
+     * @param username - пользователь, чей онлайн необходимо выяснить
+     * @return является ли пользователь онлайн
+     */
     public boolean isAlive(String username) {
         if(username == null)
             return false;
@@ -37,6 +45,12 @@ public class UserUtils {
         return (new Date().getTime() - (theDate.getTime() - 3 * HOUR_IN_MS)) < FIVE_MINUTES_IN_MS;
         // Transform GMT + 0 Into GMT + 3
     }
+
+    /**
+     * Установить юзеру состояние "в сети" (онлайн)
+     * @param username - строковое представление юзера, которому необходимо установить онлайн
+     */
+
     public boolean setAlive(String username) {
         User user = userService.findByNameIgnoreCase(username);
         if(user != null) {
@@ -48,6 +62,14 @@ public class UserUtils {
         }
         return true;
     }
+
+    /**
+     * Загрузка аватар.
+     * @param username - строковое представление юзера, которому необходимо обновить аватар
+     * @param map - Хеш коллекция, содержащая значения в формате юзернейм - аватарка
+     * @param prefix - префикс может быть либо "My" либо "" hasAvatar или hasMyAvatar
+     */
+
     public void loadAvatar(String username, HashMap<String,AvatarInfo> map,Model model,String prefix) {
         var temp = avatarInfoService.findByName(username).orElse(null);
         if(temp != null && temp.getEncodedAvatar() == null)
@@ -55,6 +77,13 @@ public class UserUtils {
         map.putIfAbsent(username,temp);
         model.addAttribute(String.format("has%sAvatar",StringUtils.capitalize(prefix)),temp != null);
     }
+
+    /**
+     * Установить юзеру состояние "в сети" (онлайн)
+     * @param username - строковое представление юзера, которому необходимо установить онлайн
+     * @param prefix - префикс может быть либо "My" либо "" hasAvatar или hasMyAvatar
+     */
+
     public void loadAvatar(String username,Model model,String prefix) {
         var temp = avatarInfoService.findByName(username).orElse(null);
         model.addAttribute(String.format("has%sAvatar",StringUtils.capitalize(prefix)),temp != null);

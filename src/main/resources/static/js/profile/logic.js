@@ -82,7 +82,7 @@ loadCommentsButton.addEventListener("click",(event) => {
 
     let timerLogic = function (id,textContent,map) {
         stompClient.send(`/application/changeLikeAmount`, {},
-            JSON.stringify({"id":id,"username":name,"like":textContent == "👍"}));
+            JSON.stringify({"id":id,"username":currentName,"like":textContent == "👍"}));
         map.delete(id);
     };
 
@@ -91,6 +91,7 @@ loadCommentsButton.addEventListener("click",(event) => {
         if(target.nodeName == "SPAN" && (target.textContent == "👍" || target.textContent == "👎")) {
 
             let id = target.parentElement.getAttribute("content");
+           // Защита от спама, будет отправлено только последнее действие на сервер
             if(idToTimer.has(id)) {
                 let result = idToTimer.get(id);
                 clearTimeout(result);
@@ -233,6 +234,7 @@ loadCommentsButton.addEventListener("click",(event) => {
             currentPage = 1;
         });
     }
+
 });
 
 

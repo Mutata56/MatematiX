@@ -9,7 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-// Wrapper Class
+/**
+ * Wrapper класс для класса User, предназначенный для ауентификации пользователя в системе.
+ */
 
 public class MyUserDetails implements UserDetails {
 
@@ -20,6 +22,10 @@ public class MyUserDetails implements UserDetails {
         this.user = user;
     }
 
+    /**
+     * Получение роли юзера
+     * @return роль юзера: ADMIN/USER
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
@@ -37,7 +43,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return isAccountNonLocked();
     }
 
     @Override
@@ -47,7 +53,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isAccountNonLocked();
     }
 
     @Override

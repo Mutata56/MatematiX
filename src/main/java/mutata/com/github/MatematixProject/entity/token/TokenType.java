@@ -2,6 +2,9 @@ package mutata.com.github.MatematixProject.entity.token;
 
 import lombok.Getter;
 
+/**
+ * Енумерация Токенов по виду resetPassword и verification.
+ */
 public enum TokenType {
     RESET("resetPassword"),VERIFICATION("verification");
 
