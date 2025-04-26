@@ -1,0 +1,38 @@
+# -----------------------
+# 1) Сборочный этап
+# -----------------------
+FROM maven:3.8.5-openjdk-17 AS builder
+
+# рабочая директория внутри контейнера
+WORKDIR /app
+
+# копируем maven-обёртку и pom.xml, чтобы установить зависимости
+COPY mvnw .
+COPY mvnw.cmd .
+COPY .mvn    .mvn
+COPY pom.xml .
+
+# делаем mvnw исполняемым и загружаем зависимости
+RUN chmod +x mvnw mvnw.cmd && \
+    ./mvnw dependency:go-offline -B
+
+# копируем исходники и собираем jar (пропускаем тесты для ускорения)
+COPY src src
+RUN ./mvnw clean package -DskipTests -B
+
+# -----------------------
+# 2) Рантайм-этап
+# -----------------------
+FROM eclipse-temurin:17-jre
+
+# директория, в которой будет лежать ваш jar
+WORKDIR /app
+
+# копируем собранный jar из предыдущего этапа
+COPY --from=builder /app/target/*.jar app.jar
+
+# прокидываем порт, на котором запускается Spring Boot
+EXPOSE 8080
+
+# точка входа — запускаем приложение
+ENTRYPOINT ["java","-jar","app.jar"]
