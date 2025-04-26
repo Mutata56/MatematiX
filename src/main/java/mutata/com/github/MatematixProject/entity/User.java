@@ -6,6 +6,7 @@ import mutata.com.github.MatematixProject.entity.token.ResetPasswordToken;
 import mutata.com.github.MatematixProject.entity.token.VerificationToken;
 import mutata.com.github.MatematixProject.util.Utils;
 import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -14,164 +15,176 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.awt.SystemColor.info;
 /**
- * Класс, представляющий собой сущность, отображаемую в БД. В данном случае сущность "действие над комментарием".
- * Entity - Сущность, отображаемая в БД
- * Table - таблица в БД
- * Data - это сокращенная аннотация, сочетающая возможности @ToString, @EqualsAndHashCode, @Getter @Setter и @RequiredArgsConstructor
- * NoArgsConstructor - сказать lombok создавать конструктор без параметров
+ * Сущность пользователя в системе.
+ * <p>Представляет запись пользователя в таблице <code>users</code>.
+ * Содержит данные для аутентификации, профиля, связей с токенами,
+ * аватаркой, комментариями, статьями и друзьями.</p>
+ *
+ * <p>Валидация полей обеспечивается аннотациями
+ * {@link NotNull}, {@link Pattern}, {@link Email}, {@link Length}.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
  */
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
 public class User {
+
     /**
-     * Юзернейм пользователя. Правила валидации для данного поля.
-     * Id - является id в таблице БД MySQL
-     * Column - с какой колонкой в MySQL связть данное поле
+     * Логин пользователя — первичный ключ.
+     * <p>Не может быть пустым, только латинские буквы и цифры.</p>
      */
     @Id
     @Column(name = "username")
     @NotNull(message = "Поле не может быть пустым")
-    //@Length(min = 5,max = 15,message = "Длина логина должна быть больше 4 и меньше 16")
-    @Pattern(regexp = "[a-zA-Z\\d]+",message = "Логин должно состоять из латинских букв и/или цифр")
+    @Pattern(regexp = "[a-zA-Z\\d]+", message = "Логин должен состоять из латинских букв и/или цифр")
     private String name;
 
     /**
-     * Почта пользователя. Правила валидации для данного поля.
+     * Адрес электронной почты пользователя.
+     * <p>Не может быть пустым, формат email и длина 5–45 символов.</p>
      */
-
     @Column(name = "email")
     @NotNull(message = "Поле не может быть пустым")
     @Email(message = "Неправильный формат эл. почты")
-    @Length(min = 5,max = 45,message = "Длина эл. почты должна быть больше 4 и меньше 46")
-
+    @Length(min = 5, max = 45, message = "Длина эл. почты должна быть больше 4 и меньше 46")
     private String email;
 
     /**
-     * Пароль в зашифрованном виде. Правила валидации для данного поля.
+     * Зашифрованный пароль пользователя.
+     * <p>Не может быть пустым.</p>
      */
-
     @Column(name = "password")
     @NotNull(message = "Поле не может быть пустым")
     private String encryptedPassword;
 
     /**
-     * Состояние "blocked" (заблокирован ли на сайте) пользователя.
+     * Флаг блокировки пользователя: 1 — заблокирован, 0 — активен.
      */
-
     @Column(name = "blocked")
     private byte blocked;
 
     /**
-     * Состояние "enabled" (подтвердил ли пользователь почту) пользователя.
+     * Флаг подтверждения email: 1 — подтверждён, 0 — не подтверждён.
      */
-
     @Column(name = "enabled")
     private byte enabled;
 
     /**
-     * Задача связи OneToOne в контексте MySQL. Выполнение операций удаления каскадно (в обоих таблицах). FetchType.EAGER - связанные данные должны быть извлечены вместе с с основной сущностью
+     * Связь с токеном сброса пароля.
+     * <p>При удалении пользователя токен удаляется каскадно.</p>
      */
-
-    @OneToOne(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
-
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private ResetPasswordToken resetPasswordToken;
 
     /**
-     * Задача связи OneToOne в контексте MySQL. Выполнение операций удаления каскадно (в обоих таблицах). FetchType.EAGER - связанные данные должны быть извлечены вместе с с основной сущностью
+     * Связь с токеном подтверждения email.
+     * <p>При удалении пользователя токен удаляется каскадно.</p>
      */
-
-    @OneToOne(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private VerificationToken verificationToken;
 
     /**
-     * Роль пользователя в системе: ADMIN/User
+     * Роль пользователя: ROLE_ADMIN или ROLE_USER.
      */
     @Column(name = "role")
     private String role;
 
     /**
-     * Рейтинг пользователя в системе
+     * Рейтинг пользователя (число голосов от комментариев).
      */
-
     @Column(name = "rating")
     private int rating;
 
-    /**
-     * Задача связи OneToOne в контексте MySQL. Выполнение операций удаления каскадно (в обоих таблицах). FetchType.LAZY - связанные данные должны быть извлечены ТОЛЬКО когда потребуются
-     */
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    public int getRating() {
+        return getComments().stream()
+                .mapToInt(Comment::getRating)
+                .sum();
+    }
+    /**
+     * Связь с аватаркой пользователя.
+     * <p>При удалении пользователя аватарка удаляется каскадно.</p>
+     */
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private AvatarInfo avatarInfo;
 
     /**
-     * Метод установвки аватарки для пользователя. Устанавливается либо стандартная аватарка, либо выбранная пользователем (но тогда она перекодируется для экономии памяти)
-     * @param map - хеш коллекция, хранящая юзернейм и соотв. информацию об аватарке. AvatarInfo либо null == стандартная аватарка, либо аватарка пользователя
+     * Сохраняет аватарку в переданную карту для последующей сериализации.
+     * <p>Ключ — логин пользователя, значение — {@link AvatarInfo}.
+     * Если аватарка не null, кодирует её Base64.</p>
+     *
+     * @param map карта для хранения аватарок
      */
-
-    public void storeAvatar(HashMap<String,AvatarInfo> map) {
-        if (!map.containsKey(getName())) {
-            map.put(getName(),avatarInfo);
-            if(avatarInfo != null)
+    public void storeAvatar(HashMap<String, AvatarInfo> map) {
+        if (!map.containsKey(name)) {
+            map.put(name, avatarInfo);
+            if (avatarInfo != null) {
                 avatarInfo.setEncodedAvatar(Utils.encodeAvatar(avatarInfo.getAvatar()));
+            }
         }
     }
 
     /**
-     * Комментарии на стене пользователя.
-     * Задача связи OneToMany в контексте MySQL.
+     * Комментарии, адресованные этому пользователю.
      */
-
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     /**
-     * Статьи, которые пользователь добавил в закладки (избранное).
-     * Задача связи ManyToMany в контексте MySQL.
-     * FetchType.LAZY - связанные данные должны быть извлечены ТОЛЬКО когда потребуются
+     * Статьи, добавленные пользователем в закладки.
      */
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_articles",
-            joinColumns = @JoinColumn(name = "name"),
+            joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
     private List<Article> articles;
 
     /**
-     * Друзья пользователя
-     * Задача связи ManyToMany в контексте MySQL.
-     * FetchType.LAZY - связанные данные должны быть извлечены ТОЛЬКО когда потребуются
+     * Список друзей пользователя.
      */
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name="user_friends",
+            name = "user_friends",
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "friend_name")
     )
     private List<User> friends;
 
     /**
-     * Когда человек был в сети последний раз.
+     * Время последнего визита пользователя.
      */
     @Column(name = "last_time_online")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastTimeOnline;
 
-    public User(String name, String email, String password, byte enabled, byte activated,String role) {
+    /**
+     * Конструктор с основными полями для создания пользователя программно.
+     *
+     * @param name               логин пользователя
+     * @param email              email пользователя
+     * @param password           зашифрованный пароль
+     * @param enabled            флаг подтверждения email
+     * @param blocked            флаг блокировки
+     * @param role               роль пользователя
+     */
+    public User(String name, String email, String password, byte enabled, byte blocked, String role) {
         this.name = name;
         this.email = email;
         this.encryptedPassword = password;
         this.enabled = enabled;
-        this.blocked = activated;
+        this.blocked = blocked;
         this.role = role;
     }
 
+    /**
+     * Переопределённый метод для краткого текстового представления пользователя.
+     */
     @Override
     public String toString() {
         return "User{" +

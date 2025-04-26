@@ -1,55 +1,65 @@
+
 package mutata.com.github.MatematixProject.service;
 
 import mutata.com.github.MatematixProject.dao.MyResponse;
 import org.springframework.data.domain.Page;
 
 /**
- * Сервис для пагинации
- * @param <T>
+ * Универсальный сервис для поиска и пагинации сущностей.
+ * <p>Определяет основные операции по получению страниц
+ * данных с возможностью фильтрации и сортировки.</p>
+ *
+ * @param <T> тип сущности, которой управляет сервис
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
  */
 public interface MyService<T> {
 
     /**
-     * Найти всех (без каких-либо исключений) на currentPage, itemsPerPage единиц на страницу
-     * @param currentPage - страница, на которой нужно найти сущность
-     * @param itemsPerPage - сколько сущностей должно быть на странице
-     * @return - страница с itemsPerPage сущностями, начиная с currentPage страницы
+     * Получает страницу всех сущностей без фильтрации.
+     *
+     * @param currentPage   номер запрашиваемой страницы (0-based)
+     * @param itemsPerPage  количество элементов на одной странице
+     * @return объект {@link Page} с сущностями типа T и метаданными пагинации
      */
-
-    public Page<T> findAllReturnPage(Integer currentPage,Integer itemsPerPage);
+    Page<T> findAllReturnPage(Integer currentPage, Integer itemsPerPage);
 
     /**
-     * Найти сущностей по параметру findBy, поиск по паттерну find  на currentPage, itemsPerPage единиц на страницу
-     * @param currentPage - страница, на которой нужно найти сущность
-     * @param itemsPerPage - сколько сущностей должно быть на странице
-     * @param findBy - по какому параметру искать (например имя, рейтинг и т.д.)
-     * @param find - паттерн, по которому нужно искать (например Иванов, 32)
-     * @return - страница с itemsPerPage сущностями, начиная с currentPage страницы, с поиском по параметру findBy и паттерну find
+     * Выполняет поиск сущностей по указанному полю и паттерну.
+     *
+     * @param currentPage   номер запрашиваемой страницы (0-based)
+     * @param itemsPerPage  количество элементов на одной странице
+     * @param find          строка-паттерн для поиска (например, часть имени)
+     * @param findBy        имя поля сущности, в котором выполнять поиск
+     * @return контейнер {@link MyResponse} с найденными сущностями и общим числом результатов
      */
-
-    public MyResponse<T> find(Integer currentPage, Integer itemsPerPage, String find, String findBy);
+    MyResponse<T> find(Integer currentPage, Integer itemsPerPage, String find, String findBy);
 
     /**
-     * Найти всех сущностей без исключения на currentPage, itemsPerPage единиц на страницу с сортировкой по парамтеру sortBy в направлении sortDirection
-     * @param currentPage - страница, на которой нужно найти сущность
-     * @param itemsPerPage - сколько сущностей должно быть на странице
-     * @param sortBy - по какому параметру сортировать (например имя, рейтинг и т.д.)
-     * @param sortDirection - направление сортировки (например возраст., убыв.)
-     * @return - страница с itemsPerPage сущностями, начиная с currentPage страницы, с сортировкой по параметру sortBy и с направлением сортровки sortDirection
+     * Получает страницу всех сущностей с сортировкой.
+     *
+     * @param currentPage   номер запрашиваемой страницы (0-based)
+     * @param itemsPerPage  количество элементов на одной странице
+     * @param sortBy        имя поля сущности для сортировки
+     * @param sortDirection направление сортировки ("asc" или "desc")
+     * @return объект {@link Page} с сущностями типа T и метаданными пагинации
      */
-
-    public Page<T> findAllSortedBy(Integer currentPage, Integer itemsPerPage, String sortBy,String sortDirection);
+    Page<T> findAllSortedBy(Integer currentPage, Integer itemsPerPage, String sortBy, String sortDirection);
 
     /**
-     * Найти сущностей по параметру findBy, поиск по паттерну find  на currentPage, itemsPerPage единиц на страницу с сортировкой по парамтеру sortBy в направлении sortDirection
-     * @param currentPage - страница, на которой нужно найти сущность
-     * @param itemsPerPage - сколько сущностей должно быть на странице
-     * @param findBy - по какому параметру искать (например имя, рейтинг и т.д.)
-     * @param find - паттерн, по которому нужно искать (например Иванов, 32)
-     * @param sortBy - по какому параметру сортировать (например имя, рейтинг и т.д.)
-     * @param sortDirection - направление сортировки (например возраст., убыв.)
-     * @return - страница с itemsPerPage сущностями, начиная с currentPage страницы, с поиском по параметру findBy и паттерну find с сортировкой по парамтеру sortBy в направлении sortDirection
+     * Выполняет комбинированный поиск и сортировку сущностей.
+     *
+     * @param currentPage   номер запрашиваемой страницы (0-based)
+     * @param itemsPerPage  количество элементов на одной странице
+     * @param find          строка-паттерн для поиска
+     * @param findBy        имя поля сущности, в котором выполнять поиск
+     * @param sortBy        имя поля сущности для сортировки
+     * @param sortDirection направление сортировки ("asc" или "desc")
+     * @return контейнер {@link MyResponse} с найденными, отфильтрованными и отсортированными сущностями
      */
+    MyResponse findAndSort(Integer currentPage, Integer itemsPerPage,
+                              String find, String findBy,
+                              String sortBy, String sortDirection);
 
-    MyResponse findAndSort(Integer currentPage, Integer itemsPerPage, String find, String findBy, String sortBy,String sortDirection);
+    Long getCount();
 }

@@ -5,36 +5,46 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 /**
- * Репозиторий в контексте Spring, который автоматически создаёт методы для работы с соотв. БД (исходя из названия репозитория)
+ * Репозиторий для управления сущностями {@link ResetPasswordToken}.
+ * <p>Наследует {@link JpaRepository}, предоставляя стандартные
+ * CRUD-операции, а также дополнительные методы для работы с
+ * токенами сброса пароля.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see ResetPasswordToken
+ * @see JpaRepository
  */
 @Repository
-public interface ResetPasswordTokenRepository extends JpaRepository<ResetPasswordToken,Long> {
+public interface ResetPasswordTokenRepository extends JpaRepository<ResetPasswordToken, Long> {
 
     /**
-     * Кастомный метод репозитория дла поиска токена по строковому литералу
-     * @param token - строковой литерал, по которому нужно найти токен
+     * Ищет {@link ResetPasswordToken} по строковому значению токена.
+     *
+     * @param token строковый литерал токена
+     * @return {@link Optional} с найденным токеном или пустой, если не найден
      */
-
     Optional<ResetPasswordToken> findByToken(String token);
 
     /**
-     * Кастомный метод репозитория дла удаления токена по его строковому литералу
-     * @param token - строковой литерал, по которому нужно удалить токен
+     * Удаляет запись {@link ResetPasswordToken} по строковому значению токена.
+     *
+     * @param token строковый литерал токена для удаления
      */
-
     void deleteByToken(String token);
 
     /**
-     * Кастомный метод репозитория дла удаления токена по его строковому литералу
-     * Modifying - позволяет модифицировать запросы: обновлять, удалять данные и расширять возможности аннотации @Query в JpaRepository
-     * Query - MySQL запрос
-     * @param date - Токены, чья expiration дата будет меньше, чем данный параметр будут удалены из БД
+     * Удаляет все токены, у которых дата истечения меньше или равна указанной.
+     * <p>Использует аннотацию {@link Modifying} для модификации данных
+     * и {@link Query} для выполнения кастомного JPQL-запроса.</p>
      *
+     * @param date пороговая дата истечения токенов
      */
-
     @Modifying
     @Query("DELETE FROM ResetPasswordToken t WHERE t.expirationDate <= ?1")
     void deleteByExpirationDateLessThan(LocalDateTime date);

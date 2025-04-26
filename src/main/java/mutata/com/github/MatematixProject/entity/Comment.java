@@ -6,33 +6,39 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+
 /**
- * Класс, представляющий собой сущность, отображаемую в БД. В данном случае сущность комментарий.
- * Entity - Сущность, отображаемая в БД
- * Table - таблица в БД
- * Data - это сокращенная аннотация, сочетающая возможности @ToString, @EqualsAndHashCode, @Getter @Setter и @RequiredArgsConstructor
- * NoArgsConstructor - сказать lombok создавать конструктор без параметров
+ * Сущность комментария в системе.
+ * <p>Представляет собой комментарий пользователя к другому пользователю (receiver).
+ * Хранит текст, дату создания, автора, получателя и рейтинг.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
  */
+@Entity
 @Table(name = "comments")
 @Data
-@Entity
 @NoArgsConstructor
 public class Comment {
+
     /**
-     * Id - является id в таблице БД MySQL
-     * GeneratedValue - инкреминтировать Id-шку для каждой сущности (новой)
-     * Column - с какой колонкой в MySQL связть данное поле
+     * Уникальный идентификатор комментария.
+     * <p>Автоматически генерируется базой данных.</p>
      */
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
+    /**
+     * Текстовое содержимое комментария.
+     */
     @Column(name = "content")
     private String content;
+
     /**
-     * JsonIgnore - исключить определённое данное свойство объекта Java из сериализации и десериализации JSON.
-     * Temporal - указание, что данное поле является типом времени
+     * Дата и время создания комментария.
+     * <p>Не включается в JSON-ответы.</p>
      */
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,29 +46,30 @@ public class Comment {
     private Date date;
 
     /**
-     * Transient - аннотация в Spring, которая указывает, что поле или метод не должны быть сохранены в базе данных
+     * Читаемое строковое представление даты.
+     * <p>Не сохраняется в базе данных и используется для отображения.</p>
      */
-
     @Transient
     private String stringDate;
 
+    /**
+     * Автор комментария (логин пользователя).
+     */
     @Column(name = "author")
     private String author;
 
     /**
-     * Задача связи ManyToOne в контексте MySQL
-     * JsonIgnore - исключить определённое данное свойство объекта Java из сериализации и десериализации JSON.
+     * Получатель комментария.
+     * <p>Связь ManyToOne с таблицей пользователей. Не включается в JSON.</p>
      */
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver")
     @JsonIgnore
     private User receiver;
 
+    /**
+     * Текущий рейтинг комментария (число лайков минус дизлайки).
+     */
     @Column(name = "rating")
-    private long rating;
-
-
-
-
+    private int rating;
 }

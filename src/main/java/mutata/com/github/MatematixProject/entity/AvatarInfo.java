@@ -5,48 +5,57 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
 /**
- * Класс, представляющий собой сущность, отображаемую в БД. В данном случае сущность аватарка.
- * Entity - Сущность, отображаемая в БД
- * Table - таблица в БД
- * Data - это сокращенная аннотация, сочетающая возможности @ToString, @EqualsAndHashCode, @Getter @Setter и @RequiredArgsConstructor
- * NoArgsConstructor - сказать lombok создавать конструктор без параметров
+ * Сущность, представляющая данные аватарки пользователя.
+ * <p>Отображается в таблице <code>avatars</code> и хранит как
+ * бинарное изображение, так и закодированную в Base64 строку (для передачи в JSON).</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
  */
 @Entity
 @Table(name = "avatars")
 @Data
+@NoArgsConstructor
 public class AvatarInfo {
+
     /**
-     * Id - является id в таблице БД MySQL
-     * Column - с какой колонкой в MySQL связть данное поле
+     * Логин пользователя — первичный ключ и одновременно связь с таблицей пользователей.
      */
     @Id
     @Column(name = "username")
     private String username;
+
     /**
-     * Изображение аватарки в виде массива байтов
+     * Собственно бинарные данные изображения аватарки.
      */
-    @Column(name=  "avatar")
+    @Column(name = "avatar")
     private byte[] avatar;
 
+    /**
+     * Связанная сущность пользователя.
+     * <p>Связь OneToOne по полю username, исключается из JSON-сериализации.</p>
+     */
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     @JsonIgnore
     private User user;
 
     /**
-     * Изображение аватарки в закодированном виде строкового литерала
-     * Transient - аннотация в Spring, которая указывает, что поле или метод не должны быть сохранены в базе данных
-     * JsonIgnore - исключить определённое данное свойство объекта Java из сериализации и десериализации JSON.
+     * Закодированная версия аватарки в Base64.
+     * <p>Поле не сохраняется в БД и игнорируется при сериализации JSON.</p>
      */
-
     @Transient
     @JsonIgnore
     private String encodedAvatar;
 
-    public AvatarInfo() {
-
-    }
+    /**
+     * Конструктор для создания сущности с указанием логина пользователя.
+     * <p>Поле avatar остаётся пустым до загрузки изображения.</p>
+     *
+     * @param username логин пользователя, для которого создаётся запись
+     */
     public AvatarInfo(String username) {
         this.username = username;
     }

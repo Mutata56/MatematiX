@@ -12,60 +12,73 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 import java.util.List;
+
 /**
- * Класс конфигурации вебсокета веб-сайта. Используется для обмена данными в реальном времени. Обеспечивает двустороннюю связь между клиентом и сервером, используя одно TCP соединение.
+ * Конфигурация WebSocket для приложения.
+ * <p>Настраивает брокер сообщений, конечные точки (endpoints) для STOMP и
+ * преобразователи сообщений в формате JSON. Обеспечивает двустороннюю связь
+ * между клиентом и сервером через WebSocket.</p>
+ *
  * @author Khaliullin Cyrill
  * @version 1.0.0
- *
- * Configuration - данный класс является классом конфигурации.
- * EnableWebSocketMessageBroker - включение webSocket в системе Spring.
  */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
-
     /**
-     * Метод конфигурации STOMP.
-     * @param config - конфигурация webSocket.
+     * Настраивает брокер сообщений STOMP с префиксами.
+     *
+     * @param config реестр настройки брокера сообщений
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/user"); // prefix
-        config.setApplicationDestinationPrefixes("/application"); // prefix
+        // Включаем встроенный простой брокер с префиксом /user
+        config.enableSimpleBroker("/user");
+        // Устанавливаем префикс назначения для методов контроллера
+        config.setApplicationDestinationPrefixes("/application");
+        // Префикс для отправки сообщений конкретным пользователям
         config.setUserDestinationPrefix("/user");
     }
 
     /**
-     * Метод конфигурации STOMP (Задача конечных точек, где webSocket будет мониторить запросы).
-     * SockJs — это JavaScript библиотека, которая обеспечивает двусторонний междоменный канал связи между клиентом и сервером.
-     * Другими словами SockJs имитирует WebSocket API
-     * @param registry
+     * Регистрирует конечные точки STOMP для подключения клиентов.
+     * <p>Добавляет endpoint "/listenToNewEvents" и разрешает fallback через SockJS
+     * для поддержки клиентов, не работающих с чистым WebSocket.</p>
+     *
+     * @param registry реестр конечных точек STOMP
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Обычное подключение
         registry.addEndpoint("/listenToNewEvents");
+        // Подключение с поддержкой SockJS (fallback для браузеров без WebSocket)
         registry.addEndpoint("/listenToNewEvents").withSockJS();
     }
 
     /**
-     * Метод для настройки преобразователя сообщений в контексте Spring MVC. Создание и установка дефолтных резолвера и преобразователя сообщений в формате JSON.
-      * @param messageConverters - сообщения в контексте Spring MVC
-     * @return false - указывает, что преобразователи по умолчанию НЕ НУЖНО переопределять
+     * Настраивает преобразователи сообщений для обработки JSON.
+     * <p>Добавляет MappingJackson2MessageConverter с дефолтным разрешителем контента,
+     * настроенным на MIME тип application/json.</p>
+     *
+     * @param messageConverters список доступных конвертеров сообщений, которые можно настроить
+     * @return false, чтобы не переопределять конвертеры по умолчанию, а лишь добавить свой
      */
-
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-        // Установка дефолтного резолвера
+        // Создаем резолвер контента и устанавливаем JSON по умолчанию
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
-        // Установка дефолтного MimeType на JSON
         resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
-        // Преобразователь сообщений для сообщений в формате JSON
+
+        // Создаем конвертер JSON и настраиваем его
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        // Конфигурация нашего преобразователя
         converter.setObjectMapper(new ObjectMapper());
         converter.setContentTypeResolver(resolver);
+
+        // Добавляем наш конвертер в список
         messageConverters.add(converter);
+
+        // Возвращаем false, чтобы поддержать другие конвертеры по умолчанию
         return false;
     }
 }

@@ -5,28 +5,41 @@ import mutata.com.github.MatematixProject.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 /**
- * Репозиторий в контексте Spring, который автоматически создаёт методы для работы с соотв. БД (исходя из названия репозитория)
+ * Репозиторий для управления сущностями {@link Comment}.
+ * <p>Наследует {@link JpaRepository}, что предоставляет стандартные
+ * CRUD-операции и дополнительные возможности JPA для работы
+ * с комментариями пользователей.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see Comment
+ * @see JpaRepository
  */
 @Repository
-public interface CommentRepository extends JpaRepository<Comment,Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     /**
-     * Кастомный метод репозитория дла поиска комментариев по пользователю
-     * @param receiver - пользователь, у которого нужно найти комментарии
-     * @return список найденных комментариев
+     * Извлекает все комментарии, адресованные указанному пользователю.
+     * <p>Возвращает список {@link Comment}, связанных с получателем.</p>
+     *
+     * @param receiver пользователь, для которого выбираются комментарии
+     * @return список комментариев, получателю которых соответствует указанный пользователь
      */
     List<Comment> findCommentsByReceiver(User receiver);
+
     /**
-     * Кастомный метод репозитория дла поиска комментариев по пользователю, сортировка по дате
-     * @param receiver - пользователь, у которого нужно найти комментарии
-     * @param pageRequest - сущность страницы с соотв. результатами (Нужна для пагинации)
-     * @return Сущность страницы, заполненная комментариями и соотв. отсортированная
+     * Извлекает комментарии, адресованные указанному пользователю,
+     * с постраничной пагинацией и сортировкой по дате в порядке убывания.
+     * <p>Используется для отображения последних комментариев первыми.</p>
+     *
+     * @param receiver    пользователь, для которого выбираются комментарии
+     * @param pageRequest объект {@link PageRequest}, задающий параметры страницы (номер и размер)
+     * @return объект {@link Page} с комментариями, отсортированными по убыванию даты
      */
     Page<Comment> findCommentsByReceiverOrderByDateDesc(User receiver, PageRequest pageRequest);
-
 }

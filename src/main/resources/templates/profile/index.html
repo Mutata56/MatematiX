@@ -12,12 +12,10 @@
     </style>
     <link rel="preload" th:href="@{/css/profile/main.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" th:href="@{/css/profile/main.css}"></noscript>
-    <link rel="preload" th:href="@{/css/base/bootstrap/modal.min.css}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" th:href="@{/css/base/bootstrap/modal.min.css}"></noscript>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" th:href="@{/css/base/base.css}">
     <link rel="stylesheet" th:href="@{/css/base/bootstrap/button.min.css}">
     <link rel="stylesheet" th:href="@{/css/base/bootstrap/container.min.css}">
@@ -28,7 +26,7 @@
     <link rel="manifest" th:href="@{/img/logo/site.webmanifest}">
 </head>
 
-<body id="body">
+<body style="min-width:1400px" id="body">
 <header id="headerDiv">
     <a th:href="@{/}"><img src="" class="frame-logo" th:src="@{/img/logo_white.svg}" alt="MatematiX"></a>
 </header>
@@ -37,8 +35,8 @@
     <nav>
         <ul>
             <li style="color: white !important; font-size: 17px; cursor: pointer">Профиль</li>
-            <li style="color: white !important; font-size: 17px; cursor: pointer"><a th:id="friendButton" class="nav-link">Друзья</a></li>
-            <li style="color: white !important; font-size: 17px; cursor: pointer"><a th:id="friendButton" class="nav-link">Поиск</a></li>
+            <li style="color: white !important; font-size: 17px; cursor: pointer"><a th:href="@{/friends/{person}(person=${name})}" class="nav-link">Подписчики</a></li>
+            <li style="color: white !important; font-size: 17px; cursor: pointer"><a th:href="@{/find}" class="nav-link">Поиск</a></li>
             <li th:if="${myProfile}" ><a class="nav-link" th:href="@{/settings}">Настройки</a></li>
             <form id="friendForm" th:if="not ${myProfile}" th:action="@{/friendAction}" th:method="POST" class="form">
                 <input type="hidden" th:value="*{name}" name="username">
@@ -63,9 +61,10 @@
 
         </div>
         <!-- Кнопки управления -->
-        <div class="action-buttons-container">
+        <div th:unless="${name == currentUserName}" class="action-buttons-container">
             <!-- Кнопка "Добавить в друзья" -->
-            <button class="action-button add-friend-button">Добавить в друзья</button>
+            <button th:if="${aFriend}" class="action-button add-friend-button" th:id="friendButton">Отписаться</button>
+            <button th:unless="${aFriend}" class="action-button add-friend-button" th:id="friendButton">Подписаться</button>
 
             <!-- Кнопка "Написать сообщение" -->
             <button class="action-button message-button">Написать сообщение</button>
@@ -74,24 +73,6 @@
             <button class="action-button block-button">Заблокировать</button>
         </div>
 
-
-        <div class="friends" th:if="${countOfFriends > 0}">
-            <p id="friends-p"><a data-bs-toggle="modal" data-target="#showFriendsModal" id="friends-a" href="#showFriendsModal">Друзья</a></p>
-            <div class="friends-flex" th:if="${countOfFriends >= 1}">
-                <div th:each="friend : ${friends}">
-                    <div class="avatar-wrapper-medium avatar-wrapper" style="width:72px;height: 72px;border-radius:50%;">
-                        <a th:href="@{/profile/{username}(username=${friend})}">
-                            <img th:unless="${avatars.get(friend) eq null}" style="width: 72px;height: 72px;border-radius: 50%;object-fit: cover" th:src="@{'data:image/webp;base64,' + ${avatars.get(friend).encodedAvatar}}" alt="Avatar">
-                            <img th:if="${avatars.get(friend) eq null}" style="width: 72px;height: 72px;border-radius: 50%;object-fit: cover" th:src="@{/img/UnsetAvatar.webp}" alt="Standard Avatar">
-                        </a>
-                    </div>
-                    <a style="text-decoration:none;" th:href="@{/profile/{username}(username=${friend})}">
-                        <p style="text-decoration:none;margin-top:10px;color: white;overflow-wrap: break-word;max-width: 72px" th:text="${friend}"></p>
-                    </a>
-                </div>
-
-            </div>
-        </div>
     </div>
     <div id="commentsDiv" style="margin-bottom: 60px" class="comments">
         <div class="comments-header">
@@ -106,19 +87,6 @@
                 <button style="margin-top: 150px" id="loadComments">Загрузить комментарии</button>
         </div>
     </div>
-    <div class="modal fade" id="showFriendsModal" tabindex="-1" aria-labelledby="showFriendsModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content" id="showFriendsModalContent">
-                <div class="modal-header text-center">
-                    <h5 class="modal-title" id="showFriendsModalLabel">Друзья</h5>
-                    <button class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
-                </div>
-                <div class="modal-body d-flex" style="padding:40px;flex-wrap: wrap;" id="showFriendsModalBody">
-
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 <script defer src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -127,72 +95,45 @@
     let name = [[${name}]];
     let currentName = [[${currentUserName}]];
     let isUserAlive = [[${isUserAlive}]];
-    let totalPages = [[${totalPages}]];
     let hasMyAvatar = [[${hasMyAvatar}]];
-    let friends = [[${friends}]];
-    let countOfFriends = [[${countOfFriends}]]
+    let aFriend = [[${aFriend}]];
 </script>
 
 <script defer src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script defer th:src="@{/js/stomp.orig.min.js}"></script>
 <script defer type="module" th:src="@{/js/profile/logic.js}"></script>
-<script defer type="module" th:src="@{/js/base/bootstrap/modal.js}"></script>
 <script defer type="text/javascript" th:src="@{/js/ping.js}" sec:authorize="isAuthenticated()"></script>
 <script defer>
 
     let frBt = document.getElementById("friendButton");
-
+    isLoading = false;
     if(frBt != null) {
         frBt.addEventListener("click",(event) => {
             event.preventDefault();
-            document.getElementById("friendForm").submit();
+            if(isLoading) return;
+            isLoading = true;
+             $.ajax({
+                url: "/ajax/FriendAction",   // URL эндпоинта
+                type: "GET",                  // Метод запроса
+                data: ({                       // Параметры запроса
+                    isAFriend: aFriend,
+                    name: name
+                }),
+                success: () => {
+                        aFriend = !aFriend;
+                            if(aFriend) {
+                                frBt.textContent  = "Отписаться";
+                            } else {
+                                frBt.textContent  = "Подписаться";
+                            }
+                            isLoading = false;
+                },// Функция-обработчик успешного ответа
+                complete: () => {
+                    isLoading = false;
+                }
+            });
         });
     }
-
-    let moduleBodyInitialized = false;
-    let modal = document.getElementById("showFriendsModalBody");
-    let currentFriendPage = 1;
-    document.getElementById("friends-a").addEventListener("click",() => {
-        if(!moduleBodyInitialized) {
-            for(let i =0;i < friends.length;i++) {
-                let el = avatars[friends[i]];
-                if(typeof el !== 'undefined' && el != null)
-                    modal.innerHTML = modal.innerHTML + `<a style="margin-bottom:20px;width: 33%;color:white;text-decoration: none" href="/profile/${friends[i]}"><img style="border-radius: 50%" class="avatar-wrapper-medium" src="data:image/webp;base64,${el.avatar}" alt=""><p style="font-size:16px;margin-top: 10px">${friends[i]}</p></a>`;
-                else
-                    modal.innerHTML = modal.innerHTML + `<a style="margin-bottom:20px;width:33%;color:white;text-decoration: none" href="/profile/${friends[i]}"><img style="border-radius: 50%" class="avatar-wrapper-medium"  src="/img/UnsetAvatar.webp" alt=""><p style="font-size:16px;margin-top: 10px">${friends[i]}</p></a>`;
-            }
-            moduleBodyInitialized = true;
-            if(countOfFriends > 6) {
-                let el = document.createElement("button");
-                el.id = "loadFriends";
-                el.textContent = "Больше друзей";
-                el.addEventListener("click",(event) => {
-                    event.preventDefault();
-                    $.ajax({
-                        url: "/ajax/nextFriends",
-                        data: {usersWhoseAvatarsAreLoaded: Object.keys(avatars).join(','),currentPage: currentFriendPage,user: name},
-                        success: renderFriends
-                    });
-                });
-                modal.append(el);
-                const renderFriends = (data) => {
-                    let arr = Object.keys(data);
-                    for (let i = 0; i < arr.length; i++) {
-                        let image = data[arr[i]].avatar == null ? "/img/UnsetAvatar.webp" : `data:image/webp;base64,${data[arr[i]].avatar}`;
-                        let element = `<a style="margin-bottom: 20px;width: 33%;color:white;text-decoration: none" href="/profile/${data[arr[i]].username}"><img style="border-radius: 50%" class="avatar-wrapper-medium" src="${image}" alt=""><p style="font-size: 16px;margin-top:10px">${data[arr[i]].username}</p></a>`
-                        $(element).insertBefore($("#loadFriends"));
-                    }
-                    if(6 + currentFriendPage * 6 >= countOfFriends) {
-                        $("#loadFriends").remove();
-                    }
-                }
-            }
-
-        }
-
-    });
-
-
 </script>
 </body>
 

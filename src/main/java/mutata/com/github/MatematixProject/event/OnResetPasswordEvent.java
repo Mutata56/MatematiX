@@ -6,27 +6,40 @@ import mutata.com.github.MatematixProject.entity.User;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * Класс, описывающий событие, создаваемое по запросу смены пароля.
+ * Событие, генерируемое при запросе сброса пароля пользователя.
+ * <p>Используется для инициирования процесса создания и отправки
+ * ссылки на смену пароля на Email пользователя.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see org.springframework.context.ApplicationEvent
  */
 public class OnResetPasswordEvent extends ApplicationEvent {
+
     /**
-     * Юзер, владеющий токеном
+     * Пользователь, для которого создаётся событие сброса пароля.
+     * <p>Содержит данные для последующей ассоциации с токеном сброса.</p>
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private User user;
 
     /**
-     * Формируемая ссылка, по которой будет проходить пользователь, чтобы подтвердить свою почту.
+     * Базовый URL или контекстный путь приложения,
+     * используемый для формирования полной ссылки сброса пароля.
      */
     @Getter
     private final String url;
 
-    
+    /**
+     * Создаёт новое событие запроса сброса пароля.
+     *
+     * @param user пользователь, запросивший смену пароля
+     * @param url  базовый URL приложения (контекстный путь),
+     *             к которому будет добавлен токен сброса
+     */
     public OnResetPasswordEvent(User user, String url) {
         super(user);
         this.url = url;
         this.user = user;
     }
 }
-

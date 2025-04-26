@@ -1,4 +1,5 @@
 package mutata.com.github.MatematixProject.configuration;
+
 import mutata.com.github.MatematixProject.security.AuthenticationProviderImpl;
 import mutata.com.github.MatematixProject.service.MyUserDetailsService;
 import mutata.com.github.MatematixProject.service.ResetPasswordTokenService;
@@ -15,49 +16,59 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
 import java.time.LocalDateTime;
 
 /**
- * Класс конфигурации защиты веб-сайта. Используется для настройки доступа к определённым страницам, настройки ауентификации, конфигурации,
- * Удаления токенов ResetPassword (Токен для восстановления пароля), VerificationToken (Токен для верификации юзера посредством отправки ему email сообщения)
+ * Конфигурация безопасности веб-приложения.
+ * <p>Настраивает доступ к ресурсам по ролям, параметры формы логина, выход из системы,
+ * а также планирует очистку устаревших токенов в фоновом режиме.</p>
+ *
  * @author Khaliullin Cyrill
  * @version 1.0.0
- *
- * Configuration - данный класс является классом конфигурации.
- * EnableWebSecurity - данный класс используется для активации и настройки веб-безопасности сайта.
- * EnableGlobalMethodSecurity  - доп. слой защиты, защита отдельных методов в бинах ( Настройка доступа к контенту с помощью ролей)
  */
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) // Enable @PreAuthorize Annotation
+@EnableWebSecurity  // Включает веб-безопасность Spring Security
+@EnableGlobalMethodSecurity(prePostEnabled = true)  // Разрешает использование аннотаций @PreAuthorize
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    /** Объект, отвечающий за ауентификацию */
+    /**
+     * Провайдер аутентификации, реализующий логику проверки учетных данных.
+     */
     private final AuthenticationProvider provider;
 
-    /** Сервис для работы с БД VerificationTokens
+    /**
+     * Сервис для работы с токенами верификации email.
      * @see mutata.com.github.MatematixProject.entity.token.VerificationToken
      */
-
     private final VerificationTokenService verificationTokenService;
 
-    /** Сервис для работы с БД ResetPasswordToken
+    /**
+     * Сервис для работы с токенами сброса пароля.
      * @see mutata.com.github.MatematixProject.entity.token.ResetPasswordToken
      */
-
     private final ResetPasswordTokenService resetPasswordTokenService;
 
-    /** Сервис для работы с БД users (Пользователи)
+    /**
+     * Сервис для загрузки деталей пользователя при аутентификации.
      * @see MyUserDetailsService
      */
-
     private final MyUserDetailsService myUserDetailsService;
 
-
-
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param provider - провайдер аутентификации
+     * @param verificationTokenService - сервис для токенов верификации
+     * @param resetPasswordTokenService - сервис для токенов сброса пароля
+     * @param myUserDetailsService - сервис для загрузки данных пользователя
+     */
     @Autowired
-    public SecurityConfiguration(AuthenticationProviderImpl provider, VerificationTokenService verificationTokenService,
-                                 ResetPasswordTokenService resetPasswordTokenService, MyUserDetailsService myUserDetailsService) {
+    public SecurityConfiguration(
+            AuthenticationProviderImpl provider,
+            VerificationTokenService verificationTokenService,
+            ResetPasswordTokenService resetPasswordTokenService,
+            MyUserDetailsService myUserDetailsService) {
         this.provider = provider;
         this.verificationTokenService = verificationTokenService;
         this.resetPasswordTokenService = resetPasswordTokenService;
@@ -65,16 +76,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Конфигурация объекта, отвечающего за регистрацию пользователя в системе.
+     * Регистрирует пользовательский сервис в AuthenticationManagerBuilder.
+     *
+     * @param builder билдер менеджера аутентификации
+     * @throws Exception в случае ошибки конфигурации
      */
-
     @Autowired
     public void registerGlobalAuthentication(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(myUserDetailsService);
     }
 
     /**
-     * Конфигурация объекта, отвечающего за ауентификацию пользователя в системе.
+     * Конфигурирует провайдер аутентификации.
+     *
+     * @param auth билдер аутентификации
+     * @throws Exception в случае ошибки конфигурации
      */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -82,12 +98,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Конфигурация входящего http запроса по ролям, задача страницы для ауентификации в том числе логина и регистрации, лог-аута.
-     * @param http -  http запрос, поступающий на сервер со стороны клиента.
+     * Настройка правил доступа к HTTP-ресурсам по URL и ролям,
+     * а также конфигурация страниц логина и выхода.
+     *
+     * @param http объект настройки HTTP безопасности
+     * @throws Exception в случае ошибки конфигурации
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/api/**").hasRole("ADMIN")
                 .antMatchers("/ajax/**").permitAll()
                 .antMatchers("/settings/**").authenticated()
@@ -109,21 +128,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/register").anonymous()
                 .antMatchers("/auth/forgotPassword").anonymous()
                 .antMatchers("/auth//process_forgotPassword").anonymous()
-                .antMatchers("/auth/resetPassword").anonymous()
-                .antMatchers("/h2/**").permitAll() // FIXME Тестирование ДБ h2, запретить для ординарных пользователей в будущшем
-                .anyRequest().authenticated().and()
-                .formLogin().loginPage("/auth/login")
+                .antMatchers("/auth/resetPassword").permitAll()
+                .antMatchers("/h2/**").permitAll()  // FIXME: Отключить доступ к H2 в проде
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/auth/login")
                 .loginProcessingUrl("/auth/process_login")
-                .defaultSuccessUrl("/",false)
-                .failureHandler(authenticationFailureHandler()).and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/").
-                    and().exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                .defaultSuccessUrl("/", false)
+                .failureHandler(authenticationFailureHandler())
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler());
     }
 
     /**
-     * Удаление тех VerificationToken, которые существуют в системе больше чем EXPIRATION_IN_HOURS часов в системе, дабы те не висели мёртвым грузом. Данная операция выполняется раз в сутки
-     * @see mutata.com.github.MatematixProject.entity.token.VerificationToken
-     * fixedRate = 60 * 60 * 24 * 1000 (мс).
+     * Периодическая очистка устаревших VerificationToken во избежание накопления.
+     * Выполняется раз в сутки.
      */
     @Scheduled(fixedRate = 3600 * 24000)
     public void purgeExpiredVerificationTokens() {
@@ -131,32 +156,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     *  Удаление тех ResetPasswordToken, которые существуют в системе больше чем EXPIRATION_IN_HOURS часов в системе, дабы те не висели мёртвым грузом. Данная операция выполняется раз в сутки
-     * @see mutata.com.github.MatematixProject.entity.token.ResetPasswordToken
-     * fixedRate = 60 * 60 * 24 * 1000 (мс).
+     * Периодическая очистка устаревших ResetPasswordToken во избежание накопления.
+     * Выполняется раз в сутки.
      */
-
     @Scheduled(fixedRate = 3600 * 4000)
     public void purgeExpiredResetPasswordTokens() {
         resetPasswordTokenService.deleteExpiredSince(LocalDateTime.now());
     }
 
     /**
-     * Конфигурация объекта, отвечающего за запрет получения какого-либо контента для пользователя.
+     * Бин для обработки отказа в доступе (HTTP 403).
+     *
+     * @return экземпляр AccessDeniedHandler
      */
-
     @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
+    public AccessDeniedHandler accessDeniedHandler() {
         return new mutata.com.github.MatematixProject.security.AccessDeniedHandler();
     }
 
     /**
-     * Конфигурация объекта, отвечающего за ошибку во время ауентификации пользователя.
+     * Бин для обработки неудачных попыток аутентификации.
+     *
+     * @return экземпляр AuthenticationFailureHandler
      */
-
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new mutata.com.github.MatematixProject.security.AuthenticationFailureHandler();
     }
-
 }

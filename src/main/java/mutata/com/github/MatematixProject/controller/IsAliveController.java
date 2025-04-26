@@ -1,4 +1,5 @@
 package mutata.com.github.MatematixProject.controller;
+
 import mutata.com.github.MatematixProject.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,49 +10,71 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Контроллер, нужный для отслеживания активности пользователя (находится ли он в сети?). Данный контроллер перехватывает все запросы по адресу "/isAlive" и устанавливает соотв. значение в БД для отображения активности пользователя.
+ * Контроллер для отслеживания активности пользователя.
+ * <p>Обрабатывает запросы по префиксу <code>/isAlive</code> и позволяет:
+ * <ul>
+ *   <li>Устанавливать метку последнего отпинга пользователя (метод setAlive).</li>
+ *   <li>Проверять, активен ли текущий или указанный пользователь (методы isAlive и isUserAlive).</li>
+ * </ul>
+ * Информация хранится через <code>UserUtils</code> в базе данных для последующего отображения статуса online/offline.
+ * </p>
+ *
  * @author Khaliullin Cyrill
  * @version 1.0.0
- *
- * Controller - данный класс является контроллером (предназначен для непосредственной обработки запросов от клиента и возвращения результатов).
- * RequestMapping - обрабытывает все запросы с префиксом /isAlive/...
  */
-@RequestMapping("/isAlive")
 @Controller
+@RequestMapping("/isAlive")
 public class IsAliveController {
 
-    private  final UserUtils userUtils;
+    /**
+     * Утилита для работы с активностью пользователей (чтение/запись последнего пинга).
+     */
+    private final UserUtils userUtils;
 
+    /**
+     * Внедрение зависимости <code>UserUtils</code> через конструктор.
+     *
+     * @param userUtils сервис для управления метками активности пользователей
+     */
     @Autowired
     public IsAliveController(UserUtils userUtils) {
         this.userUtils = userUtils;
     }
 
     /**
-     * Метод, отвечающий за установку последнего онлайна пользователя.
-     * @return не играет роли
+     * Устанавливает в базе отметку о том, что текущий пользователь активен.
+     * <p>В качестве идентификатора берётся имя из контекста Spring Security.</p>
+     *
+     * @return <code>true</code>, если отметка успешно сохранена, <code>false</code> — иначе
      */
     @GetMapping("/setAlive")
     public @ResponseBody boolean setAlive() {
-        return userUtils.setAlive(SecurityContextHolder.getContext().getAuthentication().getName()); // Установка в БД последнего онлайна пользователя
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userUtils.setAlive(username);
     }
 
     /**
-     * Метод, перенаправляющий на isUserAlive. Нужен т.к. не принимает никаких аргументов, но в свою очередь передаёт аргумент в виде имени текущего пользователя.
-     * @return
+     * Проверяет активность текущего пользователя.
+     * <p>Вызывает метод <code>isUserAlive</code> передавая имя пользователя из контекста.</p>
+     *
+     * @return <code>true</code>, если пользователь активен, <code>false</code> — иначе
      */
     @GetMapping("/isAlive")
     public @ResponseBody boolean isAlive() {
-        return isUserAlive(SecurityContextHolder.getContext().getAuthentication().getName());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return isUserAlive(username);
     }
 
     /**
-     * Метод, отвечает за определения последней активности пользоавтеля (последний  *пинг* по данному запросу)
-     * @param username
-     * @return Подключен ли пользоавтель к сайту
+     * Проверяет активность указанного пользователя по имени.
+     * <p>Определяет, был ли последний пинг пользователя в пределах заданного интервала
+     * (настраиваемый в UserUtils).</p>
+     *
+     * @param username имя пользователя для проверки активности (опционально)
+     * @return <code>true</code>, если пользователь считается активным, <code>false</code> — иначе
      */
     @GetMapping("/isUserAlive")
-    public @ResponseBody boolean isUserAlive(@RequestParam(required = false ) String username) {
+    public @ResponseBody boolean isUserAlive(@RequestParam(required = false) String username) {
         return userUtils.isAlive(username);
     }
 }

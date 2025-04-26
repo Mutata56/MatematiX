@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>mutata.com.github</groupId>
 	<artifactId>MatematixProject</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>MatematixProject</name>
-	<description>Сайт о Математике</description>
+	<description>Сайт о Математике. Пет проект</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

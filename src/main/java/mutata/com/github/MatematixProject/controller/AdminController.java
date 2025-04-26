@@ -1,61 +1,87 @@
 package mutata.com.github.MatematixProject.controller;
 
-
-
-import mutata.com.github.MatematixProject.dao.MyResponse;
+import mutata.com.github.MatematixProject.entity.AvatarInfo;
 import mutata.com.github.MatematixProject.entity.User;
 import mutata.com.github.MatematixProject.entity.token.ResetPasswordToken;
 import mutata.com.github.MatematixProject.entity.token.VerificationToken;
 import mutata.com.github.MatematixProject.event.OnRegistrationCompleteEvent;
-import mutata.com.github.MatematixProject.service.*;
+import mutata.com.github.MatematixProject.event.OnResetPasswordEvent;
+import mutata.com.github.MatematixProject.service.ResetPasswordTokenService;
+import mutata.com.github.MatematixProject.service.UserService;
+import mutata.com.github.MatematixProject.service.VerificationTokenService;
+import mutata.com.github.MatematixProject.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static mutata.com.github.MatematixProject.util.Utils.pagination;
+import static mutata.com.github.MatematixProject.util.Utils.sharedLogicForPagination;
+
 /**
- * Контроллер всего, что свзяано с администрированием. Используется для получения доступа к админ-панели, удаления юзера из системы, обновления его данных, пагинации юзеров в CRUD системе.
+ * Контроллер для административных операций:
+ * <ul>
+ *   <li>Просмотр и управление пользователями</li>
+ *   <li>Управление токенами верификации и сброса пароля</li>
+ *   <li>CRUD операции через AJAX</li>
+ *   <li>Пагинация и сортировка сущностей</li>
+ * </ul>
+ * <p>Обрабатывает запросы по пути <code>/admin</code>.</p>
+ *
  * @author Khaliullin Cyrill
  * @version 1.0.0
- *
- * Controller - данный класс является контроллером (предназначен для непосредственной обработки запросов от клиента и возвращения результатов).
- * RequestMapping - обрабытывает все запросы с префиксом /admin/...
  */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-
     /**
-     * Класс, созданный для конвертации класса User в JSON формат
+     * Интерфейс-маркер для объектов, возвращаемых в AJAX (конвертация в JSON).
      */
     private interface JavaScript {
-
     }
-    private class JavaScriptUser implements JavaScript{
+
+    /**
+     * Представление пользователя в формате JSON для JavaScript.
+     */
+    private class JavaScriptUser implements JavaScript {
         public final String name;
         public final String email;
         public final byte blocked;
         public final byte enabled;
-        public final String role; // Роль пользователя в системе: ADMIN,USER
+        public final String role;
+        public  String avatar;
+        public  int rating;
+        /**
+         * Конструктор формирования JS-объекта из User.
+         * @param user исходный пользователь
+         */
         JavaScriptUser(User user) {
             this.name = user.getName();
             this.blocked = user.getBlocked();
             this.email = user.getEmail();
             this.enabled = user.getEnabled();
             this.role = user.getRole();
+            this.rating = user.getRating();
+        }
+        /**
+         * Конструктор формирования JS-объекта из User и их аватарок.
+         * Нужен в случаях, когда требуется загрузка аватарок.
+         * @param user исходный пользователь
+         * @param avatarInfo информация об аватарке пользователя.
+         */
+        JavaScriptUser(User user,AvatarInfo avatarInfo) {
+            this(user);
+            if(avatarInfo != null) this.avatar = Utils.encodeAvatar(avatarInfo.getAvatar());
         }
 
         @Override
@@ -71,42 +97,61 @@ public class AdminController {
     }
 
     /**
-     * Класс, созданный для конвертации класса User в JSON формат
+     * Представление токена (verification/reset) в формате JSON для JavaScript.
      */
     private class JavaScriptToken implements JavaScript {
         public final String token;
         public final String user;
         public final Long id;
-
         public final String expirationDate;
 
+        /**
+         * Конструктор из VerificationToken.
+         * @param token объект VerificationToken
+         */
         JavaScriptToken(VerificationToken token) {
             this.token = token.getToken();
             this.user = token.getUserName();
             this.id = token.getId();
-            this.expirationDate = token.getExpirationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            this.expirationDate = token.getExpirationDate()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
+
+        /**
+         * Конструктор из ResetPasswordToken.
+         * @param token объект ResetPasswordToken
+         */
         JavaScriptToken(ResetPasswordToken token) {
             this.token = token.getToken();
             this.user = token.getUserName();
             this.id = token.getId();
-            this.expirationDate = token.getExpirationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            this.expirationDate = token.getExpirationDate()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
-
     }
 
-    /**
-     *  Объект, предназначенный для работы с БД users (Пользователи)
-     */
+    /** Сервис для работы с пользователями. */
     private final UserService userService;
-
+    /** Публикатор событий Spring. */
     private final ApplicationEventPublisher publisher;
-
+    /** Сервис для работы с VerificationToken. */
     private final VerificationTokenService verificationTokenService;
-
+    /** Сервис для работы с ResetPasswordToken. */
     private final ResetPasswordTokenService resetPasswordTokenService;
+
+    /**
+     * Конструктор для внедрения зависимостей.
+     * @param userService сервис пользователей
+     * @param verificationTokenService сервис VerificationToken
+     * @param resetPasswordTokenService сервис ResetPasswordToken
+     * @param publisher компонент публикации событий
+     */
     @Autowired
-    public AdminController(UserService userService,VerificationTokenService verificationTokenService,ResetPasswordTokenService resetPasswordTokenService,ApplicationEventPublisher publisher) {
+    public AdminController(
+            UserService userService,
+            VerificationTokenService verificationTokenService,
+            ResetPasswordTokenService resetPasswordTokenService,
+            ApplicationEventPublisher publisher) {
         this.userService = userService;
         this.verificationTokenService = verificationTokenService;
         this.resetPasswordTokenService = resetPasswordTokenService;
@@ -114,127 +159,123 @@ public class AdminController {
     }
 
     /**
-     * Метод, отвечающий за показ начальной (Главной) страницы CRDU системы
-     * @param token - токен  для защиты уязвимых перед CSRF ресурсов.
-     * @param model - модель в контексе MVC.
-     * @param sortBy - параметр, по которому необходимо сортировать пользователей в CRUD системе.
-     * @param findBy - параметр, по которому необходимо искать пользователей в CRUD системе.
-     * @param currentPage - параметр, отвечающий за номер отображаемой страницы в CRUD системе.
-     * @param itemsPerPage - параметр, отвечающий за кол-во пользователей, которых нужно показывать в CRUD системе.
-     * @param find - параметр, отвечающий за задание паттерна, по которому нужно искать пользователя в CRUD системе.
-     * @param sortDirection - параметр, отвечающий за направление сортировки в CRUD системе (Возр., убыв.).
-     * @return "/admin/index" - JSP страница, предназначенная для запроса по данному адресу
+     * Отображение главной страницы админ-панели с пагинацией.
+     * @param token CSRF токен для форм
+     * @param model модель MVC
+     * @param sortBy поле сортировки (опционально)
+     * @param findBy поле поиска (опционально)
+     * @param currentPage номер текущей страницы (опционально)
+     * @param itemsPerPage число элементов на странице (опционально)
+     * @param find строка поиска (опционально)
+     * @param sortDirection направление сортировки (asc/desc)
+     * @return путь к шаблону "/admin/index"
      */
     @GetMapping(value = {"/index","/",""})
-    public String showAdminPanel(CsrfToken token, Model model, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String findBy,
-                                 @RequestParam(required = false) Integer currentPage, @RequestParam(required = false) Integer itemsPerPage,
-                                 @RequestParam(required = false) String find,
-                                 @RequestParam(required = false) String sortDirection) {
-        sharedLogicForPagination(token,model,sortBy,findBy,currentPage,itemsPerPage,find,sortDirection,userService);
+    public String showAdminPanel(
+            CsrfToken token,
+            Model model,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String findBy,
+            @RequestParam(required = false) Integer currentPage,
+            @RequestParam(required = false) Integer itemsPerPage,
+            @RequestParam(required = false) String find,
+            @RequestParam(required = false) String sortDirection) {
+        sharedLogicForPagination(token, model, sortBy, findBy,
+                currentPage, itemsPerPage, find, sortDirection, userService);
         return "/admin/index";
     }
 
 
-    /**
-     * Метод, отвечающий за пагинацию сущностей в системе CRUD.
-     * @param service - сервис для работы с БД
-     * @param model - модель в контексе MVC.
-     * @param sortBy - параметр, по которому необходимо сортировать  в CRUD системе.
-     * @param findBy - параметр, по которому необходимо искать  в CRUD системе.
-     * @param currentPage - параметр, отвечающий за номер отображаемой страницы в CRUD системе.
-     * @param itemsPerPage - параметр, отвечающий за кол-во сущностей, которых нужно показывать в CRUD системе.
-     * @param find - параметр, отвечающий за задание паттерна, по которому нужно искать пользователя в CRUD системе.
-     * @param sortDirection - параметр, отвечающий за направление сортировки в CRUD системе (Возр., убыв.).
-     */
-    private <T> void pagination(MyService<T> service, Integer itemsPerPage, Integer currentPage, String sortBy, String find, String findBy, String sortDirection, Model model) {
-
-        currentPage = currentPage == null || currentPage <= 0  ? 1 : currentPage; // Если запрос пришёл без указания currentPage
-        itemsPerPage = itemsPerPage == null ? 15 : itemsPerPage; // Если запрос пришёл без указания itemsPerPage
-        sortDirection = sortDirection == null ? "asc" : sortDirection; // Если запрос пришёл без указания sortDirection
-        model.addAttribute("currentPage",currentPage);
-        model.addAttribute("itemsPerPage",itemsPerPage);
-        model.addAttribute("totalEntities",userService.getCount()); // Сколько всего сущностей в БД
-        Page<T> page = null; // Конечный результат, коллекция юзеров
-        if(sortBy == null || sortBy.isEmpty()) { // Если не нужно сортировать.
-            if(find == null || find.isEmpty()) { // Если не нужно искать по параметру find
-                page = service.findAllReturnPage(currentPage - 1,itemsPerPage);
-                model.addAttribute("objects",page.getContent()); // Сущности, попавшие в пагинацию
-                model.addAttribute("total",page.getTotalPages());
-            } else {
-                MyResponse<T> response = service.find(currentPage - 1,itemsPerPage,find,findBy);
-                model.addAttribute("objects",response.getContent()); // Сущности, попавшие в пагинацию
-                model.addAttribute("total",(int) Math.ceil(response.getTotal() / (itemsPerPage * 1.0)));
-            }
-        } else {
-            if(find == null || find.isEmpty()) {
-                page = service.findAllSortedBy(currentPage - 1,itemsPerPage,sortBy,sortDirection);
-                model.addAttribute("objects",page.getContent()); // Сущности, попавшие в пагинацию
-                model.addAttribute("total",page.getTotalPages()); //
-            } else {
-                MyResponse<User> response =  service.findAndSort(currentPage - 1,itemsPerPage,find,findBy,sortBy,sortDirection);
-                model.addAttribute("objects",response.getContent()); // Сущности, попавшие в пагинацию
-                model.addAttribute("total",(int) Math.ceil(response.getTotal() / (itemsPerPage * 1.0)));
-            }
-        }
-
-        model.addAttribute("sortDirection",sortDirection);
-
-    }
 
     /**
-     * Метод обновления сущности посредством ajax запроса по адресу "/ajax/update"
-
-     * @return true/false в зависимости от того, была ли сущность обновлена.
+     * Обновление/создание пользователя через AJAX.
+     * @param username имя пользователя
+     * @param email почта
+     * @param blocked заблокирован ли пользователь
+     * @param activated активирован ли аккаунт
+     * @param role роль пользователя
+     * @return true если операция успешна
      */
     @PatchMapping("/ajax/updatePerson")
-    public @ResponseBody boolean updateAjax(@RequestParam String username,@RequestParam String email, @RequestParam Boolean blocked, @RequestParam Boolean activated,@RequestParam String role ) {
+    public @ResponseBody boolean updateAjax(
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam Boolean blocked,
+            @RequestParam Boolean activated,
+            @RequestParam String role) {
         var tempUser = userService.findByNameIgnoreCase(username.trim());
-        boolean hasToBeCreated = tempUser == null; // Отвечает за то, нужно ли создавать нового пользователя ?
+        boolean hasToBeCreated = (tempUser == null);
         if (hasToBeCreated) {
             tempUser = new User();
             tempUser.setName(username);
-            tempUser.setEncryptedPassword("12345"); // Стандартный пароль для нового пользователя
+            tempUser.setEncryptedPassword("12345");
         }
         tempUser.setEmail(email);
         tempUser.setBlocked((byte) (blocked ? 1 : 0));
         tempUser.setEnabled((byte) (activated ? 1 : 0));
         tempUser.setRole(role);
         try {
-            if(hasToBeCreated)
-                userService.save(tempUser); // Если нужно создавать нового пользоавтеля, то шифруем пароль
+            if (hasToBeCreated)
+                userService.save(tempUser);
             else
-                userService.saveWithoutPasswordEncryption(tempUser); // Сохранение пользователя без повторной шифроки пароля ( она была на стадии регистрации)
+                userService.saveWithoutPasswordEncryption(tempUser);
         } catch (Exception exception) {
             exception.printStackTrace();
             return false;
         }
-
         return true;
     }
 
+    /**
+     * Обновление или создание VerificationToken через AJAX.
+     * @param tokenString исходный токен (опционально)
+     * @param date строка даты истечения YYYY-MM-DD HH:mm:ss
+     * @param username имя пользователя
+     * @param id идентификатор токена (опционально)
+     * @param request HTTP запрос для контекста
+     * @return строка "token id"
+     */
     @PatchMapping("/ajax/updateVerificationToken")
-    public @ResponseBody String updateVerificationToken(@RequestParam(required = false) String tokenString, @RequestParam String date, @RequestParam String username, @RequestParam(required = false) Long id, HttpServletRequest request) {
+    public @ResponseBody String updateVerificationToken(
+            @RequestParam(required = false) String tokenString,
+            @RequestParam String date,
+            @RequestParam String username,
+            @RequestParam(required = false) Long id,
+            HttpServletRequest request) {
         var token = verificationTokenService.findById(id);
-        var theUser = userService.findByNameIgnoreCase(username.trim()); // Пользователь, к которому привязан токен
-        if(token == null) {
-           //  publisher.publishEvent(new OnRegistrationCompleteEvent(theUser,request.getContextPath())); // Создание нового ивента (*Завершение регистрации*), нужно, чтобы подтвердить почту пользователя.
-           token = new VerificationToken();
+        var theUser = userService.findByNameIgnoreCase(username.trim());
+        if (token == null) {
+            publisher.publishEvent(new OnRegistrationCompleteEvent(theUser, request.getContextPath()));
+            return theUser.getVerificationToken().getToken() + theUser.getVerificationToken().getId();
         }
         token.setToken(UUID.randomUUID().toString());
         token.setUser(theUser);
-
         token.setExpirationDate(LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         verificationTokenService.save(token);
         return token.getToken() + " " + token.getId();
     }
 
+    /**
+     * Обновление или создание ResetPasswordToken через AJAX.
+     * @param tokenString исходный токен (опционально)
+     * @param date строка даты истечения YYYY-MM-DD HH:mm:ss
+     * @param username имя пользователя
+     * @param id идентификатор токена (опционально)
+     * @param request HTTP запрос для контекста
+     * @return строка "token id"
+     */
     @PatchMapping("/ajax/updateResetPasswordToken")
-    public @ResponseBody String updateResetPasswordToken(@RequestParam(required = false) String tokenString, @RequestParam String date, @RequestParam String username, @RequestParam(required = false) Long id, HttpServletRequest request) {
+    public @ResponseBody String updateResetPasswordToken(
+            @RequestParam(required = false) String tokenString,
+            @RequestParam String date,
+            @RequestParam String username,
+            @RequestParam(required = false) Long id,
+            HttpServletRequest request) {
         var token = resetPasswordTokenService.findById(id);
-        var theUser = userService.findByNameIgnoreCase(username.trim()); // Пользователь, к которому привязан токен
-        if(token == null) {
-           //  publisher.publishEvent(new OnRegistrationCompleteEvent(theUser,request.getContextPath())); // Создание нового ивента (*Завершение регистрации*), нужно, чтобы подтвердить почту пользователя.
-           token = new ResetPasswordToken();
+        var theUser = userService.findByNameIgnoreCase(username.trim());
+        if (token == null) {
+            publisher.publishEvent(new OnResetPasswordEvent(theUser, request.getContextPath()));
+            return theUser.getResetPasswordToken().getToken() + theUser.getResetPasswordToken().getId();
         }
         token.setToken(UUID.randomUUID().toString());
         token.setUser(theUser);
@@ -244,12 +285,15 @@ public class AdminController {
     }
 
     /**
-     * Метод удаления сущности по юзернейму/токену посредством ajax запроса по адресу "/ajax/delete"
-     * @param data - юзернейм пользователя/ строковое представление токена, которого нужно удалить.
-     * @return true/false - взамисимости от того, произошло ли удаление.
+     * Удаление пользователя или токена через AJAX.
+     * @param data значение username или id токена
+     * @param clazz тип сущности: "user", "verificationToken", "resetPasswordToken"
+     * @return true при успешном удалении
      */
     @DeleteMapping("/ajax/delete")
-    public @ResponseBody boolean deleteAjax(@RequestParam String data,@RequestParam String clazz) {
+    public @ResponseBody boolean deleteAjax(
+            @RequestParam String data,
+            @RequestParam String clazz) {
         try {
             if ("user".equals(clazz)) {
                 userService.delete(userService.findByNameIgnoreCase(data));
@@ -265,89 +309,118 @@ public class AdminController {
         return true;
     }
 
-
-
     /**
-     * Метод получения юзеров, подходящих по всем параметрам, посредством ajax запроса по адресу "/ajax/process/"
-     * @param sortBy - параметр, по которому необходимо сортировать пользователей в CRUD системе.
-     * @param findBy - параметр, по которому необходимо искать пользователей в CRUD системе.
-     * @param sortDirection - параметр, отвечающий за направление сортировки в CRUD системе (Возр., убыв.).
-     * @param itemsPerPage - параметр, отвечающий за кол-во пользователей, которых нужно показывать в CRUD системе.
-     * @param currentPage - параметр, отвечающий за номер отображаемой страницы в CRUD системе.
-     * @param find - параметр, отвечающий за задание паттерна, по которому нужно искать пользователя в CRUD системе.
-     * @param model - модель в контексе MVC.
-     * @return list - список юзеров, подходящих под запрос.
+     * Обрабатывает AJAX-запрос для получения списка сущностей с поддержкой пагинации, поиска и сортировки.
+     * <p>В зависимости от параметра <code>clazz</code> возвращает либо список пользователей, либо список
+     * токенов в контейнере с общим количеством элементов.</p>
+     *
+     * @param sortBy          поле, по которому требуется сортировка (или <code>null</code> для отключения)
+     * @param findBy          поле, по которому осуществляется поиск (или <code>null</code> для отключения)
+     * @param sortDirection   направление сортировки: "asc" или "desc" (или <code>null</code>)
+     * @param itemsPerPage    количество элементов на странице (или <code>null</code> для значения по умолчанию)
+     * @param currentPage     номер запрашиваемой страницы (1‑based, или <code>null</code> для первой)
+     * @param find            строка поиска (или <code>null</code> для отключения поиска)
+     * @param hasToLoadAvatars флаг, указывающий, нужно ли подгружать данные аватаров для пользователей
+     * @param model           модель MVC для передачи атрибутов пагинации и результатов
+     * @param clazz           тип запрашиваемых сущностей: "user", "verificationToken" или "resetPasswordToken"
+     * @return контейнер {@link Utils.Container}, содержащий список DTO-объектов {@link JavaScript}
+     *         и общее число элементов (total pages или total records в зависимости от реализации)
      */
     @GetMapping("/ajax/process")
-    public @ResponseBody List<JavaScript> processAjax(@RequestParam(required = false) String sortBy, @RequestParam(required = false) String findBy,
-                                                    @RequestParam(required = false) String sortDirection,@RequestParam(required = false) Integer itemsPerPage,
-                                                    @RequestParam(required = false) Integer currentPage,@RequestParam(required = false) String find,
-                                                    Model model, @RequestParam String clazz) {
+    public @ResponseBody Utils.Container<List<JavaScript>,Integer> processAjax(
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String findBy,
+            @RequestParam(required = false) String sortDirection,
+            @RequestParam(required = false) Integer itemsPerPage,
+            @RequestParam(required = false) Integer currentPage,
+            @RequestParam(required = false) String find,
+            @RequestParam(required = false) boolean hasToLoadAvatars,
+            Model model,
+            @RequestParam String clazz) {
         sortBy = "noSort".equals(sortBy) ? null : sortBy;
-        if("user".equals(clazz)) {
-            pagination(userService,itemsPerPage,currentPage,sortBy,find,findBy,sortDirection,model);
-            // Извлечение юзеров
+        if ("user".equals(clazz)) {  // Пользователь
+            pagination(userService, itemsPerPage, currentPage, sortBy, find, findBy, sortDirection, model);
             List<User> users = (List<User>) model.getAttribute("objects");
             List<JavaScript> list = new ArrayList<>();
-            if(users != null)
-                users.forEach(c -> list.add(new JavaScriptUser(c)));
-            return list;
-        } else if("verificationToken".equals(clazz)){
-            pagination(verificationTokenService,itemsPerPage,currentPage,sortBy,find,findBy,sortDirection,model);
-            // Извлечение юзеров
+            if(users != null) {
+                if (hasToLoadAvatars) users.forEach(c -> list.add(new JavaScriptUser(c,c.getAvatarInfo())));
+                else  users.forEach(c -> list.add(new JavaScriptUser(c)));
+            }
+
+            return new Utils.Container<>(list,(Integer) model.getAttribute("total"));
+        } else if ("verificationToken".equals(clazz)) {
+            pagination(verificationTokenService, itemsPerPage, currentPage, sortBy, find, findBy, sortDirection, model);
             List<VerificationToken> users = (List<VerificationToken>) model.getAttribute("objects");
             List<JavaScript> list = new ArrayList<>();
-            if(users != null)
-                users.forEach(c -> list.add(new JavaScriptToken(c)));
-            return list;
-        } else {
-            pagination(resetPasswordTokenService,itemsPerPage,currentPage,sortBy,find,findBy,sortDirection,model);
-            // Извлечение юзеров
+            if (users != null) users.forEach(c -> list.add(new JavaScriptToken(c)));
+            return new Utils.Container<>(list,(Integer) model.getAttribute("total"));
+        } else if ("resetPasswordToken".equals(clazz)) {
+            pagination(resetPasswordTokenService, itemsPerPage, currentPage, sortBy, find, findBy, sortDirection, model);
             List<ResetPasswordToken> users = (List<ResetPasswordToken>) model.getAttribute("objects");
             List<JavaScript> list = new ArrayList<>();
-            if(users != null)
-                users.forEach(c -> list.add(new JavaScriptToken(c)));
-            return list;
+            if (users != null) users.forEach(c -> list.add(new JavaScriptToken(c)));
+            return new Utils.Container<>(list,(Integer) model.getAttribute("total"));
+        } else { // Пользователь ( страница с друзьями, требует отдельной обработки)
+            pagination(userService, itemsPerPage, currentPage, sortBy, find, findBy, sortDirection, model);
+            List<User> users = (List<User>) model.getAttribute("objects");
+            // Собираем карту аватарок друзей
+            List<JavaScript> list = new ArrayList<>();
+            if (users != null) {
+                users.forEach(c -> list.add(new JavaScriptUser(c,c.getAvatarInfo())));
+            }
+            return new Utils.Container<>(list,(Integer) model.getAttribute("total"));
         }
     }
 
     /**
-     * Общая логика для пагинации. Добавление стандартных параметров в модель.
+     * Отображение страницы с токенами верификации.
+     * @param token CSRF токен
+     * @param model модель MVC
+     * @param sortBy поле сортировки
+     * @param findBy поле поиска
+     * @param currentPage номер страницы
+     * @param itemsPerPage количество элементов
+     * @param find строка поиска
+     * @param sortDirection направление сортировки
+     * @return путь к шаблону "/admin/verificationTokens"
      */
-
-    private <T> void sharedLogicForPagination(CsrfToken token, Model model, String sortBy, String findBy, Integer currentPage, Integer itemsPerPage, String find, String sortDirection,MyService<T> service) {
-        model.addAttribute("sortBy",sortBy);
-        model.addAttribute("findBy",findBy);
-        model.addAttribute("csrfToken",token.getToken()); // Получение токена из Spring
-        sortBy = "noSort".equals(sortBy) ? null : sortBy;
-        pagination(service,itemsPerPage,currentPage,sortBy,find,findBy,sortDirection,model);
-    }
-
-    /***
-     * Показать страницу с верифи. токенами
-     */
-
     @GetMapping("/verificationTokens")
-    public String getVerificationTokensPage(CsrfToken token, Model model, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String findBy,
-                                @RequestParam(required = false) Integer currentPage, @RequestParam(required = false) Integer itemsPerPage,
-                                @RequestParam(required = false) String find,
-                                @RequestParam(required = false) String sortDirection) {
-
-        sharedLogicForPagination(token,model,sortBy,findBy,currentPage,itemsPerPage,find,sortDirection,verificationTokenService);
+    public String getVerificationTokensPage(
+            CsrfToken token,
+            Model model,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String findBy,
+            @RequestParam(required = false) Integer currentPage,
+            @RequestParam(required = false) Integer itemsPerPage,
+            @RequestParam(required = false) String find,
+            @RequestParam(required = false) String sortDirection) {
+        sharedLogicForPagination(token, model, sortBy, findBy, currentPage, itemsPerPage, find, sortDirection, verificationTokenService);
         return "/admin/verificationTokens";
     }
 
-    /***
-     * Показать страницу с токенами "забыл пароль"
+    /**
+     * Отображение страницы с токенами сброса пароля.
+     * @param token CSRF токен
+     * @param model модель MVC
+     * @param sortBy поле сортировки
+     * @param findBy поле поиска
+     * @param currentPage номер страницы
+     * @param itemsPerPage количество элементов
+     * @param find строка поиска
+     * @param sortDirection направление сортировки
+     * @return путь к шаблону "/admin/resetPasswordTokens"
      */
-
     @GetMapping("/resetPasswordTokens")
-    public String getResetPasswordTokens(CsrfToken token, Model model, @RequestParam(required = false) String sortBy, @RequestParam(required = false) String findBy,
-                                @RequestParam(required = false) Integer currentPage, @RequestParam(required = false) Integer itemsPerPage,
-                                @RequestParam(required = false) String find,
-                                @RequestParam(required = false) String sortDirection) {
-
-        sharedLogicForPagination(token,model,sortBy,findBy,currentPage,itemsPerPage,find,sortDirection,resetPasswordTokenService);
+    public String getResetPasswordTokens(
+            CsrfToken token,
+            Model model,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String findBy,
+            @RequestParam(required = false) Integer currentPage,
+            @RequestParam(required = false) Integer itemsPerPage,
+            @RequestParam(required = false) String find,
+            @RequestParam(required = false) String sortDirection) {
+        sharedLogicForPagination(token, model, sortBy, findBy, currentPage, itemsPerPage, find, sortDirection, resetPasswordTokenService);
         return "/admin/resetPasswordTokens";
     }
 }

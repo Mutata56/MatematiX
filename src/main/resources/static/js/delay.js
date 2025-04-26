@@ -1,8 +1,25 @@
-// https://stackoverflow.com/questions/1909441/how-to-delay-the-keyup-handler-until-the-user-stops-typing
+/**
+ * Возвращает функцию-дебаунсер, которая задерживает вызов переданного колбэка до
+ * тех пор, пока не истечёт заданный интервал времени после последнего вызова.
+ *
+ * @param {Function} callback - Функция, которую нужно вызвать после задержки.
+ * @param {number} [ms=0] - Задержка в миллисекундах перед выполнением колбэка.
+ * @returns {Function} Обёртка, которую следует вызывать вместо прямого вызова `callback`.
+ */
 function delay(callback, ms) {
+    /**
+     * Идентификатор таймера для отсрочки выполнения.
+     * @type {number|undefined}
+     */
     var timer;
+
     return function() {
+        // Сбрасываем существующий таймер, если он был запущен ранее
         clearTimeout(timer);
-        timer = setTimeout($.proxy(callback, this), ms || 0);
+        // Создаём новый таймер, который выполнит callback в контексте текущего this
+        timer = setTimeout(
+            $.proxy(callback, this),
+            ms || 0
+        );
     };
 }

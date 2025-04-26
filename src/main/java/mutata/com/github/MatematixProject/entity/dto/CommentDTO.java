@@ -15,7 +15,7 @@ public class CommentDTO {
     /**
      * Рейтинг комментария
      */
-    private long rating;
+    private int rating;
     /**
      * Дата, когда был оставлен комментарий
      */

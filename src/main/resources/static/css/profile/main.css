@@ -404,3 +404,71 @@
                 75% { transform: translateX(-5px); }
                 100% { transform: translateX(5px); }
             }
+#logoutAccount {
+    background: linear-gradient(135deg, #FFA500, #FFD700); /* Оранжево-жёлтый градиент */
+      color: #ffffffa6;               /* Тёмно-серый текст для хорошей читаемости */
+      font-size: 16px;
+      font-weight: 600;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease; /* Плавные переходы */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+#logoutAccount:hover {
+  background: linear-gradient(135deg, #E69500, #E6C200); /* Немного более тёмный оттенок */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+}
+
+/* При клике — кратковременный «вдавленный» эффект */
+#logoutAccount:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 4px rgba(0,0,0,0.1);
+}
+#emailInput {
+      width: 300px;
+      padding: 10px 14px;
+      font-size: 1rem;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+      transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    #emailInput:focus {
+      outline: none;
+      border-color: #66afe9;
+      box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+    .avatar-wrapper .avatar-overlay {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none; /* чтобы клики шли на сам аватар */
+        z-index: 1500;
+    }
+
+    /* при наведении показываем overlay */
+    .avatar-wrapper:hover .avatar-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .comment-author {
+        position: relative !important;
+        margin-top: 10px !important;
+    }

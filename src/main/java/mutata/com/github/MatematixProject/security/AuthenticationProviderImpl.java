@@ -1,3 +1,4 @@
+
 package mutata.com.github.MatematixProject.security;
 
 import mutata.com.github.MatematixProject.service.MyUserDetailsService;
@@ -12,49 +13,80 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * Класс, описывающий провайдера ауентификации на сайте. Настраивается в основной конфигурации.
- * @see mutata.com.github.MatematixProject.configuration.SecurityConfiguration
+ * Провайдер аутентификации, реализующий логику проверки
+ * учетных данных пользователя.
+ * <p>Используется в конфигурации безопасности
+ * {@link mutata.com.github.MatematixProject.configuration.SecurityConfiguration}.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see AuthenticationProvider
+ * @see MyUserDetailsService
  */
-
 @Component
 public class AuthenticationProviderImpl implements AuthenticationProvider {
 
     /**
-     * Объект для работы с БД Wrapper класса пользователя
+     * Сервис для загрузки деталей пользователя из БД
+     * по логину или email.
      */
-
     private final MyUserDetailsService service;
 
     /**
-     * Кодировщик пароля
+     * Компонент для кодирования и проверки паролей.
      */
     private final PasswordEncoder encoder;
+
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param myUserDetailsService сервис для загрузки пользователя
+     * @param encoder               кодировщик пароля
+     */
     @Autowired
-    public AuthenticationProviderImpl(MyUserDetailsService myUserDetailsService, PasswordEncoder encoder) {
+    public AuthenticationProviderImpl(MyUserDetailsService myUserDetailsService,
+                                      PasswordEncoder encoder) {
         this.service = myUserDetailsService;
         this.encoder = encoder;
-
     }
 
     /**
-     * Метод ауентификации пользователя на сайт
-     * @param authentication - данные, которые ввёл пользователь
-     * @throws BadCredentialsException - ошибка, возникающая при вводе неправильных данных: логин/пароль
-     * @return Ауентификацию по паролю, которая присваивается пользователю
+     * Основная логика аутентификации пользователя.
+     * <p>Проверяет введённые учетные данные и при совпадении
+     * возвращает объект {@link UsernamePasswordAuthenticationToken}.</p>
+     *
+     * @param authentication объект с введёнными именем и паролем
+     * @return токен аутентификации с деталями пользователя и правами
+     * @throws BadCredentialsException если пароль неверен
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        UserDetails details; // Wrapper класс
-        if(!username.contains("@"))
-              details = service.loadUserByUsername(username); // Если не почта, ищем по юзернейму
-        else
-             details = service.loadUserByEmail(username); // Ищем по почте
-        if(!encoder.matches(authentication.getCredentials().toString(),details.getPassword())) // Если закодированный пароль не совпадает с закодированным введённым паролем
+        UserDetails details;
+        // Определяем, искали ли пользователя по email или по логину
+        if (!username.contains("@")) {
+            details = service.loadUserByUsername(username);
+        } else {
+            details = service.loadUserByEmail(username);
+        }
+        // Проверка пароля: введённый vs. сохранённый (закодированный)
+        if (!encoder.matches(authentication.getCredentials().toString(), details.getPassword())) {
             throw new BadCredentialsException("Неверный пароль!");
-        return new UsernamePasswordAuthenticationToken(details,details.getPassword(), details.getAuthorities());
+        }
+        // Возвращаем токен с правами пользователя
+        return new UsernamePasswordAuthenticationToken(
+                details,
+                details.getPassword(),
+                details.getAuthorities()
+        );
     }
 
+    /**
+     * Указывает, что данный провайдер поддерживает все типы аутентификации.
+     *
+     * @param authentication класс аутентификационных объектов
+     * @return {@code true}, если поддерживается
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return true;

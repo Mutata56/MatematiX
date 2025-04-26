@@ -3,21 +3,46 @@ package mutata.com.github.MatematixProject.entity;
 import lombok.Data;
 
 import java.io.Serializable;
+
 /**
- * Класс, представляющий собой сущность, ID для класса CommentAction. По сути нужен, чтобы соединить две сущности Id(comment_id и username) в одну (CommentActionId).
- * Data - это сокращенная аннотация, сочетающая возможности @ToString, @EqualsAndHashCode, @Getter @Setter и @RequiredArgsConstructor
+ * Класс-композитный ключ для сущности {@link CommentAction}.
+ * <p>Используется JPA для объединения полей <code>comment_id</code>
+ * и <code>username</code> в составной первичный ключ.</p>
+ *
+ * <p>Реализует {@link Serializable} в соответствии с требованиями JPA
+ * для идентификаторов-композитов.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see CommentAction
  */
 @Data
 public class CommentActionId implements Serializable {
+
+    /**
+     * Идентификатор комментария, часть составного ключа.
+     */
     private Long comment_id;
 
+    /**
+     * Логин пользователя, часть составного ключа.
+     */
     private String username;
 
-    public CommentActionId(Long comment_id,String username) {
+    /**
+     * Конструктор с параметрами для инициализации составного ключа.
+     *
+     * @param comment_id идентификатор комментария
+     * @param username   логин пользователя
+     */
+    public CommentActionId(Long comment_id, String username) {
         this.comment_id = comment_id;
         this.username = username;
     }
-    public CommentActionId() {
 
+    /**
+     * Конструктор без параметров, необходимый для работы JPA.
+     */
+    public CommentActionId() {
     }
 }

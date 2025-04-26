@@ -1,41 +1,55 @@
+
 package mutata.com.github.MatematixProject.listener;
 
 import mutata.com.github.MatematixProject.entity.User;
 import mutata.com.github.MatematixProject.event.OnRegistrationCompleteEvent;
 import mutata.com.github.MatematixProject.service.VerificationTokenService;
 import mutata.com.github.MatematixProject.util.mail.JavaMailServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
 /**
- * Класс, прослушивающий события OnRegistrationCompleteEvent.
+ * Слушатель событий завершения регистрации пользователя.
+ * <p>Обрабатывает {@link OnRegistrationCompleteEvent}, создаёт
+ * токен верификации и отправляет письмо с ссылкой подтверждения.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
  * @see OnRegistrationCompleteEvent
+ * @see VerificationTokenService
+ * @see JavaMailServiceImpl
  */
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
+
     /**
-     * Объкет для работы с БД verification_tokens
-     * @see mutata.com.github.MatematixProject.entity.token.VerificationToken
+     * Сервис для управления токенами подтверждения email.
      */
     private final VerificationTokenService service;
 
     /**
-     * Объкет для работы с почтой
+     * Сервис для отправки email-сообщений.
      */
-    private  JavaMailServiceImpl mailSender;
+    private final JavaMailServiceImpl mailSender;
 
-    @Autowired
+    /**
+     * Создаёт слушатель с внедрением необходимых сервисов.
+     *
+     * @param service    сервис управления токенами подтверждения
+     * @param mailSender сервис отправки email-сообщений
+     */
     public RegistrationListener(VerificationTokenService service, JavaMailServiceImpl mailSender) {
         this.service = service;
         this.mailSender = mailSender;
     }
 
     /**
-     * Метод, запускаемый, когда в системе создаётся OnRegistrationCompleteEvent
-     * @param event - событие OnRegistrationCompleteEvent, которое было создано в системе
+     * Обработка события завершения регистрации.
+     * <p>Вызывает внутренний метод confirmRegistration.</p>
+     *
+     * @param event событие завершения регистрации
      */
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
@@ -43,16 +57,29 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     /**
-     * Метод основной логики при регистрации пользователяю.
-     * @param event - событие OnRegistrationCompleteEvent, которое было создано в системе
+     * Основная логика подтверждения регистрации:
+     * <ol>
+     *   <li>Генерация уникального токена подтверждения.</li>
+     *   <li>Сохранение токена через {@link VerificationTokenService}.</li>
+     *   <li>Формирование URL для подтверждения.</li>
+     *   <li>Отправка email с инструкциями и ссылкой.</li>
+     * </ol>
+     *
+     * @param event событие с пользователем и базовым URL
      */
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
         User user = event.getUser();
-        String token = UUID.randomUUID().toString(); // Генерация токена в виде строкового литерала
-        service.createVerificationToken(user,token); // Сохранение токена
-        String url = "http://localhost:8080" + event.getUrl() + "/auth/registrationConfirm?token=" + token;
-        mailSender.send(user.getEmail(),"MatematiX - Подтверждение регистрации",
-                "Ссылка истечет через 24 часа\r\n" + url);
+        String token = UUID.randomUUID().toString();
+        // Сохраняем токен в БД
+        service.createVerificationToken(user, token);
+        // Формируем ссылку для подтверждения регистрации
+        String confirmationUrl = "http://localhost:8080" + event.getUrl()
+                + "/auth/registrationConfirm?token=" + token;
+        // Отправляем письмо с токеном (действует 24 часа)
+        mailSender.send(
+                user.getEmail(),
+                "MatematiX - Подтверждение регистрации",
+                "Ссылка истечёт через 24 часа\r\n" + confirmationUrl
+        );
     }
-
 }

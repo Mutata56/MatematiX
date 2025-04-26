@@ -5,42 +5,49 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
-/**
- * Репозиторий в контексте Spring, который автоматически создаёт методы для работы с соотв. БД (исходя из названия репозитория)
- */
 
+/**
+ * Репозиторий для управления сущностями {@link VerificationToken}.
+ * <p>Наследует {@link JpaRepository}, предоставляя стандартные
+ * CRUD-операции, а также дополнительные методы для поиска,
+ * удаления по токену и очистки устаревших записей.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see VerificationToken
+ * @see JpaRepository
+ */
 @Repository
-public interface VerificationTokenRepository extends JpaRepository<VerificationToken,Long> {
+public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
 
     /**
-     * Кастомный метод репозитория дла поиска токена по строковому литералу
-     * @param token - строковой литерал, по которому нужно найти токен
+     * Ищет токен подтверждения пользователя по строковому значению.
+     *
+     * @param token строковый литерал токена
+     * @return {@link Optional} с найденным {@link VerificationToken},
+     *         или пустой {@code Optional}, если запись не найдена
      */
-
     Optional<VerificationToken> findByToken(String token);
 
     /**
-     * Кастомный метод репозитория дла удаления токена по его строковому литералу
-     * Modifying - позволяет модифицировать запросы: обновлять, удалять данные и расширять возможности аннотации @Query в JpaRepository
-     * Query - MySQL запрос
-     * @param token - строковой литерал, по которому нужно удалить токен
+     * Удаляет запись {@link VerificationToken} по строковому значению токена.
+     * <p>Использует JPQL-запрос для удаления конкретной записи.</p>
      *
+     * @param token строковый литерал токена для удаления
      */
-
     @Modifying
     @Query("DELETE FROM VerificationToken t WHERE t.token = ?1")
     void deleteByToken(String token);
 
     /**
-     * Кастомный метод репозитория дла удаления токена по его строковому литералу
-     * Modifying - позволяет модифицировать запросы: обновлять, удалять данные и расширять возможности аннотации @Query в JpaRepository
-     * Query - MySQL запрос
-     * @param date - Токены, чья expiration дата будет меньше, чем данный параметр будут удалены из БД
+     * Удаляет все токены, у которых дата истечения меньше или равна указанной.
+     * <p>Используется для очистки устаревших токенов.</p>
      *
+     * @param date пороговая дата истечения токенов
      */
-
     @Modifying
     @Query("DELETE FROM VerificationToken t WHERE t.expirationDate <= ?1")
     void deleteByExpirationDateLessThan(LocalDateTime date);

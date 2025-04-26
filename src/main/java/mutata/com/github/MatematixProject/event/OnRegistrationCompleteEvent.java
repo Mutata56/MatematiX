@@ -1,3 +1,4 @@
+
 package mutata.com.github.MatematixProject.event;
 
 import lombok.Getter;
@@ -6,21 +7,37 @@ import mutata.com.github.MatematixProject.entity.User;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * Класс, описывающий событие, создаваемое по завершению регистрации, и нужное для подтверждения почты.
+ * Событие, генерируемое после успешной регистрации пользователя.
+ * <p>Используется для инициирования процесса отправки письма
+ * с ссылкой подтверждения email.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see org.springframework.context.ApplicationEvent
  */
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
+
     /**
-     * Формируемая ссылка, по которой будет проходить пользователь, чтобы подтвердить свою почту.
+     * Базовый URL или путь приложения, к которому будет добавлен токен подтверждения.
+     * <p>Используется для формирования полной ссылки подтверждения.</p>
      */
     @Getter
     private final String url;
+
     /**
-     * Юзер, владеющий токеном
+     * Пользователь, для которого создаётся событие регистрации.
+     * <p>Содержит данные для последующей ассоциации с токеном верификации.</p>
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private User user;
 
+    /**
+     * Создаёт новое событие завершения регистрации.
+     *
+     * @param user клиентская сущность пользователя, зарегистрированная в системе
+     * @param url  базовый URL приложения (контекстный путь),
+     *             используемый для построения ссылки подтверждения
+     */
     public OnRegistrationCompleteEvent(User user, String url) {
         super(user);
         this.url = url;

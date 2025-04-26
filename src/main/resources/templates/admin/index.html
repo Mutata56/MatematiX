@@ -135,6 +135,9 @@
     let csrf = [[${_csrf.token}]];
 
      const successFunction = (data) => {
+        let totalBlock = data.r;
+        data = data.t;
+        $("#totalCounter").text(`из ${totalBlock} страница`);
         $("#tableBody").empty();
         for (index = 0;index < data.length;index++) {
             let third = null;

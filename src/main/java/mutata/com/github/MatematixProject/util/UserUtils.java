@@ -10,53 +10,75 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 /**
- * Класс, представляющий утилиты для работы с классом User
+ * Утилитный компонент для работы с пользователями и их аватарами.
+ * Включает методы для проверки онлайн-статуса, установки времени последней активности,
+ * а также загрузки и кодирования аватарок пользователей.
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
  */
 @Component
 public class UserUtils {
-    private  final UserService userService;
+
+    private final UserService userService;
     private final AvatarInfoService avatarInfoService;
+    /** Количество миллисекунд, соответствующее пяти минутам */
     private static final int FIVE_MINUTES_IN_MS = 300_000; // 5 * 60 * 1000
+    /** Количество миллисекунд, соответствующее одному часу */
     private static final int HOUR_IN_MS = 3_600_000; // 60 * 1000 * 60
 
     @Autowired
-    public UserUtils(UserService userService,AvatarInfoService avatarInfoService) {
+    public UserUtils(UserService userService, AvatarInfoService avatarInfoService) {
         this.userService = userService;
         this.avatarInfoService = avatarInfoService;
     }
 
     /**
-     * Находится ли юзер в сети (онлайн)
-     * @param username - пользователь, чей онлайн необходимо выяснить
-     * @return является ли пользователь онлайн
+     * Проверяет, находится ли пользователь в сети (онлайн).
+     * Параметр username сравнивается с текущим аутентифицированным пользователем;
+     * если не совпадает, проверяется время последней активности в БД.
+     *
+     * @param username имя пользователя, чей онлайн проверяется
+     * @return true, если пользователь онлайн или является текущим авторизованным;
+     *         false в противном случае или при отсутствии данных
      */
     public boolean isAlive(String username) {
-        if(username == null)
+        if (username == null) {
             return false;
-        if(username.equals(SecurityContextHolder.getContext().getAuthentication().getName()))
+        }
+        // Текущий пользователь всегда считается онлайн
+        if (username.equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
             return true;
+        }
         User targetUser = userService.findByNameIgnoreCase(username);
-        Date theDate = targetUser.getLastTimeOnline();
-        if(theDate == null)
+        Date lastOnline = targetUser.getLastTimeOnline();
+        if (lastOnline == null) {
             return false;
-        return (new Date().getTime() - (theDate.getTime() - 3 * HOUR_IN_MS)) < FIVE_MINUTES_IN_MS;
-        // Transform GMT + 0 Into GMT + 3
+        }
+        // Сравнение текущего времени с временем последней активности (+ сдвиг GMT)
+        long adjustedLast = lastOnline.getTime() - 3 * HOUR_IN_MS;
+        return (new Date().getTime() - adjustedLast) < FIVE_MINUTES_IN_MS;
     }
 
     /**
-     * Установить юзеру состояние "в сети" (онлайн)
-     * @param username - строковое представление юзера, которому необходимо установить онлайн
+     * Устанавливает пользователю время последней активности (онлайн) в текущий момент.
+     * Добавляет смещение для перехода из GMT+0 в GMT+3.
+     *
+     * @param username имя пользователя, для которого обновляется время активности
+     * @return всегда true (результат операции сохранения)
      */
-
     public boolean setAlive(String username) {
         User user = userService.findByNameIgnoreCase(username);
-        if(user != null) {
+        if (user != null) {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(new Date());
-            calendar.add(Calendar.HOUR_OF_DAY,3); // Transform GMT + 0 Into GMT + 3
+            calendar.add(Calendar.HOUR_OF_DAY, 3); // Сдвиг GMT+0 → GMT+3
             user.setLastTimeOnline(calendar.getTime());
             userService.saveWithoutPasswordEncryption(user);
         }
@@ -64,29 +86,35 @@ public class UserUtils {
     }
 
     /**
-     * Загрузка аватар.
-     * @param username - строковое представление юзера, которому необходимо обновить аватар
-     * @param map - Хеш коллекция, содержащая значения в формате юзернейм - аватарка
-     * @param prefix - префикс может быть либо "My" либо "" hasAvatar или hasMyAvatar
+     * Загружает аватар пользователя и добавляет информацию в модель и карту.
+     * Кодирует аватар в Base64 при необходимости.
+     *
+     * @param username имя пользователя, чей аватар загружается
+     * @param map      коллекция username → AvatarInfo для хранения загруженных аватаров
+     * @param model    MVC-модель для передачи флагов во View
+     * @param prefix   префикс для атрибута наличия аватара ("My" или пустая строка)
      */
-
-    public void loadAvatar(String username, HashMap<String,AvatarInfo> map,Model model,String prefix) {
-        var temp = avatarInfoService.findByName(username).orElse(null);
-        if(temp != null && temp.getEncodedAvatar() == null)
-            temp.setEncodedAvatar(Utils.encodeAvatar(temp.getAvatar()));
-        map.putIfAbsent(username,temp);
-        model.addAttribute(String.format("has%sAvatar",StringUtils.capitalize(prefix)),temp != null);
+    public void loadAvatar(String username, HashMap<String, AvatarInfo> map, Model model, String prefix) {
+        AvatarInfo info = avatarInfoService.findByName(username).orElse(null);
+        if (info != null && info.getEncodedAvatar() == null) {
+            info.setEncodedAvatar(Utils.encodeAvatar(info.getAvatar()));
+        }
+        map.putIfAbsent(username, info);
+        model.addAttribute(String.format("has%sAvatar", StringUtils.capitalize(prefix)), info != null);
     }
 
     /**
-     * Установить юзеру состояние "в сети" (онлайн)
-     * @param username - строковое представление юзера, которому необходимо установить онлайн
-     * @param prefix - префикс может быть либо "My" либо "" hasAvatar или hasMyAvatar
+     * Загружает аватар пользователя в модель.
+     * Возвращает строку Base64 с изображением или null.
+     *
+     * @param username имя пользователя
+     * @param model    MVC-модель для передачи аватара во View
+     * @param prefix   префикс для атрибута наличия аватара ("My" или пустая строка)
      */
-
-    public void loadAvatar(String username,Model model,String prefix) {
-        var temp = avatarInfoService.findByName(username).orElse(null);
-        model.addAttribute(String.format("has%sAvatar",StringUtils.capitalize(prefix)),temp != null);
-        model.addAttribute("theAvatar",temp ==  null ? null : Utils.encodeAvatar(temp.getAvatar()));
+    public void loadAvatar(String username, Model model, String prefix) {
+        AvatarInfo info = avatarInfoService.findByName(username).orElse(null);
+        boolean hasAvatar = info != null;
+        model.addAttribute(String.format("has%sAvatar", StringUtils.capitalize(prefix)), hasAvatar);
+        model.addAttribute("theAvatar", hasAvatar ? Utils.encodeAvatar(info.getAvatar()) : null);
     }
 }

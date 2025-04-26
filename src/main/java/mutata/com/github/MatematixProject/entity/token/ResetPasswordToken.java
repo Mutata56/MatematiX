@@ -9,65 +9,82 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Класс, представляющий токен, служащий для идентификации пользователя, который хочет поменять пароль на сайте.
- * Entity - Сущность, отображаемая в БД
- * Table - таблица в БД
- * Data - это сокращенная аннотация, сочетающая возможности @ToString, @EqualsAndHashCode, @Getter @Setter и @RequiredArgsConstructor
- * NoArgsConstructor - сказать lombok создавать конструктор без параметров
+ * Сущность, представляющая токен сброса пароля пользователя.
+ * <p>Каждый токен хранится в таблице <code>reset_tokens</code> и уникально
+ * ассоциируется с пользователем через relation OneToOne.</p>
+ * <p>Токен автоматически создаётся с датой истечения <code>expirationDate</code>,
+ * рассчитанной как текущее время плюс {@link #EXPIRATION_IN_HOURS} часов.
+ * При этом добавляется смещение в 3 часа для перевода из GMT+0 в GMT+3.</p>
+ *
+ * @author Khaliullin Cyrill
+ * @version 1.0.0
+ * @see Token
  */
 @Entity
 @Table(name = "reset_tokens")
 @Data
 @NoArgsConstructor
 public class ResetPasswordToken implements Token {
+
     /**
-     * Время, за которое токен перестанет существовать, дабы не хранить его вечно в БД
+     * Время жизни токена в часах (до автоматического удаления).
      */
     private static final int EXPIRATION_IN_HOURS = 4;
 
     /**
-     * Id - является id в таблице БД MySQL
-     * GeneratedValue - инкреминтировать Id-шку для каждой сущности (новой)
-     * Column - с какой колонкой в MySQL связть данное поле
+     * Уникальный идентификатор токена в базе данных.
      */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     /**
-     * Строковое изображение токена
+     * Строковое представление токена для передачи в ссылке сброса пароля.
      */
-
-    @Column
+    @Column(nullable = false)
     private String token;
 
     /**
-     * К EXPIRATION_HOURS добавляем 3 часа, чтобы перейти из GMT+0 в GMT+3
+     * Дата и время истечения токена (включая смещение временной зоны).
+     * <p>Значение по умолчанию: текущее время плюс {@link #EXPIRATION_IN_HOURS} часов и 3-часовое смещение.</p>
      */
-
-    @Column(name = "expiration_date",columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private LocalDateTime expirationDate = LocalDateTime.now().plus(EXPIRATION_IN_HOURS + 3, ChronoUnit.HOURS);
+    @Column(name = "expiration_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime expirationDate = LocalDateTime.now()
+            .plus(EXPIRATION_IN_HOURS + 3, ChronoUnit.HOURS);
 
     /**
-     * Задача связи OneToOne между таблица reset_tokens и users
+     * Связанная сущность пользователя, для которого создан токен.
      */
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private User user;
 
+    /**
+     * Возвращает имя пользователя, которому принадлежит токен.
+     *
+     * @return логин пользователя из связанной сущности {@link User}
+     */
     @Override
     public String getUserName() {
         return user.getName();
     }
 
+    /**
+     * Устанавливает пользователя для данного токена сброса пароля.
+     *
+     * @param user сущность пользователя
+     */
     @Override
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * Возвращает идентификатор токена.
+     *
+     * @return значение поля {@link #id}
+     */
     public Long getId() {
         return id;
     }
