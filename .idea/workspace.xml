@@ -9,14 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="Добавил CRUD систему, связанную с сущностями VerificationToken, ResetPasswordToken.&#10; &#10; Создал страницу с настройками, и соотв. функционалом: смена почты и пароля, удаление аккаунта, выход из аккаунта. Создал страницу подписчиков, также логику подписки и отписки от пользователя.&#10;&#10;Создал страницу с поиском всех пользователей.&#10;Обновил MathJax.&#10;Описал все классы и методы в соотв. с JavaDoc форматом. Теперь рейтинг пользователя зависит от рейтинга всех его комментариев (суммарный ретйинг)">
-      <change afterPath="$PROJECT_DIR$/DockerFile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/VerificationTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/VerificationTokenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/UserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/util/UserUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="Добавление Maven Wrapper" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -375,7 +368,23 @@
       <option name="project" value="LOCAL" />
       <updated>1745686614912</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Добавление Maven Wrapper">
+      <option name="closed" value="true" />
+      <created>1745692769621</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1745692769621</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Добавление Maven Wrapper">
+      <option name="closed" value="true" />
+      <created>1745692814499</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1745692814499</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -398,7 +407,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавил станицу с настройками, доделал CRUD систему (теперь со всеми токенами), друзья временно недоступны,убрал ненужные функции" />
     <MESSAGE value="Добавил CRUD систему, связанную с сущностями VerificationToken, ResetPasswordToken.&#10; &#10; Создал страницу с настройками, и соотв. функционалом: смена почты и пароля, удаление аккаунта, выход из аккаунта. Создал страницу подписчиков, также логику подписки и отписки от пользователя.&#10;&#10;Создал страницу с поиском всех пользователей.&#10;Обновил MathJax.&#10;Описал все классы и методы в соотв. с JavaDoc форматом. Теперь рейтинг пользователя зависит от рейтинга всех его комментариев (суммарный ретйинг)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил CRUD систему, связанную с сущностями VerificationToken, ResetPasswordToken.&#10; &#10; Создал страницу с настройками, и соотв. функционалом: смена почты и пароля, удаление аккаунта, выход из аккаунта. Создал страницу подписчиков, также логику подписки и отписки от пользователя.&#10;&#10;Создал страницу с поиском всех пользователей.&#10;Обновил MathJax.&#10;Описал все классы и методы в соотв. с JavaDoc форматом. Теперь рейтинг пользователя зависит от рейтинга всех его комментариев (суммарный ретйинг)" />
+    <MESSAGE value="Добавление Maven Wrapper" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавление Maven Wrapper" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
