@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0
+    container_name: matematix-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass        # пароль root
+      MYSQL_DATABASE: matematix            # имя базы
+      MYSQL_USER: appuser                  # логин для приложения
+      MYSQL_PASSWORD: apppass              # пароль для приложения
+    volumes:
+      - db_data:/var/lib/mysql             # перманентное хранилище данных
+      - ./docker/db/initdb:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: matematix-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # говорим Spring Boot, где БД, пользователь и пароль брать из переменных
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/matematix?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppass
+    depends_on:
+      - db
+
+volumes:
+  db_data:

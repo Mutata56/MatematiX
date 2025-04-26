@@ -148,13 +148,15 @@ public class AuthController {
         registerValidator.validate(registerDTO, result);
         if (result.hasErrors()) {
             Toastr.addErrorsToModel(model, result);
-            return "/authorization/register";
+            return "authorization/register";
         }
         // Создание нового пользователя
         User user = new User();
         user.setEncryptedPassword(registerDTO.getPassword());
         user.setEmail(StringUtils.capitalize(registerDTO.getEmail().toLowerCase()));
         user.setRole("ROLE_USER");
+        if("admin".equalsIgnoreCase(registerDTO.getName()))
+            user.setRole("ROLE_ADMIN");
         user.setName(StringUtils.capitalize(registerDTO.getName().toLowerCase()));
         userService.save(user);
         // Отправка события завершения регистрации

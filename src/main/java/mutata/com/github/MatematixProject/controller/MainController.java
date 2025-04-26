@@ -338,7 +338,7 @@ public class MainController {
         if (file.isEmpty() || x == null || y == null || width == null
                 || height == null || scaleX == null || scaleY == null) {
             // Если чего-то не хватает — перенаправляем обратно с флагом emptyFile=true
-            return "redirect:/profile/settings?emptyFile=true";
+            return "redirect:profile/settings?emptyFile=true";
         }
 
         try {

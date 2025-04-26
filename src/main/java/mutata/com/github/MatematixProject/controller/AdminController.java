@@ -182,7 +182,7 @@ public class AdminController {
             @RequestParam(required = false) String sortDirection) {
         sharedLogicForPagination(token, model, sortBy, findBy,
                 currentPage, itemsPerPage, find, sortDirection, userService);
-        return "/admin/index";
+        return "admin/index";
     }
 
 
@@ -395,7 +395,7 @@ public class AdminController {
             @RequestParam(required = false) String find,
             @RequestParam(required = false) String sortDirection) {
         sharedLogicForPagination(token, model, sortBy, findBy, currentPage, itemsPerPage, find, sortDirection, verificationTokenService);
-        return "/admin/verificationTokens";
+        return "admin/verificationTokens";
     }
 
     /**
@@ -421,6 +421,6 @@ public class AdminController {
             @RequestParam(required = false) String find,
             @RequestParam(required = false) String sortDirection) {
         sharedLogicForPagination(token, model, sortBy, findBy, currentPage, itemsPerPage, find, sortDirection, resetPasswordTokenService);
-        return "/admin/resetPasswordTokens";
+        return "admin/resetPasswordTokens";
     }
 }
