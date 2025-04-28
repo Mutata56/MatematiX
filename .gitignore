@@ -38,6 +38,5 @@ build/
 *.iml
 *.ipr
 
-### VS Code ###
-.vscode/
-application.properties
+.env
+application-secrets.propertiesz
