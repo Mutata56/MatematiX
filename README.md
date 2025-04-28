@@ -34,7 +34,7 @@
 1. Соберите образ приложения:
    
    ```bash
-   docker build -t mypetproject:latest
+   docker build -t mypetproject:latest .
   
 2. Запустите с Docker Compose:
    
