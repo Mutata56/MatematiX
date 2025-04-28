@@ -9,7 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="Добавление поддержи Docker">
+    <list default="true" id="1ddf2753-fb65-4f87-8ba0-baa8bea16ff4" name="Changes" comment="Добавление поддержки postgresql">
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
@@ -403,7 +404,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745706758166</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Добавление поддержки postgresql">
+      <option name="closed" value="true" />
+      <created>1745714123139</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1745714123139</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -428,7 +437,8 @@
     <MESSAGE value="Добавил CRUD систему, связанную с сущностями VerificationToken, ResetPasswordToken.&#10; &#10; Создал страницу с настройками, и соотв. функционалом: смена почты и пароля, удаление аккаунта, выход из аккаунта. Создал страницу подписчиков, также логику подписки и отписки от пользователя.&#10;&#10;Создал страницу с поиском всех пользователей.&#10;Обновил MathJax.&#10;Описал все классы и методы в соотв. с JavaDoc форматом. Теперь рейтинг пользователя зависит от рейтинга всех его комментариев (суммарный ретйинг)" />
     <MESSAGE value="Добавление Maven Wrapper" />
     <MESSAGE value="Добавление поддержи Docker" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавление поддержи Docker" />
+    <MESSAGE value="Добавление поддержки postgresql" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавление поддержки postgresql" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -438,11 +448,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/dao/UserDAO.java</url>
           <line>62</line>
           <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/controller/AdminController.java</url>
-          <line>244</line>
-          <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/mutata/com/github/MatematixProject/service/UserService.java</url>
