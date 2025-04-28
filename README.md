@@ -94,7 +94,11 @@
 
 ## Скриншоты
 
+### Главная страница
 ![Главная страница](screenshots/home.png)
+### Профиль пользователя
 ![Профиль пользователя](screenshots/profile.png)
+### Пример статьи
 ![Статья](screenshots/article.png)
+### CRUD система
 ![CRUD](screenshots/crud.png)
